@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\BrandController;
+use App\Http\Controllers\ProductController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -51,13 +53,25 @@ Route::get('/active-category-product/{category_id}',[CategoryController::class,'
 
 // Brand Product
 
-Route::get('/add-brand-product',[brandController::class,'add_brand_product']);
+Route::get('/add-brand-product',[BrandController::class,'add_brand_product']);
 
-Route::get('/all-brand-product',[brandController::class,'all_brand_product']);
-Route::post('/save-brand-product',[brandController::class,'save_brand_product']);
-Route::get('/edit-brand-product/{brand_id}',[brandController::class,'edit_brand_product']);
-Route::post('/update-brand-product/{brand_id}',[brandController::class,'update_brand_product']); 
-Route::get('/delete-brand-product/{brand_id}',[brandController::class,'delete_brand_product']);
+Route::get('/all-brand-product',[BrandController::class,'all_brand_product']);
+Route::post('/save-brand-product',[BrandController::class,'save_brand_product']);
+Route::get('/edit-brand-product/{brand_id}',[BrandController::class,'edit_brand_product']);
+Route::post('/update-brand-product/{brand_id}',[BrandController::class,'update_brand_product']); 
+Route::get('/delete-brand-product/{brand_id}',[BrandController::class,'delete_brand_product']);
 
-Route::get('/unactive-brand-product/{brand_id}',[brandController::class,'unactive_brand_product']);
-Route::get('/active-brand-product/{brand_id}',[brandController::class,'active_brand_product']);
+Route::get('/unactive-brand-product/{brand_id}',[BrandController::class,'unactive_brand_product']);
+Route::get('/active-brand-product/{brand_id}',[BrandController::class,'active_brand_product']);
+
+// Product
+Route::get('/add-product',[ProductController::class,'add_product']);
+
+Route::get('/all-product',[ProductController::class,'all_product']);
+Route::post('/save-product',[ProductController::class,'save_product']);
+Route::get('/edit-product/{product_id}',[ProductController::class,'edit_product']);
+Route::post('/update-product/{product_id}',[ProductController::class,'update_product']); 
+Route::get('/delete-product/{product_id}',[ProductController::class,'delete_product']);
+
+Route::get('/unactive-product/{product_id}',[ProductController::class,'unactive_product']);
+Route::get('/active-product/{product_id}',[ProductController::class,'active_product']);

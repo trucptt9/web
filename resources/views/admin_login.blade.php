@@ -21,6 +21,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <script src="{{asset('public/backend/js/jquery2.0.3.min.js')}}"></script>
 </head>
 <body>
+@include('sweetalert::alert')
 <div class="log-w3">
 <div class="w3layouts-main">
 	<h2>Đăng nhập</h2>

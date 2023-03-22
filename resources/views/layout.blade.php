@@ -27,6 +27,7 @@
 <!--/head-->
 
 <body>
+@include('sweetalert::alert')
     <header id="header">
         <!--header-->
         <div class="header_top">

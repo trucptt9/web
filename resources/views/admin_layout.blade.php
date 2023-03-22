@@ -37,11 +37,14 @@ Smar tphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Son
     <script src="{{asset('public/backend/js/jquery2.0.3.min.js')}}"></script>
     <script src="{{asset('public/backend/js/raphael-min.js')}}"></script>
     <script src="{{asset('public/backend/js/morris.js')}}"></script>
+    <script src="https://unpkg.com/sweetalert2@7.18.0/dist/sweetalert2.all.js"></script>
 
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
 
-<bod y>
+<body>
+@include('sweetalert::alert')
+
     <section id="container">
         <!--header start-->
         <header class="header fixed-top clearfix">
@@ -125,8 +128,21 @@ Smar tphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Son
                                 <span>Thương hiệu sản phẩm</span>
                             </a>
                             <ul class="sub">
-                                <li><a href="{{URL::to('/add-brand')}}">Thêm thương hiệu</a></li>
-                                <li><a href="{{URL::to('/all-brand')}}">Liệt kê thương hiệu</a></li>
+                                <li><a href="{{URL::to('/add-brand-product')}}">Thêm thương hiệu</a></li>
+                                <li><a href="{{URL::to('/all-brand-product')}}">Liệt kê thương hiệu</a></li>
+                                
+                            </ul>
+                        </li>
+
+                        <!-- sản phẩm -->
+                        <li class="sub-menu">
+                            <a href="javascript:;">
+                                <i class="fa fa-book"></i>
+                                <span>Sản phẩm</span>
+                            </a>
+                            <ul class="sub">
+                                <li><a href="{{URL::to('/add-product')}}">Thêm sản phẩm</a></li>
+                                <li><a href="{{URL::to('/all-product')}}">Liệt kê sản phẩm</a></li>
                                 
                             </ul>
                         </li>
@@ -292,6 +308,8 @@ Smar tphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Son
     });
     </script>
     <!-- //calendar -->
-</bod>
+
+   
+</body>
 
 </html>
