@@ -11,16 +11,27 @@ use Illuminate\Support\Facades\Redirect;
 session_start();
 class CategoryController extends Controller
 {
+    public function AuthLogin(){
+        $admin_id = Session::get('admin_id');
+        if($admin_id){
+            return Redirect::to('dashboard');
+        }
+        else{
+            return Redirect::to('admin')->send();
+         }
+        }
     public function add_category_product(){
-     
+        $this->AuthLogin();
         return view('admin.add_category_product');
     }
 
     public function all_category_product(){
+        $this->AuthLogin();
         $all_category_product = DB::table('category')->get(); 
         return view('admin.all_category_product')->with('all_category_product', $all_category_product);
     }
     public function save_category_product(Request $request){
+        $this->AuthLogin();
         // khi người dùng nhấn nút Thêm ở danh mục thêm danh mục sp mới thì nội dung dữ liệu của form đó được guier tới đây
         $data = array();
         // 'category_name' là của cột trong bảng category tên phải giống với cột trong csdl ko đc khác
@@ -39,6 +50,7 @@ class CategoryController extends Controller
     }
 
     public function unactive_category_product($category_id){
+        $this->AuthLogin();
        DB::table('category')->where('category_id',$category_id)
                             ->update(['category_status'=> 0]);
 
@@ -47,6 +59,7 @@ class CategoryController extends Controller
         return Redirect::to('all-category-product');
     }
     public function active_category_product($category_id){
+        $this->AuthLogin();
         DB::table('category')->where('category_id',$category_id)
                              ->update(['category_status'=> 1]);
          
@@ -55,10 +68,12 @@ class CategoryController extends Controller
      }
 
      public function edit_category_product($category_id){
+        $this->AuthLogin();
         $edit_category_product = DB::table('category')->where('category_id',$category_id)->get(); 
         return view('admin.edit_category_product')->with('edit_category_product', $edit_category_product);
      }
      public function update_category_product($category_id, Request $request){
+        $this->AuthLogin();
        $data = array();
        $data['category_name'] = $request->category_product_name;
        $data['category_desc'] = $request->category_product_desc;
@@ -68,7 +83,7 @@ class CategoryController extends Controller
        return Redirect::to('all-category-product');
      }
      public function delete_category_product($category_id){
-      
+        $this->AuthLogin();
  
         DB::table('category')->where('category_id',$category_id)->delete();
         Session::put('message','Xóa danh mục thành công');

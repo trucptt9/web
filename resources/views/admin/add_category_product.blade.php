@@ -41,7 +41,7 @@
 
                         </div>
                     </section>
-                    @if(Session::has('message'))
+                    <!-- @if(Session::has('message'))
                             <script>
                                 swal("Thông báo","{{Session::get('message')}}",'success',{
                                     button:true,
@@ -49,7 +49,7 @@
                                 }
                                 );
                             </script>
-                     @endif
+                     @endif -->
       
             </div>
           
