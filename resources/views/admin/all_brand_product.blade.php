@@ -67,7 +67,9 @@
               <a href="{{URL::to('edit-brand-product/'.$cate_pro->brand_id)}}" class="active" ui-toggle-class="">
                 <i class="fa fa-pencil-square-o text-success text-active" style="font-size: 18px;"></i>
               </a>
-              <a href="{{URL::to('delete-brand-product/'.$cate_pro->brand_id)}}" class="active" ui-toggle-class="">
+              <a href="{{URL::to('delete-brand-product/'.$cate_pro->brand_id)}}"
+              onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này không?')"
+              class="active" ui-toggle-class="">
                 <i class="fa fa-times text-danger text" style="font-size: 18px;"></i>
               </a>
             </td>

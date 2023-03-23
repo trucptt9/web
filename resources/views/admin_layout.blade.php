@@ -146,6 +146,14 @@ Smar tphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Son
                                 
                             </ul>
                         </li>
+                        <!-- don hang -->
+                        <li class="">
+                            <a href="{{URL::to('/manager-order')}}">
+                                <i class="fa fa-book"></i>
+                                <span>Quản lý đơn hàng</span>
+                            </a>
+                           
+                        </li>
                        
                     </ul>
                 </div>

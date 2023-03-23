@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CheckoutController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -75,3 +76,6 @@ Route::get('/delete-product/{product_id}',[ProductController::class,'delete_prod
 
 Route::get('/unactive-product/{product_id}',[ProductController::class,'unactive_product']);
 Route::get('/active-product/{product_id}',[ProductController::class,'active_product']);
+
+// Order
+Route::get('/manage-order',[CheckoutController::class,'manage_product']);

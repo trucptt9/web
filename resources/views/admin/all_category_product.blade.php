@@ -67,7 +67,9 @@
               <a href="{{URL::to('edit-category-product/'.$cate_pro->category_id)}}" class="active" ui-toggle-class="">
                 <i class="fa fa-pencil-square-o text-success text-active" style="font-size: 18px;"></i>
               </a>
-              <a href="{{URL::to('delete-category-product/'.$cate_pro->category_id)}}" class="active" ui-toggle-class="">
+              <a href="{{URL::to('delete-category-product/'.$cate_pro->category_id)}}" 
+              onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này không?')"
+              class="active" ui-toggle-class="">
                 <i class="fa fa-times text-danger text" style="font-size: 18px;"></i>
               </a>
             </td>
@@ -95,7 +97,7 @@
       </div>
     </footer>
   </div>
-  @if(Session::has('message'))
+  <!-- @if(Session::has('message'))
                             <script>
                                 swal("Thông báo","{{Session::get('message')}}",'success',{
                                     button:true,
@@ -103,7 +105,7 @@
                                 }
                                 );
                             </script>
-                     @endif
+                     @endif -->
 </div>
 
 
