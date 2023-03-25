@@ -90,4 +90,16 @@ class BrandController extends Controller
         Session::put('message','Xóa danh mục thành công');
         return Redirect::to('all-brand-product');
       }
+
+    //   end admin
+    public function show_brand_home($brand_id){
+        $category = DB::table('category')->where('category_status','1')->orderBy("category_id","desc")->get();
+        $brand = DB::table('brand')->where('brand_status','1')->orderBy("brand_id","desc")->get();
+
+        $brand_name = DB::table('brand')->where('brand.brand_id',$brand_id)->limit(1)->get();
+        $brand_byID = DB::table('product')->join('brand','product.brand_id','=','brand.brand_id')
+                                            ->where('product.brand_id',$brand_id)->get();
+        return view('pages.brand.show_brand')->with('brand',$brand)->with('category',$category)
+                                            ->with('brand_name',$brand_name)->with('brand_byID',$brand_byID);
+    }
 }

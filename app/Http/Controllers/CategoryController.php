@@ -89,4 +89,21 @@ class CategoryController extends Controller
         Session::put('message','Xóa danh mục thành công');
         return Redirect::to('all-category-product');
       }
+
+    //   end function admin page
+
+    // start function user page
+    public function show_category_home($category_id){
+        $category = DB::table('category')->where('category_status','1')->orderBy("category_id","desc")->get();
+        $brand = DB::table('brand')->where('brand_status','1')->orderBy("brand_id","desc")->get();
+
+        $category_name = DB::table('category')->where('category.category_id',$category_id)->limit(1)->get();
+        $category_byID = DB::table('product')->join('category','product.category_id','=','category.category_id')
+                                            ->where('product.category_id',$category_id)->get();
+        return view('pages.category.show_category')->with('category',$category)->with('brand',$brand)
+                                                ->with('category_name',$category_name)
+                                                    ->with('category_byID',$category_byID);
+    }
+   
+
 }

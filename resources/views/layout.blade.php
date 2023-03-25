@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Home | E-Shopper</title>
+    <title>Web bán phụ kiện</title>
     <link href="{{asset('public/frontend/css/bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{asset('public/frontend/css/font-awesome.min.css')}}" rel="stylesheet">
     <link href="{{asset('public/frontend/css/prettyPhoto.css')}}" rel="stylesheet">
@@ -14,6 +14,7 @@
     <link href="{{asset('public/frontend/css/animate.css')}}" rel="stylesheet">
     <link href="{{asset('public/frontend/css/main.css')}}" rel="stylesheet">
     <link href="{{asset('public/frontend/css/responsive.css')}}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!--[if lt IE 9]>
     <script src="js/html5shiv.js"></script>
     <script src="js/respond.min.js"></script>
@@ -30,32 +31,9 @@
 @include('sweetalert::alert')
     <header id="header">
         <!--header-->
-        <div class="header_top">
-            <!--header_top-->
-            <!-- <div class="container">
-                <div class="row">
-					<div class="col-sm-6">
-						<div class="contactinfo">
-							<ul class="nav nav-pills">
-								<li><a href="#"><i class="fa fa-phone"></i> +2 95 01 88 821</a></li>
-								<li><a href="#"><i class="fa fa-envelope"></i> info@domain.com</a></li>
-							</ul>
-						</div>
-					</div>
-					<div class="col-sm-6">
-						<div class="social-icons pull-right">
-							<ul class="nav navbar-nav">
-								<li><a href="#"><i class="fa fa-facebook"></i></a></li>
-								<li><a href="#"><i class="fa fa-twitter"></i></a></li>
-								<li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-								<li><a href="#"><i class="fa fa-dribbble"></i></a></li>
-								<li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-							</ul>
-						</div>
-					</div>
-				</div> 
-            </div> -->
-        </div>
+        <!-- <div class="header_top">
+            
+        </div> -->
         <!--/header_top-->
 
         <div class="header-middle">
@@ -64,43 +42,57 @@
                 <div class="row">
                     <div class="col-sm-4">
                         <div class="logo pull-left">
-                            <a href="index.html"><img src="{{('public/frontend/images/logo.png')}}" alt="" width="80"
+                            <a href="{{URL::to('/trangchu')}}"><img src="public/frontend/images/logo.png" alt="" width="80"
                                     height="80" /></a>
                         </div>
-                        <div class="btn-group pull-right">
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-default dropdown-toggle usa"
-                                    data-toggle="dropdown">
-                                    USA
-                                    <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">Canada</a></li>
-                                    <li><a href="#">UK</a></li>
-                                </ul>
-                            </div>
-
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-default dropdown-toggle usa"
-                                    data-toggle="dropdown">
-                                    DOLLAR
-                                    <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">Canadian Dollar</a></li>
-                                    <li><a href="#">Pound</a></li>
-                                </ul>
-                            </div>
-                        </div>
+                      
                     </div>
                     <div class="col-sm-8">
                         <div class="shop-menu pull-right">
                             <ul class="nav navbar-nav">
-                                <li><a href="#"><i class="fa fa-user"></i> Tài khoản</a></li>
-                                <li><a href="#"><i class="fa fa-star"></i> Wishlist</a></li>
-                                <li><a href="checkout.html"><i class="fa fa-crosshairs"></i> Checkout</a></li>
-                                <li><a href="cart.html"><i class="fa fa-shopping-cart"></i> Giỏ hàng</a></li>
-                                <li><a href="login.html"><i class="fa fa-lock"></i> Đăng nhập</a></li>
+                                <li><a href="{{URL::to('/login-checkout')}}"><i class="fa fa-user"></i> Tài khoản</a></li>
+                                <!-- <li><a href="#"><i class="fa fa-star"></i> Wishlist</a></li> -->
+
+                               
+                                <?php
+                                    $customer_id = Session::get('customer_id');
+                                    $shipping_id = Session::get('shipping_id');
+                                    if($customer_id != null && $shipping_id == null){
+
+                                ?>
+                                
+                                    <li><a href="{{URL::to('/checkout')}}"><i class="fa fa-crosshairs"></i> Thanh toán</a></li>
+                                <?php
+                                }elseif($customer_id != null && $shipping_id != null){
+                                ?>
+                                 <li><a href="{{URL::to('/payment')}}"><i class="fa fa-crosshairs"></i> Thanh toán</a></li>
+                                <?php
+                                }else{
+                                ?>
+                                    <li><a href="{{URL::to('/login-checkout')}}"><i class="fa fa-crosshairs"></i> Thanh toán</a></li>
+                                <?php
+                                }
+                                ?>
+
+                                <li><a href="{{URL::to('/show-cart')}}"><i class="fa fa-shopping-cart"></i> Giỏ hàng</a></li>
+                                <?php
+                                    $customer_id = Session::get('customer_id');
+                                    if($customer_id != null){
+
+                                ?>
+                                
+                                    <li><a href="{{URL::to('/logout-checkout')}}"><i class="fa-solid fa-arrow-right-from-bracket"></i> Đăng xuất</a></li>
+                                <?php
+                                }else{
+                                ?>
+                                <li><a href="{{URL::to('/login-checkout')}}"><i class="fa fa-lock"></i> Đăng nhập</a></li>
+                                <?php
+                                } 
+                                ?>
+                               
+                               
+                                
+                              
                             </ul>
                         </div>
                     </div>
@@ -112,8 +104,8 @@
         <div class="header-bottom">
             <!--header-bottom-->
             <div class="container">
-                <div class="row">
-                    <div class="col-sm-9">
+                <div class="row" >
+                    <div class="col-sm-8">
                         <div class="navbar-header">
                             <button type="button" class="navbar-toggle" data-toggle="collapse"
                                 data-target=".navbar-collapse">
@@ -140,10 +132,15 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="col-sm-3">
-                        <div class="search_box pull-right">
-                            <input type="text" placeholder="Search" />
-                        </div>
+                    <div class="col-sm-4">
+                        <form action="{{URL::to('/timkiem')}}" method="post">
+                            {{csrf_field()}}
+                            <div class="search_box pull-right" style="width:250px">
+                                <input type="text" placeholder="Tìm kiếm" name="keyword_sub"/>
+                                <button type="submit" class="btn btn-primary btn-sm" style="margin-top:0px">
+                                    <i class="fa-solid fa-magnifying-glass"></i> </button>
+                            </div>
+                     </form>
                     </div>
                 </div>
             </div>
@@ -152,74 +149,7 @@
     </header>
     <!--/header-->
 
-    <section id="slider">
-        <!--slider-->
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-12">
-                    <div id="slider-carousel" class="carousel slide" data-ride="carousel">
-                        <ol class="carousel-indicators">
-                            <li data-target="#slider-carousel" data-slide-to="0" class="active"></li>
-                            <li data-target="#slider-carousel" data-slide-to="1"></li>
-                            <li data-target="#slider-carousel" data-slide-to="2"></li>
-                        </ol>
 
-                        <div class="carousel-inner">
-                            <div class="item active">
-                                <div class="col-sm-6">
-                                    <h1><span>E</span>-SHOPPER</h1>
-                                    <h2>Free E-Commerce Template</h2>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                                        incididunt ut labore et dolore magna aliqua. </p>
-                                    <button type="button" class="btn btn-default get">Get it now</button>
-                                </div>
-                                <div class="col-sm-6">
-                                    <img src="images/home/girl1.jpg" class="girl img-responsive" alt="" />
-                                    <img src="images/home/pricing.png" class="pricing" alt="" />
-                                </div>
-                            </div>
-                            <div class="item">
-                                <div class="col-sm-6">
-                                    <h1><span>E</span>-SHOPPER</h1>
-                                    <h2>100% Responsive Design</h2>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                                        incididunt ut labore et dolore magna aliqua. </p>
-                                    <button type="button" class="btn btn-default get">Get it now</button>
-                                </div>
-                                <div class="col-sm-6">
-                                    <img src="images/home/girl2.jpg" class="girl img-responsive" alt="" />
-                                    <img src="images/home/pricing.png" class="pricing" alt="" />
-                                </div>
-                            </div>
-
-                            <div class="item">
-                                <div class="col-sm-6">
-                                    <h1><span>E</span>-SHOPPER</h1>
-                                    <h2>Free Ecommerce Template</h2>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                                        incididunt ut labore et dolore magna aliqua. </p>
-                                    <button type="button" class="btn btn-default get">Get it now</button>
-                                </div>
-                                <div class="col-sm-6">
-                                    <img src="images/home/girl3.jpg" class="girl img-responsive" alt="" />
-                                    <img src="images/home/pricing.png" class="pricing" alt="" />
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <a href="#slider-carousel" class="left control-carousel hidden-xs" data-slide="prev">
-                            <i class="fa fa-angle-left"></i>
-                        </a>
-                        <a href="#slider-carousel" class="right control-carousel hidden-xs" data-slide="next">
-                            <i class="fa fa-angle-right"></i>
-                        </a>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </section>
     <!--/slider-->
 
     <section>
@@ -240,11 +170,11 @@
                             @endforeach
                         <div class="brands_products">
                             <!--brands_products-->
-                            <h2>Thương hiệu sản phẩm</h2>
+                            <h2 style="margin-top: 30px">Thương hiệu sản phẩm</h2>
                             <div class="brands-name">
                                 @foreach ($brand as $key => $brand)
                                 <ul class="nav nav-pills nav-stacked">
-                                    <li><a href="{{URL::to('/thuong-hieu-san-pham/'.$brand->brand_id)}}"> <span class="pull-right">(50)</span>{{$brand->brand_name}}</a></li>
+                                    <li><a href="{{URL::to('/thuong-hieu-san-pham/'.$brand->brand_id)}}"> <span class="pull-right">()</span>{{$brand->brand_name}}</a></li>
                                     
                                 </ul>
                                 @endforeach
@@ -267,8 +197,8 @@
     <footer id="footer">
         <!--Footer-->
         <div class="footer-top">
-            <div class="container">
-                <div class="row">
+            <div class="">
+                <div class="row" style="margin-right:0px;">
                     <div class="col-sm-2">
                         <div class="companyinfo">
                             <h2><span>e</span>-shopper</h2>
@@ -347,8 +277,8 @@
         </div>
 
         <div class="footer-widget">
-            <div class="container">
-                <div class="row">
+            <div class="">
+                <div class="row" style="margin-right:0px;">
                     <div class="col-sm-2">
                         <div class="single-widget">
                             <h2>Service</h2>
@@ -413,15 +343,7 @@
             </div>
         </div>
 
-        <div class="footer-bottom">
-            <div class="container">
-                <div class="row">
-                    <p class="pull-left">Copyright © 2013 E-SHOPPER Inc. All rights reserved.</p>
-                    <p class="pull-right">Designed by <span><a target="_blank"
-                                href="http://www.themeum.com">Themeum</a></span></p>
-                </div>
-            </div>
-        </div>
+       
 
     </footer>
     <!--/Footer-->

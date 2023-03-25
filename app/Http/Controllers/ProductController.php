@@ -129,4 +129,20 @@ class ProductController extends Controller
         Session::put('message','Xóa sản phẩm thành công');
         return Redirect::to('all-product');
       }
+
+    //   trang chi tiết sp
+    public function detail_product($product_id){
+        $category = DB::table('category')->where('category_status','1')->orderBy("category_id","desc")->get();
+        $brand = DB::table('brand')->where('brand_status','1')->orderBy("brand_id","desc")->get();
+
+        $product_detail = DB::table('product')->join('category','product.category_id', '=','category.category_id')
+        ->join('brand','product.brand_id', '=','brand.brand_id') 
+        ->where('product.product_id',$product_id) 
+        ->get();
+
+
+        return view('pages.products.show_detail_product')
+        ->with('category',$category)->with('brand',$brand)
+        ->with('product_detail',$product_detail);
+    }
 }
