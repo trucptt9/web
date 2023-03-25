@@ -97,7 +97,7 @@ class CheckoutController extends Controller
         $order_data['customer_id'] = Session::get('customer_id');  //khi đăng nhập sẽ có customer_id
         $order_data['shipping_id'] = Session::get('shipping_id');
         $order_data['payment_id'] = $payment_id;
-        $order_data['order_total'] = Cart::total();
+        $order_data['order_total'] = Cart::subtotal();
         $order_data['order_status'] = 'Đang chờ xử lý';
 
         $order_id = DB::table('order')->insertGetId($order_data);
