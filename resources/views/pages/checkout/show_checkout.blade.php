@@ -1,24 +1,49 @@
 @extends('layout')
 @section('content')
 
-<section id="cart_items">
+
+<div class="container mt-4">
+  @if(session('status'))
+    <div class="alert alert-success">
+        {{ session('status') }}
+    </div>
+  @endif
+  <div class="card">
+    <div class="card-header text-center font-weight-bold">
+      Laravel 8 - Add Blog Post Form Example
+    </div>
+    <div class="card-body">
+      <form name="add-blog-post-form" id="add-blog-post-form" method="post" action="{{url('store-form')}}">
+       @csrf
+        <div class="form-group">
+          <label for="exampleInputEmail1">Title</label>
+          <input type="text" id="title" name="title" class="form-control" required="">
+        </div>
+        <div class="form-group">
+          <label for="exampleInputEmail1">Description</label>
+          <textarea name="description" class="form-control" required=""></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+  </div>
+</div>    
+<!-- <section id="cart_items">
     <div class="">
         <div class="breadcrumbs">
             <ol class="breadcrumb">
                 <li><a href="{{URL::to('/trangchu')}}">Trang chủ</a></li>
                 <li class="active">Thanh toán giỏ hàng</li>
             </ol>
-        </div>
+        </div> -->
         <!--/breadcrums-->
 
        
 
-        <div class="register-req">
-            <h5>Đăng nhập để thanh toán giỏ hàng. Bạn chưa có tài khoản? <span> <a  href="{{URL::to('/login-checkout')}}">Đăng ký</a></span></h5>
-        </div>
+        
         <!--/register-req-->
 
-        <div class="shopper-informations">
+        <!-- <div class="shopper-informations">
             <div class="row">
                 
                 <div class="col-sm-10 clearfix">
@@ -32,7 +57,7 @@
                                 <input type="text" placeholder="Số điện thoại" name="phone">
 
                                 <input type="text" placeholder="Địa chỉ" name="address">
-                                
+                                <input type="hidden" value="{{$customer_id}}" name="customer_id">
                                  <textarea name="note" placeholder="Ghi chú"
                                     rows="2" style="height:150px"></textarea>
                                <input type="submit" value="Gửi" class="btn btn-primary btn-sm" style="width:30%">
@@ -43,23 +68,9 @@
                 </div>
                 
             </div>
-        </div>
-        <div class="review-payment">
-            <h2>Xem lại giỏ hàng</h2>
-        </div>
-
+        </div> -->
+       
       
-        <div class="payment-options">
-            <span>
-                <label><input type="checkbox"> Direct Bank Transfer</label>
-            </span>
-            <span>
-                <label><input type="checkbox"> Check Payment</label>
-            </span>
-            <span>
-                <label><input type="checkbox"> Paypal</label>
-            </span>
-        </div>
-    </div>
-</section>
+    <!-- </div> -->
+<!-- </section> -->
 @endsection

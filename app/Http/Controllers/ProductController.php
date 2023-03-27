@@ -35,6 +35,19 @@ class ProductController extends Controller
     return view('admin.all_product')->with('all_product', $all_product);
                                         
     }
+    public function tat_ca_sp(){
+        $category = DB::table('category')->orderBy("category_id","desc")->get();
+        $brand = DB::table('brand')->orderBy("brand_id","desc")->get();
+        $products = DB::table('product')->join('category','product.category_id', '=','category.category_id')
+                                            ->join('brand','product.brand_id', '=','brand.brand_id')  
+                                            ->select('product.*','category.category_name','brand.brand_name')
+                                            ->get();
+       
+        return view('pages.products.all_product')->with('products', $products)
+        ->with('category', $category)
+        ->with('brand', $brand);
+                                        
+    }
     public function save_product(Request $request){
         $this->AuthLogin();
         $data = array();
@@ -46,7 +59,7 @@ class ProductController extends Controller
         $data['product_content'] = $request->product_content;
         $data['product_desc'] = $request->product_desc;
         $data['product_status'] = $request->product_status;
-      
+        $data['product_SLtrongkho'] = $request->product_SLtrongkho;
         $get_image = $request->file('product_image');
         // thêm ảnh vào public/upload
         if($get_image){
@@ -102,7 +115,7 @@ class ProductController extends Controller
        $data['category_id'] = $request->product_category;
        $data['product_content'] = $request->product_content;
        $data['product_desc'] = $request->product_desc;
-
+       $data['product_SLtrongkho'] = $request->product_SLtrongkho;
        $get_image = $request->file('product_image');
 
        if($get_image){

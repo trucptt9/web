@@ -24,9 +24,10 @@
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="images/ico/apple-touch-icon-57-precomposed.png">
-</head>
-<!--/head-->
 
+    
+
+      
 <body>
 @include('sweetalert::alert')
     <header id="header">
@@ -50,7 +51,21 @@
                     <div class="col-sm-8">
                         <div class="shop-menu pull-right">
                             <ul class="nav navbar-nav">
-                                <li><a href="{{URL::to('/login-checkout')}}"><i class="fa fa-user"></i> Tài khoản</a></li>
+                            <?php
+                                    $customer_id = Session::get('customer_id');
+                                    if($customer_id != null){
+
+                                ?>
+                                
+                                <li><a href="{{URL::to('/account/'.$customer_id)}}"><i class="fa fa-user"></i> Tài khoản</a></li>
+                                <?php
+                                }else{
+                                ?>
+                                 <li><a href="{{URL::to('/login-checkout')}}"><i class="fa fa-user"></i> Tài khoản</a></li>
+                                <?php
+                                } 
+                                ?>
+                               
                                 <!-- <li><a href="#"><i class="fa fa-star"></i> Wishlist</a></li> -->
 
                                
@@ -118,16 +133,11 @@
                         <div class="mainmenu pull-left">
                             <ul class="nav navbar-nav collapse navbar-collapse">
                                 <li><a href="{{URL::to('/trangchu')}}" class="active">Trang chủ</a></li>
-                                <li class="dropdown"><a href="#">Sản phẩm<i class="fa fa-angle-down"></i></a>
-                                    <ul role="menu" class="sub-menu">
-                                        <li><a href="shop.html">Products</a></li>
-                                        
-                                    </ul>
-                                </li>
-                                <li class="dropdown"><a href="#">Tin tức<i class="fa fa-angle-down"></i></a>
+                                <li class="dropdown"><a href="{{URL::to('/tat-ca-sp')}}">Sản phẩm</a>
                                     
                                 </li>
-                                <li><a href="404.html">Giỏ hàng</a></li>
+                              
+                                <li><a href="{{URL::to('/show-cart')}}">Giỏ hàng</a></li>
                                 <li><a href="contact-us.html">Liên hệ</a></li>
                             </ul>
                         </div>
@@ -174,7 +184,7 @@
                             <div class="brands-name">
                                 @foreach ($brand as $key => $brand)
                                 <ul class="nav nav-pills nav-stacked">
-                                    <li><a href="{{URL::to('/thuong-hieu-san-pham/'.$brand->brand_id)}}"> <span class="pull-right">()</span>{{$brand->brand_name}}</a></li>
+                                    <li><a href="{{URL::to('/thuong-hieu-san-pham/'.$brand->brand_id)}}"> <span class="pull-right"></span>{{$brand->brand_name}}</a></li>
                                     
                                 </ul>
                                 @endforeach

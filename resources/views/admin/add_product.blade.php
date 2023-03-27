@@ -30,6 +30,10 @@
                                     <input type="text" name="product_price" class="form-control" placeholder="Nhập tên danh mục">
                                 </div>
                                 <div class="form-group">
+                                    <label for="">Số lượng hiện có</label>
+                                    <input type="number" name="product_SLtrongkho" class="form-control" placeholder="Nhập tên danh mục">
+                                </div>
+                                <div class="form-group">
                                      <label for="">Danh mục</label>
                                         <select class="form-control m-bot15" name="product_category">
                                         @foreach($category as $key => $cate)

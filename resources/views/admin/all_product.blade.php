@@ -20,29 +20,21 @@
       <div class="col-sm-4">
       </div>
       <div class="col-sm-3">
-        <div class="input-group">
-          <input type="text" class="input-sm form-control" placeholder="Search">
-          <span class="input-group-btn">
-            <button class="btn btn-sm btn-default" type="button">Tìm kiếm</button>
-          </span>
-        </div>
+        
       </div>
     </div>
     <div class="table-responsive">
       <table class="table table-striped b-t b-light">
         <thead>
           <tr>
-            <th style="width:20px;">
-              <label class="i-checks m-b-none">
-                <input type="checkbox"><i></i>
-              </label>
-            </th>
+            
             <th>Tên sản phẩm</th>
             <th>Hình ảnh</th>
             <th>Danh mục</th>
             <th>Thương hiệu</th>
             <th>Nội dung sản phẩm</th>
             <th>Giá</th>
+            <th>Số lượng</th>
             <th>Hiển thị</th>
             
             <th style="width:30px;"></th>
@@ -51,13 +43,14 @@
         <tbody>
           @foreach($all_product as $key => $pro)
           <tr>
-            <td><label class="i-checks m-b-none"><input type="checkbox" name="post[]"><i></i></label></td>
+         
             <td>{{$pro->product_name}}</td>
             <td> <img src="public/upload/product/{{$pro->product_image}}" height="100" width="100"> </td>
             <td>{{$pro->category_name}}</td>
             <td>{{$pro->brand_name}}</td>
             <td>{{$pro->product_content}}</td>
             <td>{{$pro->product_price}}</td>
+            <td>{{$pro->product_SLtrongkho}}</td>
             <td><span class="text-ellipsis">
               <?php 
                   if($pro->product_status==0){

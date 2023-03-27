@@ -1,5 +1,7 @@
 @extends('layout')
 @section('content')
+
+
 @foreach($product_detail as $key => $pro_detail)
 <div class="product-details">
     <!--product-details-->
@@ -21,25 +23,55 @@
             <h2>{{$pro_detail->product_name}}</h2>
             <p>ID sản phẩm: {{$pro_detail->product_id}}</p>
             <img src="images/product-details/rating.png" alt="rating" />
-            <p class="productinfo">{{number_format($pro_detail->product_price).'VND'}}</p>
-            
-            <p><b>Trạng thái: </b>Còn hàng</p>
-            
+            <h2 class="productinfo" style="color:red">{{number_format($pro_detail->product_price).'VND'}}</h2>
             <p><b>Thương hiệu:</b> {{$pro_detail->brand_name}}</p>
-            <form action="{{URL::to('save-cart')}}" method="POST"> 
-                {{csrf_field()}}
-            <p>
-               
-                <label>Số lượng:</label>
-                <input name="productid_hidden" type="hidden" value="{{$pro_detail->product_id}}"/>
-                <input name="qty" type="number" value="1" class="form-control" style="width:30%"/>
-                
-            </p>
-            <button type="submit" class="btn btn-fefault cart mt-4" style="margin-top:20px;margin-left:0px">
-                    <i class="fa fa-shopping-cart"></i>
-                    Thêm vào giỏ hàng
-            </button>
-</form>
+            <?php
+                if($pro_detail->product_SLtrongkho > 0){
+                   
+            ?> <p><b>Trạng thái: </b>Còn hàng</p>
+                    <form action="{{URL::to('save-cart')}}" method="POST"> 
+                        {{csrf_field()}}
+                    <p>
+                    
+                        <label>Số lượng:</label>
+                        <input name="productid_hidden" type="hidden" value="{{$pro_detail->product_id}}"/>
+                        <input name="qty" type="number" value="1" class="form-control" style="width:30%"/>
+                        
+                    </p>
+                    <button type="submit" class="btn btn-fefault cart mt-4" style="margin-top:20px;margin-left:0px">
+                            <i class="fa fa-shopping-cart"></i>
+                            Thêm vào giỏ hàng
+                    </button>
+                    </form>
+            <?php
+                }
+                else{
+            ?>
+                   <p><b>Trạng thái: </b> <span class="text-danger">Hết hàng<span></p>
+                   <form > 
+                        {{csrf_field()}}
+                    <p>
+                    
+                        <label>Số lượng:</label>
+                        <input name="productid_hidden" type="hidden" value="{{$pro_detail->product_id}}"/>
+                        <input name="qty" type="number" value="1" class="form-control" style="width:30%"/>
+                        
+                    </p>
+                    <button type="submit" class="btn btn-secondary cart mt-4 disabled"
+                     style="margin-top:20px;margin-left:0px; background-color:grey;"
+                    
+                     >
+                            <i class="fa fa-shopping-cart"></i>
+                            Thêm vào giỏ hàng
+                    </button>
+                    </form>
+            <?php
+                }
+            ?>
+           
+            
+            
+           
             <a href=""><img src="images/product-details/share.png" class="share img-responsive" alt="" /></a>
         </div>
         <!--/product-information-->

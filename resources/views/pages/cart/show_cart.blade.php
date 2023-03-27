@@ -86,7 +86,7 @@
 
                                 ?>
                                 
-                                    <a href="{{URL::to('/checkout')}}"> <button class="btn btn-primary">Thanh toán</button></a>
+                                    <a href="{{URL::to('/payment/'.$customer_id)}}"> <button class="btn btn-primary">Thanh toán</button></a>
                                 <?php
                                 }else{
                                 ?>

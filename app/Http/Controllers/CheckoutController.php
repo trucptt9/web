@@ -9,6 +9,15 @@ use Session;
 use Illuminate\Support\Facades\Redirect;
 class CheckoutController extends Controller
 {
+    public function AuthLogin(){
+        $admin_id = Session::get('admin_id');
+        if($admin_id){
+            return Redirect::to('dashboard');
+        }
+        else{
+            return Redirect::to('admin')->send();
+        }
+}
     public function login_checkout(){
         $category = DB::table('category')->where('category_status','1')->orderBy("category_id","desc")->get();
         $brand = DB::table('brand')->where('brand_status','1')->orderBy("brand_id","desc")->get();
@@ -27,14 +36,16 @@ class CheckoutController extends Controller
         Session::put('customer_name',$request->name);
         return Redirect::to('/checkout');
     }
-    public function checkout(){
+    public function checkout($customer_id){
         $category = DB::table('category')->where('category_status','1')->orderBy("category_id","desc")->get();
         $brand = DB::table('brand')->where('brand_status','1')->orderBy("brand_id","desc")->get();
         return view('pages.checkout.show_checkout')
-        ->with('category',$category)->with('brand',$brand);
+        ->with('category',$category)->with('brand',$brand)
+        ->with('customer_id',$customer_id);
     }
     public function save_checkout_customer(Request $request){
         $data = array();
+        $data['customer_id'] = $request->customer_id;
         $data['shipping_name'] = $request->name;
         $data['shipping_phone'] = $request->phone;
         $data['shipping_note'] = $request->note;
@@ -47,11 +58,14 @@ class CheckoutController extends Controller
         return Redirect::to('/payment');    //quay lại trang thanh toán
     }
     //trả về trang thanh toán
-    public function payment(){
+    public function payment($customer_id){
         $category = DB::table('category')->where('category_status','1')->orderBy("category_id","desc")->get();
         $brand = DB::table('brand')->where('brand_status','1')->orderBy("brand_id","desc")->get();
-        return view('pages.checkout.payment')
-        ->with('category',$category)->with('brand',$brand);
+        $infor_shipping = DB::table('shipping')->where('shipping.customer_id',$customer_id)->first();
+
+        return view('pages.checkout.payment') ->with('customer_id',$customer_id)
+        ->with('category',$category)->with('brand',$brand)
+        ->with('infor_shipping',$infor_shipping);
     }
 
     public function logout_checkout(){
@@ -69,7 +83,7 @@ class CheckoutController extends Controller
 
          Session::put('customer_id',$result->customer_id); 
         if($result){
-            return Redirect('/checkout');
+            return Redirect('/trangchu');
         }
         else{
             return Redirect('/login-checkout');
@@ -78,10 +92,6 @@ class CheckoutController extends Controller
          
                          
          
-    }
-
-    public function manage_order(){
-        return view('admin.manage_order');
     }
 
     //insert dữ liệu vào bảng payment
@@ -128,5 +138,50 @@ class CheckoutController extends Controller
         }
        
 
+    }
+
+    public function manage_order(){
+        $this->AuthLogin();
+        $all_order = DB::table('order')->join('customer','order.customer_id', '=','customer.customer_id')
+              ->select('order.*','customer.customer_name')
+              ->orderBy('order.order_id','desc')
+            ->get();
+       
+        return view('admin.manage_order')->with('all_order',$all_order);
+    }   
+
+    public function view_order($orderId){
+        $this->AuthLogin();
+
+        $order_byid = DB::table('order')
+            ->join('customer','order.customer_id', '=','customer.customer_id')
+            ->join('shipping','order.shipping_id', '=','shipping.shipping_id')
+            ->where('order.order_id','=',$orderId)
+            ->select('order.*','customer.*','shipping.*')
+            ->first();
+        
+            $order_detail = DB::table(('order'))
+            ->join('order_detail','order.order_id', '=','order_detail.order_id')
+            ->where('order.order_id','=',$orderId)
+            ->select('order.*','order_detail.*')
+            ->get();
+         
+       
+        return view('admin.view_order')->with('order_byid',$order_byid)->with('order_detail',$order_detail);
+    }
+
+    //cập nhật tình trạng đơn hàng
+    public function capnhat($orderId, Request $request){
+        echo 'helo';
+        $tinhtrang = $request->tinhtrangdonhang;
+
+        DB::table('order')->where('order.order_id',$orderId)
+                        ->update(['order_status'=> $tinhtrang]);
+        
+         return Redirect::to('manage-order') ;
+    }
+
+    public function update_address(){
+      
     }
 }

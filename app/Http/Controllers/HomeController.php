@@ -34,4 +34,8 @@ class HomeController extends Controller
         return view('pages.products.search')->with('category',$category)->with('brand',$brand)
         ->with('result',$result);
     }
+
+    public function show_account($customer_id){
+        echo 'trang tài khoản người dung';
+    }
 }

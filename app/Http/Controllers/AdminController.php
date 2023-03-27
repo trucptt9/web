@@ -23,7 +23,17 @@ class AdminController extends Controller
     }
     public function showDashboard(){
         $this->AuthLogin();
-        return view('admin.dashboard');
+        $customers = DB::table('customer')->get();
+        $sl = count($customers);
+
+        $products = count(DB::table('product')->get());
+        $orders = count(DB::table('order')->get());
+        $products_hethang = count(DB::table('product')->where('product.product_SLtrongkho','=',0)->get());
+        // echo $sl;
+        return view('admin.dashboard')->with('number_customer',$sl)
+        ->with('number_product',$products)
+        ->with('number_order',$orders)
+        ->with('number_hethang',$products_hethang);
     }
     public function dashboard(Request $request){
         $admin_email = $request->admin_email;
@@ -49,5 +59,16 @@ class AdminController extends Controller
         Session::put('admin_name',null);
         Session::put('admin_id',null);
         return Redirect::to('/admin');
+    }
+
+    //thống kê doanh thu
+    public function thong_ke_doanh_thu(){
+
+        return view('admin.revenue_statistic');
+    }
+
+    //hàm trả về thông tin tên trang dashboard
+    public function get_infor(){
+       
     }
 }

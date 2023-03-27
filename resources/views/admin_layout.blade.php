@@ -148,9 +148,18 @@ Smar tphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Son
                         </li>
                         <!-- don hang -->
                         <li class="">
-                            <a href="{{URL::to('/manager-order')}}">
+                            <a href="{{URL::to('/manage-order')}}">
                                 <i class="fa fa-book"></i>
                                 <span>Quản lý đơn hàng</span>
+                            </a>
+                           
+                        </li>
+
+                         <!-- thống kê -->
+                         <li class="">
+                            <a href="{{URL::to('/revenue-statistic')}}">
+                                <i class="fa fa-book"></i>
+                                <span>Thống kê doanh thu</span>
                             </a>
                            
                         </li>
@@ -163,7 +172,7 @@ Smar tphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Son
         <!--sidebar end-->
         <!--main content start-->
         <section id="main-content">
-            <section class="wrapper">
+            <section class="wrapper" style="color:black;">
 				@yield('admin_content')
                 
             </section>

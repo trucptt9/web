@@ -20,12 +20,7 @@
       <div class="col-sm-4">
       </div>
       <div class="col-sm-3">
-        <div class="input-group">
-          <input type="text" class="input-sm form-control" placeholder="Search">
-          <span class="input-group-btn">
-            <button class="btn btn-sm btn-default" type="button">Tìm kiếm</button>
-          </span>
-        </div>
+        
       </div>
     </div>
     <div class="table-responsive">

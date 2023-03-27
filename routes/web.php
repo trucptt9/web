@@ -25,6 +25,10 @@ Route::get('/',[HomeController::class,'index']);
 Route::get('/trangchu',[HomeController::class, 'index']);
 Route::post('/timkiem',[HomeController::class, 'tim_kiem']);
 
+//trả về trang tài khoản người dùng
+Route::get('/account/{customer_id}',[HomeController::class, 'show_account']);
+
+
 // danh mục sản phẩm của trang chủ
 Route::get('/danh-muc-san-pham/{category_id}',[CategoryController::class, 'show_category_home']);
 
@@ -76,6 +80,7 @@ Route::get('/active-brand-product/{brand_id}',[BrandController::class,'active_br
 Route::get('/add-product',[ProductController::class,'add_product']);
 
 Route::get('/all-product',[ProductController::class,'all_product']);
+Route::get('/tat-ca-sp',[ProductController::class,'tat_ca_sp']);
 Route::post('/save-product',[ProductController::class,'save_product']);
 Route::get('/edit-product/{product_id}',[ProductController::class,'edit_product']);
 Route::post('/update-product/{product_id}',[ProductController::class,'update_product']); 
@@ -86,6 +91,7 @@ Route::get('/active-product/{product_id}',[ProductController::class,'active_prod
 
 //Cart -> thêm sp vào giỏ hàng
 Route::post('/save-cart',[CartController::class,'save_cart']); 
+Route::post('/sell-cart',[CartController::class,'sell_cart']); 
 Route::get('/show-cart',[CartController::class,'show_cart']); 
 Route::get('/delete-cart/{rowId}',[CartController::class,'delete_cart']); 
 
@@ -93,10 +99,19 @@ Route::get('/delete-cart/{rowId}',[CartController::class,'delete_cart']);
 Route::get('/login-checkout',[CheckoutController::class,'login_checkout']); 
 Route::get('/logout-checkout',[CheckoutController::class,'logout_checkout']); 
 Route::post('/add',[CheckoutController::class,'add_customer']);
- Route::get('/checkout',[CheckoutController::class,'checkout']); 
- Route::get('/payment',[CheckoutController::class,'payment']); 
+ Route::get('/checkout/{customer_id}',[CheckoutController::class,'checkout']); 
+ Route::get('/payment/{customer_id}',[CheckoutController::class,'payment']); 
  Route::post('/phuongthucthanhtoan',[CheckoutController::class,'phuongthucthanhtoan']);
  Route::post('/save-checkout-customer',[CheckoutController::class,'save_checkout_customer']);
  Route::post('/login-customer',[CheckoutController::class,'login_customer']);
-// Order
-Route::post('/manage-order',[CheckoutController::class,'manage_product']);
+
+ Route::get('/update-address',[CheckoutController::class,'update_address']); 
+ // Order đơn hàng
+Route::get('/manage-order',[CheckoutController::class,'manage_order']);
+Route::get('/view-order/{orderId}',[CheckoutController::class,'view_order']);
+Route::post('/capnhatdonhang/{orderId}',[CheckoutController::class,'capnhat']);
+
+
+//thống kê doanh thu
+
+Route::get('/revenue-statistic',[AdminController::class,'thong_ke_doanh_thu']);
