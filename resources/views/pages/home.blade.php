@@ -30,11 +30,23 @@ function add_shoppingCart(clicked_id) {
                         <input name="qty" type="hidden" value="1" class="form-control" style="width:30%"/>
                         
                     </p>
-                    <button type="submit" class="btn btn-fefault cart mt-4" style="margin-top:20px;margin-left:0px">
-                        <i class="fa fa-shopping-cart"></i>
-                        Mua ngay
-                     </button>
-                    
+                    <?php
+                        if($product->product_SLtrongkho >0 ){
+                    ?>
+                        <button type="submit" class="btn btn-fefault cart mt-4" style="margin-top:20px;margin-left:0px">
+                            <i class="fa fa-shopping-cart"></i>
+                            Mua ngay
+                        </button>
+                    <?php
+                    }else{
+                    ?>
+                     <button type="submit" class="btn btn-fefault cart mt-4 disabled" style="margin-top:20px;margin-left:0px">
+                            <i class="fa fa-shopping-cart"></i>
+                            Mua ngay
+                        </button>
+                   <?php
+                    }
+                    ?>
 
                     </form>
                 </div>

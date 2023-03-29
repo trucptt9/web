@@ -25,16 +25,35 @@ class CheckoutController extends Controller
         ->with('category',$category)->with('brand',$brand);
     }
     public function add_customer(Request $request){
+        $request->validate([
+            'customer_name' => 'required',
+            'customer_email'=> 'required|email|unique:customer,customer_email',
+            'customer_phone'=> ['required',
+                               'regex:/^(0|\+84)(\s|\.)?((3[2-9])|(5[689])|(7[06-9])|(8[1-689])|(9[0-46-9]))(\d)(\s|\.)?(\d{3})(\s|\.)?(\d{3})$/',
+                               'unique:customer,customer_phone'],
+             'customer_password' => 'required|confirmed',
+        ],
+        [
+            "customer_name.required"=>"Vui lòng nhập họ tên",
+            "customer_email.required"=>"Vui lòng nhập email",
+            "customer_email.unique"=>"Email đã tồn tại",
+            "customer_email.email"=>"Email có định dạng là `name@gmail.com`",
+            "customer_phone.required"=>"Vui lòng nhập số điện thoại",
+            "customer_phone.unique"=>"Số điện thoại đã tồn tại",
+            "customer_password.required"=>"Vui lòng nhập mật khẩu",
+            "customer_password.confirmed"=>"Xác nhận mật khẩu sai",
+        ]);
+       
         $data = array();
-        $data['customer_name'] = $request->name;
-        $data['customer_email'] = $request->email;
-        $data['customer_phone'] = $request->phone;
-        $data['customer_password'] = md5($request->password);
+        $data['customer_name'] = $request->customer_name;
+        $data['customer_email'] = $request->customer_email;
+        $data['customer_phone'] = $request->customer_phone;
+        $data['customer_password'] = md5($request->customer_password);
 
         $customer_id = DB::table('customer')->insertGetId($data);
         Session::put('customer_id',$customer_id);
         Session::put('customer_name',$request->name);
-        return Redirect::to('/checkout');
+        return Redirect::to('/trangchu');
     }
     public function checkout($customer_id){
         $category = DB::table('category')->where('category_status','1')->orderBy("category_id","desc")->get();
@@ -44,6 +63,7 @@ class CheckoutController extends Controller
         ->with('customer_id',$customer_id);
     }
     public function save_checkout_customer(Request $request){
+        // echo 'hello';
         $data = array();
         $data['customer_id'] = $request->customer_id;
         $data['shipping_name'] = $request->name;
@@ -51,21 +71,33 @@ class CheckoutController extends Controller
         $data['shipping_note'] = $request->note;
         $data['shipping_address'] = $request->address;
 
-        $shipping_id = DB::table('shipping')->insertGetId($data);
-        Session::put('shipping_id',$shipping_id);
-       
-
-        return Redirect::to('/payment');    //quay lại trang thanh toán
+        DB::table('shipping')->insert($data);
+        
+        $infor_shipping = DB::table('shipping')->where('shipping.customer_id',$request->customer_id)->first();
+        $category = DB::table('category')->where('category_status','1')->orderBy("category_id","desc")->get();
+        $brand = DB::table('brand')->where('brand_status','1')->orderBy("brand_id","desc")->get();
+        return Redirect::to('/trangchu');
+            
+         //quay lại trang thanh toán
     }
     //trả về trang thanh toán
     public function payment($customer_id){
         $category = DB::table('category')->where('category_status','1')->orderBy("category_id","desc")->get();
         $brand = DB::table('brand')->where('brand_status','1')->orderBy("brand_id","desc")->get();
         $infor_shipping = DB::table('shipping')->where('shipping.customer_id',$customer_id)->first();
-
-        return view('pages.checkout.payment') ->with('customer_id',$customer_id)
-        ->with('category',$category)->with('brand',$brand)
-        ->with('infor_shipping',$infor_shipping);
+        if($infor_shipping){
+            Session::put('shipping_id',$infor_shipping->shipping_id);
+            return view('pages.checkout.payment') ->with('customer_id',$customer_id)
+            ->with('category',$category)->with('brand',$brand)
+            ->with('infor_shipping',$infor_shipping);
+        }
+        else{
+            return view('pages.checkout.payment') ->with('customer_id',$customer_id)
+            ->with('category',$category)->with('brand',$brand)
+            ->with('infor_shipping',$infor_shipping);
+        }
+       
+      
     }
 
     public function logout_checkout(){
@@ -74,9 +106,21 @@ class CheckoutController extends Controller
     }
 
     public function login_customer(Request $request){
+        $request->validate([
+            
+            'email'=> 'required|email',
+            'password' => 'required',
+        ],
+        [
+          
+            "email.required"=>"Vui lòng nhập email",
+            "email.email"=>"Email có định dạng là `name@gmail.com`",
+            "password.required"=>"Vui lòng nhập mật khẩu",
+           
+        ]);
        
-        $email = $request->email_account;
-        $password = md5($request->password_account);
+        $email = $request->email;
+        $password = md5($request->password);
 
         $result = DB::table('customer')->where('customer_email',$email)->where('customer_password',$password)
                                     ->first();
@@ -97,14 +141,21 @@ class CheckoutController extends Controller
     //insert dữ liệu vào bảng payment
     public function phuongthucthanhtoan(Request $request){
         //insert payment_method
+        $customer_id = Session::get('customer_id'); //khi đăng nhập sẽ có customer_id
+        if(!Session::get('shipping_id')){
+            $alert = "Vui lòng nhập thông tin nhận hàng ở phía trên!";
+            return Redirect::to('/payment/'.$customer_id)->with('alert',$alert);
+        }
+        else{
         $data = array();
         $data['payment_method'] = $request->payment_op;
         $data['payment_status'] = 'Đang chờ xử lý';
         $payment_id = DB::table('payment')->insertGetId($data);
 
+       
         //insert vào bảng order
         $order_data = array();
-        $order_data['customer_id'] = Session::get('customer_id');  //khi đăng nhập sẽ có customer_id
+        $order_data['customer_id'] = $customer_id;
         $order_data['shipping_id'] = Session::get('shipping_id');
         $order_data['payment_id'] = $payment_id;
         $order_data['order_total'] = Cart::subtotal();
@@ -137,6 +188,8 @@ class CheckoutController extends Controller
             echo'Thanh toán online';
         }
        
+    }
+      
 
     }
 
@@ -181,7 +234,27 @@ class CheckoutController extends Controller
          return Redirect::to('manage-order') ;
     }
 
-    public function update_address(){
-      
+    public function update_address($customer_id,Request $request){
+        if($request->name != null && $request->phone != null && $request->address != null){
+            $data = array();
+
+            $data['shipping_name'] = $request->name;
+            $data['shipping_phone'] = $request->phone;
+            $data['shipping_note'] = $request->note;
+            $data['shipping_address'] = $request->address;
+    
+            DB::table('shipping')->where('shipping.customer_id',$customer_id)->update($data);
+            $infor_shipping = DB::table('shipping')->where('shipping.customer_id',$customer_id)->first();
+            $category = DB::table('category')->where('category_status','1')->orderBy("category_id","desc")->get();
+            $brand = DB::table('brand')->where('brand_status','1')->orderBy("brand_id","desc")->get();
+            return view('pages.checkout.payment')->with('infor_shipping',$infor_shipping)
+            ->with('category',$category)
+            ->with('brand',$brand); 
+        }
+        else{
+            return Redirect::to('/payment/'.$customer_id);
+        }
+       
+        
     }
 }

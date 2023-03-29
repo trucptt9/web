@@ -33,6 +33,17 @@ class CategoryController extends Controller
     public function save_category_product(Request $request){
         $this->AuthLogin();
         // khi người dùng nhấn nút Thêm ở danh mục thêm danh mục sp mới thì nội dung dữ liệu của form đó được guier tới đây
+        $request->validate([
+            
+            'category_product_name'=> 'required',
+            'category_product_desc' => 'nullable',
+        ],
+        [
+          
+            "category_product_name.required"=>"Trường này không được bỏ trống",
+           
+           
+        ]);
         $data = array();
         // 'category_name' là của cột trong bảng category tên phải giống với cột trong csdl ko đc khác
         $data['category_name'] = $request->category_product_name;
@@ -44,7 +55,7 @@ class CategoryController extends Controller
        
         /* A way to pass a message to the next request. */
          Session::put('message','Thêm mới thành công');
-        return Redirect::to('add-category-product');
+        return Redirect::to('add-category-product')->with('success', 'Thêm danh mục thành công');
        
 
     }

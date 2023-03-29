@@ -31,6 +31,19 @@ class BrandController extends Controller
     public function save_brand_product(Request $request){
         $this->AuthLogin();
         // khi người dùng nhấn nút Thêm ở danh mục thêm danh mục sp mới thì nội dung dữ liệu của form đó được guier tới đây
+       
+        $request->validate([
+            
+            'brand_product_name'=> 'required',
+            'brand_product_desc' => 'nullable',
+        ],
+        [
+          
+            "brand_product_name.required"=>"Trường này không được bỏ trống",
+           
+           
+        ]);
+       
         $data = array();
         // 'brand_name' là của cột trong bảng brand tên phải giống với cột trong csdl ko đc khác
         $data['brand_name'] = $request->brand_product_name;
@@ -45,7 +58,7 @@ class BrandController extends Controller
      
         Session::put('message','Thêm mới thành công');
       
-        return Redirect::to('add-brand-product');
+        return Redirect::to('add-brand-product')->with('success', 'Thêm thương hiệu thành công');
        
 
     }

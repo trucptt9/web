@@ -103,9 +103,10 @@ Route::post('/add',[CheckoutController::class,'add_customer']);
  Route::get('/payment/{customer_id}',[CheckoutController::class,'payment']); 
  Route::post('/phuongthucthanhtoan',[CheckoutController::class,'phuongthucthanhtoan']);
  Route::post('/save-checkout-customer',[CheckoutController::class,'save_checkout_customer']);
+
  Route::post('/login-customer',[CheckoutController::class,'login_customer']);
 
- Route::get('/update-address',[CheckoutController::class,'update_address']); 
+  Route::post('/update-address/{customer_id}',[CheckoutController::class,'update_address']); 
  // Order đơn hàng
 Route::get('/manage-order',[CheckoutController::class,'manage_order']);
 Route::get('/view-order/{orderId}',[CheckoutController::class,'view_order']);

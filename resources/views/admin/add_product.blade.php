@@ -11,27 +11,38 @@
                         </header>
                         
                             <div class="panel-body">
-                          
+                            @include('common.alert')
                             <div class="position-center">
                                 <form role="form" method="post" action="{{URL::to('/save-product')}}" enctype="multipart/form-data">
                                     {{csrf_field()}}
                                    
                                 <div class="form-group">    
-                                    <label for="">Tên sản phẩm</label>
-                                    <input type="text" name="product_name" class="form-control" placeholder="Nhập tên danh mục">
+                                    <span class="text-danger">* </span><label for="">Tên sản phẩm</label>
+                                    <input type="text" name="product_name" class="form-control" placeholder="Nhập tên sản phẩm" value="{{ old('product_name') }}">
+                                    @error('product_name')
+                                                    <span class="text-danger" style="color: red">{{ $message }} </span>
+                                     @enderror
                                 </div>
                                 <div class="form-group">
                                     <label for="">Nội dung sản phẩm</label>
-                                    <textarea type="password" style="resize:none;" rows="3" name="product_content" class="form-control" id="exampleInputPassword1" placeholder="nội dung sản phẩm"></textarea>
+                                    <textarea type="password" style="resize:none;" rows="3" name="product_content"
+                                     class="form-control" id="exampleInputPassword1" placeholder="nội dung sản phẩm"></textarea>
+                                   
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="">Giá sản phẩm</label>
-                                    <input type="text" name="product_price" class="form-control" placeholder="Nhập tên danh mục">
+                                <span class="text-danger">* </span><label for="">Giá sản phẩm</label>
+                                    <input type="text" name="product_price" class="form-control" value="{{ old('product_price') }}" placeholder="Nhập tên danh mục">
+                                    @error('product_price')
+                                                    <span class="text-danger" style="color: red">{{ $message }} </span>
+                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label for="">Số lượng hiện có</label>
-                                    <input type="number" name="product_SLtrongkho" class="form-control" placeholder="Nhập tên danh mục">
+                                <span class="text-danger">* </span> <label for="">Số lượng hiện có</label>
+                                    <input type="number" name="product_SLtrongkho" class="form-control" value="{{ old('product_SLtrongkho') }}" placeholder="Nhập tên danh mục">
+                                    @error('product_SLtrongkho')
+                                                    <span class="text-danger" style="color: red">{{ $message }} </span>
+                                     @enderror
                                 </div>
                                 <div class="form-group">
                                      <label for="">Danh mục</label>
@@ -56,8 +67,11 @@
                                         </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="">Hình ảnh sản phẩm</label>
-                                    <input type="file" name="product_image" class="form-control" >
+                                <span class="text-danger">* </span> <label for="">Hình ảnh sản phẩm</label>
+                                    <input type="file" name="product_image" class="form-control" value="{{ old('product_image') }}"  >
+                                    @error('product_image')
+                                                    <span class="text-danger" style="color: red">{{ $message }} </span>
+                                     @enderror
                                 </div>
                                 <div class="form-group">
                                     <label for="">Mô tả sản phẩm</label>

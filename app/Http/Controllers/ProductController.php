@@ -50,6 +50,23 @@ class ProductController extends Controller
     }
     public function save_product(Request $request){
         $this->AuthLogin();
+        $request->validate([
+            
+            'product_name'=> 'required',
+            'product_content' => 'nullable',
+            'product_price'=> 'required|numeric',
+            'product_SLtrongkho'=> 'required',
+            'product_image'=> 'required|image',
+        ],
+        [
+          
+            "product_name.required"=>"Trường này không được bỏ trống",
+            "product_price.required"=>"Trường này không được bỏ trống",
+            "product_price.numeric"=>"Trường này không được nhập kí tự",
+            "product_SLtrongkho.required"=>"Trường này không được bỏ trống",
+            "product_image.required"=>"Trường này không được bỏ trống",
+           
+        ]);
         $data = array();
         // 'brand_name' là của cột trong bảng brand tên phải giống với cột trong csdl ko đc khác
         $data['product_name'] = $request->product_name;
@@ -75,8 +92,8 @@ class ProductController extends Controller
         $data['product_image'] = '';
 
         DB::table('product')->insert($data); 
-        Session::put('message','Thêm sản phẩm thành công');
-        return Redirect::to('add-product');
+        // Session::put('message','Thêm sản phẩm thành công');
+        return Redirect::to('add-product')->with('success', 'Thêm thương hiệu thành công');
     }
 
     public function unactive_product($product_id){

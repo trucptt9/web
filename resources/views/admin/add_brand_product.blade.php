@@ -6,16 +6,9 @@
                         <header class="panel-heading">
                             Thêm thương hiệu sản phẩm
                         </header>
-                        <?php
-                         $message = Session::get('message');
-                            if($message){
-                        
-                            echo '<span class="text-center" style="color: green; font-weight: bold;">'.$message.'</span>';
-                                Session::put('message',null);
-                            }
-                        ?>
+                       
                             <div class="panel-body">
-                          
+                            @include('common.alert')
                             <div class="position-center">
                                 <form role="form" method="post" action="{{URL::to('/save-brand-product')}}">
                                     {{csrf_field()}}
@@ -23,6 +16,10 @@
                                     <div class="form-group">
                                         <label for="">Tên thương hiệu</label>
                                         <input type="text" name="brand_product_name" class="form-control" placeholder="Nhập tên danh mục">
+                                                @error('brand_product_name')
+                                                    <span class="text-danger" style="color: red">{{ $message }} </span>
+                                                 @enderror
+                                                        
                                     </div>
                                     <div class="form-group">
                                         <label for="">Mô tả</label>

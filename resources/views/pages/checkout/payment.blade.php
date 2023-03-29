@@ -22,47 +22,142 @@
                     {{$infor_shipping->shipping_address}}
                 </div>
                 <div class="col-sm-2">
-                   
 
-					<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
-  Launch demo modal
-</button>
 
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
-                  
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-success btn-sm open_modal" data-toggle="modal"
+                        data-target="#myModal">
+                        Thay đổi
+                    </button>
+
+                    <!-- Modal -->
+                    <form action="{{URL::to('/update-address/'.$infor_shipping->customer_id)}}" method="post">
+                        {{csrf_field()}}
+                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                            <div class="modal-dialog" role="document">
+
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <a type="" class="close" data-dismiss="modal" aria-label="Close"><span
+                                                aria-hidden="true">&times;</span></a>
+                                        <h2 class="modal-title" id="myModalLabel">Thông tin nhận hàng</h2>
+                                    </div>
+                                    <div class="modal-body">
+
+                                        <div class="form-one" style="width:100%">
+
+
+
+                                            <input type="text" placeholder="Họ tên người nhận" name="name"
+                                                class="form-control">
+
+                                            <input type="text" placeholder="Số điện thoại" name="phone"
+                                                class="form-control" style="margin-top:10px">
+
+                                            <input type="text" placeholder="Địa chỉ" name="address" class="form-control"
+                                                style="margin-top:10px">
+                                            <input type="hidden" value="" name="customer_id">
+                                            <textarea name="note" placeholder="Ghi chú" style="margin-top:10px"
+                                                class="form-control" rows="4"></textarea>
+
+
+
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer ">
+
+
+                                        <input type="submit" class="btn btn-success" 
+                                            style="margin-top:10px" value="Lưu">
+                                        <button type="button" class="btn btn-info" data-dismiss="modal"
+                                            style="margin-top:10px">Đóng</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </form>
                 </div>
+
             </div>
 
 
             <?php
 			}else{
 			?>
-            <p>Vui lòng nhập thông tin giao hàng <span><a href="#">Nhập thông tin</a></span></p>
-            </p>
+            <div class="row">
+                <div class="col-sm-4">
+                    Vui lòng nhập thông tin giao hàng!
+                </div>
+                <div class="col-sm">
+
+
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-success btn-sm open_modal" data-toggle="modal"
+                        data-target="#myModal">
+                        Nhập thông tin
+                    </button>
+
+                    <!-- Modal -->
+
+                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <form action="{{URL::to('/save-checkout-customer')}}" method="post">
+                                {{csrf_field()}}
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <a type="submit" class="close" data-dismiss="modal" aria-label="Close"><span
+                                                aria-hidden="true">&times;</span></a>
+                                        <h2 class="modal-title" id="myModalLabel">Thông tin nhận hàng</h2>
+                                    </div>
+                                    <div class="modal-body">
+
+                                        <div class="form-one" style="width:100%">
+
+
+
+                                            <input type="text" placeholder="Họ tên người nhận" name="name"
+                                                class="form-control">
+
+                                            <input type="text" placeholder="Số điện thoại" name="phone"
+                                                class="form-control" style="margin-top:10px">
+
+                                            <input type="text" placeholder="Địa chỉ" name="address" class="form-control"
+                                                style="margin-top:10px">
+                                            <input type="hidden" value="{{$customer_id}}" name="customer_id">
+                                            <textarea name="note" placeholder="Ghi chú" style="margin-top:10px"
+                                                class="form-control" rows="4"
+                                                style="height:200px!important ;"></textarea>
+
+
+
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer ">
+
+
+                                        <button type="submit" class="btn btn-success" 
+                                            style="margin-top:10px">Lưu</button>
+                                        <button type="button" class="btn btn-info" data-dismiss="modal"
+                                            style="margin-top:10px">Đóng</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+
             <?php
 			}
 			?>
 
 
-
+        </div>
 
         <div class="review-payment">
             <h2>Xem lại giỏ hàng</h2>
@@ -137,11 +232,25 @@
                     <label><input type="radio" name="payment_op" value="1"> Thanh toán trực tuyến</label>
                 </span>
                 <div>
+
+                <?php
+				if($infor_shipping != null){
+			    ?>
                     <input type="submit" value="Đặt hàng" class="btn btn-success btn-sm" style="font-size:18px">
+                <?php
+                }else{
+                ?>
+                <input type="submit" value="Đặt hàng" class="btn btn-success btn-sm" style="font-size:18px">
+                <section class='alert alert-danger' style="margin-top:20px">{{session('alert')}}</section>
+                <?php
+                }
+                ?>
                 </div>
 
             </form>
         </div>
     </div>
 </section>
+
+
 @endsection
