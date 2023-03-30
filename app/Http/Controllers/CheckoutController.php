@@ -257,4 +257,16 @@ class CheckoutController extends Controller
        
         
     }
+    public function tim_kiem_order(Request $request){
+        $this->AuthLogin();
+        $keyword = $request->keyword_sub;
+        $all_order = DB::table('order')->join('customer','order.customer_id', '=','customer.customer_id')
+              ->select('order.*','customer.customer_name')
+              ->where('customer.customer_name','like','%'.$keyword.'%')
+              ->orWhere('order.order_id','like','%'.$keyword.'%')
+              ->orderBy('order.order_id','desc')
+            ->get();
+       
+        return view('admin.view_search_order')->with('all_order',$all_order);
+    }   
 }
