@@ -17,7 +17,7 @@ class HomeController extends Controller
         ->select('product.*','category.category_name','brand.brand_name')
         ->get(); */
 
-        $all_product = DB::table('product')->where('product_status','1')->orderBy("product_id","desc")->limit(3)->get();
+        $all_product = DB::table('product')->where('product_status','1')->orderBy("product_id","desc")->limit(8)->get();
 
         return view('pages.home')->with('category',$category)->with('brand',$brand)->with('all_product',$all_product);
     }

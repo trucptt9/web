@@ -16,6 +16,21 @@ body {
 ul li {
   list-style: none;
 }
+#abcv::after{
+  content:12;
+  position: absolute;
+  top:-30px;
+  right:-30px;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background-color: red;
+  color:white;
+  font-size: 20px;
+}
 
 a:hover {
 outline: none;
@@ -247,12 +262,17 @@ a#scrollUp i{
 	padding-bottom: 10px;
 }
 
-.mainmenu ul li a:hover, .mainmenu ul li a.active,  .shop-menu ul li a.active{
+.mainmenu ul li a:hover, .mainmenu ul li a.active,  .shop-menu ul li a.active,
+.panel-heading .panel-title a.active, .brands-name ul li a.active{
 	background:none;
-	color:#fdb45e;
+	color: #fdb45e!important;;
+}
+a:hover{
+	background:none;
+	color: #7b9bbe!important;;
 }
 
-.search_box input {
+.search_box input { 
   background: #F0F0E9;
   border: medium none;
   color: #B2B2B2;
@@ -660,7 +680,7 @@ ul.sub-menu {
   padding-top: 15px;
 }
 .left-sidebar h2, .brands_products h2 {
-  color: #FE980F;
+  color: #5e5952;
   font-family: 'Roboto', sans-serif;
   font-size: 18px;
   font-weight: 700;
@@ -835,7 +855,7 @@ h2.title:before{
 
 
 h2.title {
-  color: #FE980F;
+  color: #e78000;
   font-family: 'Roboto', sans-serif;
   font-size: 18px;
   font-weight: 700;
@@ -862,11 +882,14 @@ h2.title {
 }
 
 .productinfo h2{
-	color: #FE980F;
+	color: #f57224;
 	font-family: 'Roboto', sans-serif;
-	font-size: 24px;
-	font-weight: 700;
+	font-size: 20px;
+	font-weight: 400;
 }
+/* .tryit{
+  color: 
+} */
 .product-overlay h2{
 	color: #fff;
 	font-family: 'Roboto', sans-serif;
@@ -878,8 +901,8 @@ h2.title {
 .productinfo p{
   font-family: 'Roboto', sans-serif;
   font-size: 14px;
-  font-weight: 400;
-  color: #696763;
+  font-weight: 500;
+  color: #444;
   height: 55px;
   text-overflow: ellipsis;
 }
@@ -1284,10 +1307,10 @@ h2.title {
 
 
 .cart {
-  background: #FE980F;
-  border: 0 none;
+  /* background: #FE980F; */
+  border: 1px solid #f57224;
   border-radius: 0;
-  color: #FFFFFF;
+  color: #f57224;
   font-family: 'Roboto', sans-serif;
   font-size: 15px;
   margin-bottom: 10px;

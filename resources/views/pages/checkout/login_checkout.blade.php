@@ -4,6 +4,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-sm-4 col-sm-offset-1">
+				@include('common.alert')
 					<div class="login-form"><!--login form-->
 						<h2>Đăng nhập</h2>
 						<form action="{{URL::to('/login-customer')}}" method="post">

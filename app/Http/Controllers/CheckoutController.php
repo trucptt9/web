@@ -40,6 +40,7 @@ class CheckoutController extends Controller
             "customer_email.email"=>"Email có định dạng là `name@gmail.com`",
             "customer_phone.required"=>"Vui lòng nhập số điện thoại",
             "customer_phone.unique"=>"Số điện thoại đã tồn tại",
+            "customer_phone.regex"=>"Số điện thoại không đúng định dạng",
             "customer_password.required"=>"Vui lòng nhập mật khẩu",
             "customer_password.confirmed"=>"Xác nhận mật khẩu sai",
         ]);
@@ -122,15 +123,18 @@ class CheckoutController extends Controller
         $email = $request->email;
         $password = md5($request->password);
 
+        
         $result = DB::table('customer')->where('customer_email',$email)->where('customer_password',$password)
                                     ->first();
-
-         Session::put('customer_id',$result->customer_id); 
+       
+        
         if($result){
+            Session::put('customer_id',$result->customer_id); 
             return Redirect('/trangchu');
         }
         else{
-            return Redirect('/login-checkout');
+
+            return Redirect('/login-checkout')->with('error','Tên đăng nhập hoặc mật khẩu không đúng. Vui lòng nhập lại');
         }
 
          
@@ -140,11 +144,16 @@ class CheckoutController extends Controller
 
     //insert dữ liệu vào bảng payment
     public function phuongthucthanhtoan(Request $request){
+        $content= Cart::content();
         //insert payment_method
         $customer_id = Session::get('customer_id'); //khi đăng nhập sẽ có customer_id
-        if(!Session::get('shipping_id')){
+        if(!Session::get('shipping_id') || $request->payment_op == null){
             $alert = "Vui lòng nhập thông tin nhận hàng ở phía trên!";
-            return Redirect::to('/payment/'.$customer_id)->with('alert',$alert);
+           
+            return Redirect::to('/payment/'.$customer_id)->with('alert',$alert)->with('error',"Vui lòng chọn phương thức thanh toán.");
+        }
+        elseif(Cart::subtotal() == 0){
+            return Redirect::to('/payment/'.$customer_id)->with('error',"Không có sản phẩm nào được chọn để thanh toán.");
         }
         else{
         $data = array();
@@ -166,7 +175,7 @@ class CheckoutController extends Controller
         //insert vào bảng order detail;
         
 
-        $content= Cart::content();
+        //$content= Cart::content();
         //$content được lấy ra nhở vapf Cart có lưu thông tin các sp thêm vào giỏ hàng
         foreach($content as $value){
             $orderDetail_data['order_id'] =  $order_id;  //khi đăng nhập sẽ có customer_id
@@ -174,9 +183,11 @@ class CheckoutController extends Controller
             $orderDetail_data['product_name'] = $value->name;
             $orderDetail_data['product_price'] = $value->price;
             $orderDetail_data['product_qty'] = $value->qty;
-           
             DB::table('order_detail')->insert($orderDetail_data);
             
+            $product = DB::table('product')->where('product.product_id',$value->id)->first();
+            $sl = $product->product_SLtrongkho - $value->qty;
+            DB::table('product')->where('product.product_id',$value->id)->update(['product.product_SLtrongkho'=>$sl]);
         }
         //
         if($data['payment_method'] == 0){   //bằng 0 là thanh toán bằng khi nhận hàng

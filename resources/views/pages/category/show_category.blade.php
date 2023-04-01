@@ -18,13 +18,13 @@
                     <p style="height:55px;text-overflow:ellipsis">{{$product->product_name}}</p>
                     <form action="{{URL::to('/sell-cart')}}" method="POST"> 
                         {{csrf_field()}}
-                    <p>
+                    
                     
                        
                         <input name="productid_hidden" type="hidden" value="{{$product->product_id}}"/>
                         <input name="qty" type="hidden" value="1" class="form-control" style="width:30%"/>
                         
-                    </p>
+                    
                     <?php
                         if($product->product_SLtrongkho >0 ){
                     ?>

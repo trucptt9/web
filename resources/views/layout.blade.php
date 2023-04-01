@@ -25,7 +25,23 @@
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="images/ico/apple-touch-icon-57-precomposed.png">
 
-    
+    <style>
+    .lzd-header .lzd-logo-bar .logo-bar-content .lzd-nav-cart .cart-num {
+    position: absolute;
+    background: #f36e36;
+    color: #fff;
+    top: -4px;
+    font-weight: 400;
+    right: -4px;
+    text-align: center;
+    border: 3px solid #f36e36;
+    font-size: 13px;
+    min-width: 14px;
+    line-height: 14px;
+    border-radius: 50%;
+    display: none;
+}
+    </style>
 
       
 <body>
@@ -43,8 +59,7 @@
                 <div class="row">
                     <div class="col-sm-4">
                         <div class="logo pull-left">
-                            <a href="{{URL::to('/trangchu')}}"><img src="public/frontend/images/logo.png" alt="" width="80"
-                                    height="80" /></a>
+                            <a href="{{URL::to('/trangchu')}}" title="logo"><img src="{{URL::to('public/frontend/images/Capture.PNG')}}" alt="" height="70";/></a>
                         </div>
                       
                     </div>
@@ -89,7 +104,9 @@
                                 }
                                 ?>
 
-                                <li><a href="{{URL::to('/show-cart')}}"><i class="fa fa-shopping-cart"></i> Giỏ hàng</a></li>
+                                <li><a href="{{URL::to('/show-cart')}}" id="abcv"><i class="fa fa-shopping-cart" id="abcv"></i>Giỏ hàng</a>
+                               
+                                </li>
                                 <?php
                                     $customer_id = Session::get('customer_id');
                                     if($customer_id != null){
@@ -130,15 +147,15 @@
                                 <span class="icon-bar"></span>
                             </button>
                         </div>
-                        <div class="mainmenu pull-left">
+                        <div class="mainmenu pull-left" id="hello">
                             <ul class="nav navbar-nav collapse navbar-collapse">
-                                <li><a href="{{URL::to('/trangchu')}}" class="active">Trang chủ</a></li>
-                                <li class="dropdown"><a href="{{URL::to('/tat-ca-sp')}}">Sản phẩm</a>
+                                <li><a href="{{URL::to('/trangchu')}}" class="{{(request()->is('trangchu')) ? 'active' : '' }}">Trang chủ</a></li>
+                                <li class="" ><a href="{{URL::to('/tat-ca-sp')}}" class="{{(request()->is('tat-ca-sp')) ? 'active' : '' }}">Sản phẩm</a>
                                     
                                 </li>
                               
-                                <li><a href="{{URL::to('/show-cart')}}">Giỏ hàng</a></li>
-                                <li><a href="contact-us.html">Liên hệ</a></li>
+                                <li ><a href="{{URL::to('/show-cart')}}" class="{{(request()->is('show-cart')) ? 'active' : '' }}" >Giỏ hàng</a></li>
+                                <li><a href="{{URL::to('/lienhe')}}" class="{{(request()->is('lienhe')) ? 'active' : '' }}">Liên hệ</a></li>
                             </ul>
                         </div>
                     </div>
@@ -173,7 +190,9 @@
                             @foreach ($category as $key => $cate)
                             <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <h4 class="panel-title"><a href="{{URL::to('/danh-muc-san-pham/'.$cate->category_id)}}">{{$cate->category_name}}</a></h4>
+                                    <h4 class="panel-title"><a href="{{URL::to('/danh-muc-san-pham/'.$cate->category_id)}}"
+                                    class="{{(request()->is('danh-muc-san-pham/'.$cate->category_id)) ? 'active' : '' }}"
+                                    >{{$cate->category_name}}</a></h4>
                                 </div>
                             </div>
                            
@@ -184,7 +203,9 @@
                             <div class="brands-name">
                                 @foreach ($brand as $key => $brand)
                                 <ul class="nav nav-pills nav-stacked">
-                                    <li><a href="{{URL::to('/thuong-hieu-san-pham/'.$brand->brand_id)}}"> <span class="pull-right"></span>{{$brand->brand_name}}</a></li>
+                                    <li><a href="{{URL::to('/thuong-hieu-san-pham/'.$brand->brand_id)}}"
+                                    class="{{(request()->is('thuong-hieu-san-pham/'.$brand->brand_id)) ? 'active' : '' }}"
+                                    > <span class="pull-right"></span>{{$brand->brand_name}}</a></li>
                                     
                                 </ul>
                                 @endforeach

@@ -12,6 +12,7 @@
         <!--/breadcrums-->
 
         <div class="review-payment">
+        @include('common.alert')    
             <h2>Thông tin nhận hàng</h2>
             <?php
 				if($infor_shipping != null){
@@ -220,6 +221,7 @@
 
         <div class="payment-options">
             <div class="review-payment">
+               
                 <h2>Phương thức thanh toán</h2>
             </div>
             <form action="{{URL::to('/phuongthucthanhtoan')}}" method="post">
