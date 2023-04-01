@@ -8,6 +8,7 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\TypeaheadController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -111,8 +112,10 @@ Route::post('/add',[CheckoutController::class,'add_customer']);
 Route::get('/manage-order',[CheckoutController::class,'manage_order']);
 Route::get('/view-order/{orderId}',[CheckoutController::class,'view_order']);
 Route::post('/capnhatdonhang/{orderId}',[CheckoutController::class,'capnhat']);
+Route::get('/timkiem_order',[CheckoutController::class, 'tim_kiem_order']);
 
 
 //thống kê doanh thu
 
 Route::get('/revenue-statistic',[AdminController::class,'thong_ke_doanh_thu']);
+Route::get('/timkiem_thong_ke',[AdminController::class, 'tim_kiem_thong_ke']);

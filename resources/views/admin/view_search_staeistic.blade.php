@@ -1,7 +1,8 @@
 @extends('admin_layout')
 @section('admin_content')
 
-    <form action="{{URL::to('/timkiem_thong_ke')}}">
+
+<form action="{{URL::to('/timkiem_thong_ke')}}">
         <div class="input-group" style="width:50%">
             <input type="text" class="input-sm form-control" placeholder="Search" name="keyword_sub">
             <span class="input-group-btn">
@@ -9,16 +10,6 @@
             </span>
         </div>
         </form>
-        <!-- <div class="col-sm-4">
-                        <form action="" method="post">
-                            {{csrf_field()}}
-                            <div class="search_box pull-right" style="width:250px">
-                                <input type="text" placeholder="Tìm kiếm" name="keyword_sub"/>
-                                <button type="submit" class="btn btn-primary btn-sm" style="margin-top:0px">
-                                    <i class="fa-solid fa-magnifying-glass"></i> </button>
-                            </div>
-                     </form>
-                    </div> -->
     
 <div class="panel-heading">
             Tổng doanh thu
