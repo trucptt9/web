@@ -17,6 +17,7 @@ html, body{
 	background-size:cover;
     
 }
+
 body a{
 	transition: 0.5s all ease;
 	-webkit-transition: 0.5s all ease;

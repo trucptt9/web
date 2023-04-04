@@ -35,7 +35,7 @@
                                     </div>
                                 
                                      <button type="submit" class="btn btn-info" name="save_brand_product">Thêm</button>
-                                    
+                                     <a  class="btn btn-warning" name="quay lai" type="button" href="{{URL::to('/all-brand-product')}}">Hủy</a>
                                 </form>
                               
                                

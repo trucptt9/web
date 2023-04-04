@@ -2,11 +2,14 @@
 @section('admin_content')
 
 <div class="table-agile-info">
+
   <div class="panel panel-default">
+  <a class="btn btn-success " href="{{URL::to('/add-brand-product')}}" type="button" style="margin-bottom: 10px;">Thêm</a>
     <div class="panel-heading">
+    
       Liệt kê thương hiệu sản phẩm
     </div>
-    
+    @include('common.alert')
     <div class="row w3-res-tb">
       <!-- <div class="col-sm-5 m-b-xs">
         <select class="input-sm form-control w-sm inline v-middle">

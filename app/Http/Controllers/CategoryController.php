@@ -95,10 +95,17 @@ class CategoryController extends Controller
      }
      public function delete_category_product($category_id){
         $this->AuthLogin();
- 
-        DB::table('category')->where('category_id',$category_id)->delete();
-        Session::put('message','Xóa danh mục thành công');
-        return Redirect::to('all-category-product');
+        $pro = DB::table('product')->where('product.category_id',$category_id)->first();
+        if($pro != null){
+            return Redirect::to('all-category-product')->with('error',"Không thể xóa danh mục này vì vẫn còn sản phẩm thuộc danh mục.");
+          
+        }
+        else{
+            DB::table('category')->where('category_id',$category_id)->delete();
+            //Session::put('message','Xóa danh mục thành công');
+            return Redirect::to('all-category-product');
+        }
+      
       }
 
     //   end function admin page

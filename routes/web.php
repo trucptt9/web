@@ -8,6 +8,7 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\CouponController;
 use App\Http\Controllers\TypeaheadController;
 /*
 |--------------------------------------------------------------------------
@@ -113,9 +114,20 @@ Route::get('/manage-order',[CheckoutController::class,'manage_order']);
 Route::get('/view-order/{orderId}',[CheckoutController::class,'view_order']);
 Route::post('/capnhatdonhang/{orderId}',[CheckoutController::class,'capnhat']);
 Route::get('/timkiem_order',[CheckoutController::class, 'tim_kiem_order']);
-
+Route::get('/delete-order/{order_id}',[CheckoutController::class,'delete_order']);
 
 //thống kê doanh thu
 
 Route::get('/revenue-statistic',[AdminController::class,'thong_ke_doanh_thu']);
 Route::get('/timkiem_thong_ke',[AdminController::class, 'tim_kiem_thong_ke']);
+
+//khuyến mãi
+Route::get('/all-coupon',[CouponController::class,'all_coupon']);
+Route::get('/add-coupon',[CouponController::class,'add_coupon']);
+Route::post('/save-coupon',[CouponController::class,'save_coupon']);
+Route::get('/edit-coupon/{coupon_id}',[CouponController::class,'edit_coupon']);
+Route::post('/update-coupon/{coupon_id}',[CouponController::class,'update_coupon']);
+Route::get('/delete-coupon/{coupon_id}',[CouponController::class,'delete_coupon']);
+Route::get('/apply-coupon',[CouponController::class,'apply_coupon']);
+Route::post('/save-coupon-product/{product_id}',[CouponController::class,'save_coupon_product']);
+Route::get('/delete-product-coupon/{product_id}',[CouponController::class,'delete_product_coupon']);

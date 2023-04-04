@@ -3,9 +3,11 @@
 
 <div class="table-agile-info">
   <div class="panel panel-default">
-  <a class="btn btn-success " href="{{URL::to('/add-product')}}" type="button" style="margin-bottom: 10px;">Thêm</a>
+    @include('common.alert')
+    <a href="{{URL::to('/add-coupon')}}" class="btn btn-success" type="button">Thêm khuyến mãi</a>
+    
     <div class="panel-heading">
-      Liệt kê các sản phẩm
+      Liệt kê khuyến mãi
     </div>
     
     <div class="row w3-res-tb">
@@ -21,57 +23,40 @@
       <div class="col-sm-4">
       </div>
       <div class="col-sm-3">
-        
+      
       </div>
     </div>
     <div class="table-responsive">
       <table class="table table-striped b-t b-light">
         <thead>
           <tr>
-          <th>ID</th>
-            <th>Tên sản phẩm</th>
-            <th>Hình ảnh</th>
-            <th>Danh mục</th>
-            <th>Thương hiệu</th>
-            <th>Nội dung sản phẩm</th>
-            <th style="width:150px;">Giá</th>
-            <th>Số lượng</th>
-            <th>Hiển thị</th>
+            <th>ID</th>
+            <th>Tên Khuyến mãi</th>
+            <th>Giá trị</th>
+          
+            <th>Ngày bắt đầu</th>
+            <th>Ngày kết thúc</th>
+          
             
-            <th style="width:20px;"></th>
+            <th style="width:30px;"></th>
           </tr>
         </thead>
         <tbody>
-          @foreach($all_product as $key => $pro)
+        @foreach($all_coupon as $key => $cp)
           <tr>
-           <td>{{$pro->product_id}}</td>
-            <td>{{$pro->product_name}}</td>
-            <td> <img src="public/upload/product/{{$pro->product_image}}" height="100" width="100"> </td>
-            <td>{{$pro->category_name}}</td>
-            <td>{{$pro->brand_name}}</td>
-            <td>{{$pro->product_content}}</td>
-            <td>{{number_format($pro->product_price).' VND'}}</td>
-            <td>{{$pro->product_SLtrongkho}}</td>
-            <td><span class="text-ellipsis">
-              <?php 
-                  if($pro->product_status==0){
-              ?>
-                   <a href="{{URL::to('/active-product/'.$pro->product_id)}}"> <i class="fa-regular fa-circle-xmark" style="color: #f70808;font-size:18px"></i></a>;
-                  <?php
-                    }else{
-                  ?>
-                    <a href="{{URL::to('/unactive-product/'.$pro->product_id)}}"> <i class="fa-regular fa-circle-check" style="color: #34e411;font-size:18px"></i></a>;
-                  <?php
-                  }
-               ?>
            
-            </span></td>
+            <td>{{$cp->coupon_id}}</td>
+            <td>{{$cp->coupon_name}}</td>
+            <td>{{($cp->coupon_value)*100}}%</td>
+            <td>{{date('d/m/Y', strtotime ($cp->coupon_start))}}</td>
+            <td>{{date('d/m/Y', strtotime ($cp->coupon_end))}}</td>
+           </td>
             
             <td>
-              <a href="{{URL::to('edit-product/'.$pro->product_id)}}" class="active" ui-toggle-class="">
+              <a href="{{URL::to('edit-coupon/'.$cp->coupon_id)}}" class="active" ui-toggle-class="">
                 <i class="fa fa-pencil-square-o text-success text-active" style="font-size: 18px;"></i>
               </a>
-              <a href="{{URL::to('delete-product/'.$pro->product_id)}}" 
+              <a href="{{URL::to('delete-coupon/'.$cp->coupon_id)}}"
               onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này không?')"
               class="active" ui-toggle-class="">
                 <i class="fa fa-times text-danger text" style="font-size: 18px;"></i>
@@ -101,7 +86,15 @@
       </div>
     </footer>
   </div>
-  
+  <!-- @if(Session::has('message'))
+                            <script>
+                                swal("Thông báo","{{Session::get('message')}}",'success',{
+                                    button:true,
+                                    button:"OK",
+                                }
+                                );
+                            </script>
+                     @endif -->
 </div>
 
 

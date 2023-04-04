@@ -39,9 +39,9 @@
             <tbody>
                 <tr>
 
-                    <td>{{number_format($total).'VND'}}</td>
-                    <td>{{number_format($total_paid).'VND'}}</td>
-                    <td>{{number_format($total_unpaid).'VND'}}</td>
+                    <td>{{number_format($total).' VND'}}</td>
+                    <td>{{number_format($total_paid).' VND'}}</td>
+                    <td>{{number_format($total_unpaid).' VND'}}</td>
                 </tr>
                 
             </tbody>

@@ -38,6 +38,7 @@
                                 </div>
                             
                                 <button type="submit" class="btn btn-info" name="add_category_product">Thêm</button>
+                                <a  class="btn btn-warning" name="quay lai" type="button" href="{{URL::to('/all-category-product')}}">Hủy</a>
                             </form>
                            
                                 </div>

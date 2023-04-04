@@ -63,6 +63,7 @@ class AdminController extends Controller
 
     //thống kê doanh thu
     public function thong_ke_doanh_thu(){
+        $this->AuthLogin();
         $Count_product = DB::table('product')->count();
         $statistical = DB:: table('product')
                         ->join('order_detail','product.product_id','=','order_detail.product_id')
@@ -72,6 +73,8 @@ class AdminController extends Controller
         $total=0;
         $total_unpaid=0;
         $total_paid=0;
+      
+       
         $total = DB::table('order')->sum('order_total');
         $total_paid = DB::table('order')
                 ->where('order_status','Giao hàng thành công')
@@ -80,6 +83,23 @@ class AdminController extends Controller
                 ->where('order_status','Đang chờ xử lý')
                 ->orWhere('order_status','Đã giao cho bên vận chuyển')
                 ->sum('order_total');
+
+        // $total_paid = DB::table('order')
+        //         ->select('order_total', DB::raw('SUM(CAST(order_total as DECIMAL(10,2)) )as total_paid'))
+        //         ->where('order_status', "Giao hàng thành công")
+        //         ->get();
+
+        // $S = DB::table('order')->select('order_total');
+        // foreach($S as $value){
+        //     $total += (float)($value->order_total);
+        //  }
+        // $total_paid = DB::table('order')
+        //         ->where('order_status','Giao hàng thành công')
+        //         ->sum('order_total');
+        // $total_unpaid = DB::table('order')
+        //         ->where('order_status','Đang chờ xử lý')
+        //         ->orWhere('order_status','Đã giao cho bên vận chuyển')
+        //         ->sum('order_total');
         return view('admin.revenue_statistic')
                 ->with('total',$total)
                 ->with('statistical',$statistical)

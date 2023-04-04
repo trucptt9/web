@@ -32,7 +32,7 @@
 
                                 <div class="form-group">
                                 <span class="text-danger">* </span><label for="">Giá sản phẩm</label>
-                                    <input type="text" name="product_price" class="form-control" value="{{ old('product_price') }}" placeholder="Nhập tên danh mục">
+                                    <input type="number" name="product_price" class="form-control" value="{{ old('product_price') }}" placeholder="Nhập tên danh mục">
                                     @error('product_price')
                                                     <span class="text-danger" style="color: red">{{ $message }} </span>
                                      @enderror
@@ -87,6 +87,7 @@
                                 </div>
                             
                                 <button type="submit" class="btn btn-info" name="add_product">Thêm</button>
+                                <a  class="btn btn-warning" name="quay lai" type="button" href="{{URL::to('/all-product')}}">Hủy</a>
                             </form>
                            
                                 </div>

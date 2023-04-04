@@ -40,6 +40,7 @@ Smar tphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Son
     <script src="https://unpkg.com/sweetalert2@7.18.0/dist/sweetalert2.all.js"></script>
 
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
 </head>
 
 <body>
@@ -163,6 +164,19 @@ Smar tphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Son
                             </a>
                            
                         </li>
+                        <!-- khuyến mãi -->
+                        <li class="sub-menu">
+                            <a href="javascript:;">
+                                <i class="fa fa-book"></i>
+                                <span>Khuyến mãi</span>
+                            </a>
+                            <ul class="sub">
+                                <li><a href="{{URL::to('/apply-coupon')}}">Áp dụng khuyến mãi</a></li>
+                                <li><a href="{{URL::to('/all-coupon')}}">Quản lý khuyến mãi</a></li>
+                                
+                            </ul>
+                        </li>
+                        
                        
                     </ul>
                 </div>
@@ -326,7 +340,7 @@ Smar tphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Son
     </script>
     <!-- //calendar -->
 
-   
+    
 </body>
 
 </html>

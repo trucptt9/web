@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -160,16 +161,16 @@ class CheckoutController extends Controller
         $data['payment_method'] = $request->payment_op;
         $data['payment_status'] = 'Đang chờ xử lý';
         $payment_id = DB::table('payment')->insertGetId($data);
-
+        
        
         //insert vào bảng order
         $order_data = array();
         $order_data['customer_id'] = $customer_id;
         $order_data['shipping_id'] = Session::get('shipping_id');
         $order_data['payment_id'] = $payment_id;
-        $order_data['order_total'] = Cart::subtotal();
+        $order_data['order_total'] = Cart::subtotal(0,'','');
         $order_data['order_status'] = 'Đang chờ xử lý';
-
+        $order_data['order_ngaydathang'] = Carbon::now();
         $order_id = DB::table('order')->insertGetId($order_data);
 
         //insert vào bảng order detail;
@@ -280,4 +281,12 @@ class CheckoutController extends Controller
        
         return view('admin.view_search_order')->with('all_order',$all_order);
     }   
+
+    public function delete_order($order_id){
+        $this->AuthLogin();
+ 
+        DB::table('order')->where('order_id',$order_id)->delete();
+        Session::put('message','Xóa danh mục thành công');
+        return Redirect::to('manage-order');
+    }
 }

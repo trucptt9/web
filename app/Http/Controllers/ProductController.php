@@ -30,6 +30,7 @@ class ProductController extends Controller
         $all_product = DB::table('product')->join('category','product.category_id', '=','category.category_id')
                                             ->join('brand','product.brand_id', '=','brand.brand_id')  
                                             ->select('product.*','category.category_name','brand.brand_name')
+                                            ->orderBy('product.product_id','desc')
                                             ->get();
        
     return view('admin.all_product')->with('all_product', $all_product);
@@ -38,9 +39,11 @@ class ProductController extends Controller
     public function tat_ca_sp(){
         $category = DB::table('category')->orderBy("category_id","desc")->get();
         $brand = DB::table('brand')->orderBy("brand_id","desc")->get();
-        $products = DB::table('product')->join('category','product.category_id', '=','category.category_id')
+        $products = DB::table('product')
+                                         ->join('category','product.category_id', '=','category.category_id')
                                             ->join('brand','product.brand_id', '=','brand.brand_id')  
                                             ->select('product.*','category.category_name','brand.brand_name')
+                                            ->orderBy('product.product_id','desc')
                                             ->get();
        
         return view('pages.products.all_product')->with('products', $products)
@@ -87,13 +90,13 @@ class ProductController extends Controller
             $data['product_image'] = $new_image;
             DB::table('product')->insert($data); 
             Session::put('message','Thêm sản phẩm thành công');
-            return Redirect::to('add-product');
+            return Redirect::to('add-product')->with('success', 'Thêm sản phẩm thành công');
         }
         $data['product_image'] = '';
 
         DB::table('product')->insert($data); 
-        // Session::put('message','Thêm sản phẩm thành công');
-        return Redirect::to('add-product')->with('success', 'Thêm thương hiệu thành công');
+         Session::put('message','Thêm sản phẩm thành công');
+        return Redirect::to('add-product')->with('success', 'Thêm sản phẩm thành công');
     }
 
     public function unactive_product($product_id){
@@ -174,5 +177,10 @@ class ProductController extends Controller
         return view('pages.products.show_detail_product')
         ->with('category',$category)->with('brand',$brand)
         ->with('product_detail',$product_detail);
+    }
+
+    public function khuyen_mai(){
+
+        return view('admin.khuyenmai');
     }
 }
