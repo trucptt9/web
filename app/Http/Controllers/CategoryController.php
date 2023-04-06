@@ -116,8 +116,12 @@ class CategoryController extends Controller
         $brand = DB::table('brand')->where('brand_status','1')->orderBy("brand_id","desc")->get();
 
         $category_name = DB::table('category')->where('category.category_id',$category_id)->limit(1)->get();
-        $category_byID = DB::table('product')->join('category','product.category_id','=','category.category_id')
-                                            ->where('product.category_id',$category_id)->get();
+        $category_byID = DB::table('product')->where('product.category_id',$category_id)
+                                            ->join('category','product.category_id','=','category.category_id')
+                                            ->leftJoin('promotional_products','product.product_id','promotional_products.product_id')
+                                            ->leftJoin('coupon','promotional_products.coupon_id','coupon.coupon_id')
+                                            ->select('product.*','promotional_products.price_final','coupon.*')
+                                            ->get();
         return view('pages.category.show_category')->with('category',$category)->with('brand',$brand)
                                                 ->with('category_name',$category_name)
                                                     ->with('category_byID',$category_byID);

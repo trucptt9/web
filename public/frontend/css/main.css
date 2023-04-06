@@ -11,6 +11,7 @@ body {
   /* background:; */
   position: relative;
   font-weight:400px;
+  line-height: 1!important;
 }
 
 ul li {
@@ -886,10 +887,11 @@ h2.title {
 	font-family: 'Roboto', sans-serif;
 	font-size: 20px;
 	font-weight: 400;
+  margin-top:0px;
 }
-/* .tryit{
-  color: 
-} */
+.tryit{
+  color: #f57224!important;
+}
 .product-overlay h2{
 	color: #fff;
 	font-family: 'Roboto', sans-serif;
@@ -1270,7 +1272,7 @@ h2.title {
 .product-information span {
   display: inline-block;
   margin-bottom: 8px;
-  margin-top: 18px;
+  /* margin-top: 18px; */
 }
 
 .product-information span span {

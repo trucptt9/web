@@ -17,8 +17,16 @@ class HomeController extends Controller
         ->select('product.*','category.category_name','brand.brand_name')
         ->get(); */
 
-        $all_product = DB::table('product')->where('product_status','1')->orderBy("product_id","desc")->limit(8)->get();
+        //$all_product = DB::table('product')->where('product_status','1')->orderBy("product_id","desc")->limit(8)->get();
 
+        $all_product = DB::table('product')
+                ->where('product_status','1')
+                ->leftJoin('promotional_products','product.product_id','promotional_products.product_id')
+                ->leftJoin('coupon','promotional_products.coupon_id','coupon.coupon_id')
+                ->select('product.*','promotional_products.price_final','coupon.*')
+                ->orderBy("product_id","desc")->limit(8)->get()
+                
+                ;
         return view('pages.home')->with('category',$category)->with('brand',$brand)->with('all_product',$all_product);
     }
 

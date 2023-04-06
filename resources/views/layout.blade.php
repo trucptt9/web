@@ -199,8 +199,8 @@
                             <div class="brands-name">
                                 @foreach ($brand as $key => $brand)
                                 <ul class="nav nav-pills nav-stacked">
-                                    <li><a href="{{URL::to('/thuong-hieu-san-pham/'.$brand->brand_id)}}"
-                                    class="{{(request()->is('thuong-hieu-san-pham/'.$brand->brand_id)) ? 'active' : '' }}"
+                                    <li><a href="{{URL::to('/thuonghieu/'.$brand->brand_id)}}"
+                                    class="{{(request()->is('thuonghieu/'.$brand->brand_id)) ? 'active' : '' }}"
                                     > <span class="pull-right"></span>{{$brand->brand_name}}</a></li>
                                     
                                 </ul>

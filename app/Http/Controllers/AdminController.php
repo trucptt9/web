@@ -67,7 +67,8 @@ class AdminController extends Controller
         $Count_product = DB::table('product')->count();
         $statistical = DB:: table('product')
                         ->join('order_detail','product.product_id','=','order_detail.product_id')
-                        ->select('product.product_id','product.product_name','product.product_price',DB::raw('count(*) as count'),DB::raw('sum(product.product_price) as total'))
+                        ->select('product.product_id','product.product_name','product.product_price',
+                        DB::raw('sum(order_detail.product_qty) as count'),DB::raw('sum(product.product_price * order_detail.product_qty) as total'))
                         ->groupBy('product.product_id','product.product_name','product.product_price')
                         ->get();
         $total=0;
@@ -84,27 +85,13 @@ class AdminController extends Controller
                 ->orWhere('order_status','Đã giao cho bên vận chuyển')
                 ->sum('order_total');
 
-        // $total_paid = DB::table('order')
-        //         ->select('order_total', DB::raw('SUM(CAST(order_total as DECIMAL(10,2)) )as total_paid'))
-        //         ->where('order_status', "Giao hàng thành công")
-        //         ->get();
-
-        // $S = DB::table('order')->select('order_total');
-        // foreach($S as $value){
-        //     $total += (float)($value->order_total);
-        //  }
-        // $total_paid = DB::table('order')
-        //         ->where('order_status','Giao hàng thành công')
-        //         ->sum('order_total');
-        // $total_unpaid = DB::table('order')
-        //         ->where('order_status','Đang chờ xử lý')
-        //         ->orWhere('order_status','Đã giao cho bên vận chuyển')
-        //         ->sum('order_total');
+    
         return view('admin.revenue_statistic')
                 ->with('total',$total)
                 ->with('statistical',$statistical)
                 ->with('total_paid',$total_paid)
-                ->with('total_unpaid',$total_unpaid);
+                ->with('total_unpaid',$total_unpaid)
+                ;
     }
 
     public function tim_kiem_thong_ke(Request $request){
@@ -113,7 +100,7 @@ class AdminController extends Controller
         $Count_product = DB::table('product')->count();
         $statistical = DB:: table('product')
                         ->join('order_detail','product.product_id','=','order_detail.product_id')
-                        ->select('product.product_id','product.product_name','product.product_price',DB::raw('count(*) as count'),DB::raw('sum(product.product_price) as total'))
+                        ->select('product.product_id','product.product_name','product.product_price',DB::raw('sum(order_detail.product_qty) as count'),DB::raw('sum(product.product_price) as total'))
                         ->groupBy('product.product_id','product.product_name','product.product_price')
                         ->where('product.product_name','like','%'.$keyword.'%')
                         ->orWhere('product.product_id','=',$keyword)

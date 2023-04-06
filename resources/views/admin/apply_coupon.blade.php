@@ -3,7 +3,7 @@
 
 <div class="table-agile-info">
     <div class="panel panel-default">
-    @include('common.alert')
+        @include('common.alert')
         <div class="panel-heading">
             Áp dụng khuyến mãi cho sản phẩm
         </div>
@@ -25,11 +25,12 @@
                         <th>ID SP</th>
                         <th style="width:200px">Tên sản phẩm</th>
                         <th>Giá sản phẩm</th>
-                        
-                        <th>Khuyến mãi áp dụng</th>
-                        <th style="width:20px"></th>
 
-                        <th style="width:20px"></th>
+                        <th>Khuyến mãi áp dụng</th>
+                        <th>Giá áp dụng sau KM</th>
+                        <th style="width:30px"></th>
+
+                       
                     </tr>
                 </thead>
                 <tbody>
@@ -44,68 +45,27 @@
                             
                             if($pro->coupon_name == null){
                         ?>
-
-                                <td>Không có</td>
+                          <td>Không có</td>
+                        <td>{{number_format($pro->product_price). ' VND'}}</td>
+                      
                         <?php
                             }else{
                             ?>
-                            <td>{{$pro->coupon_name}}</td>
-                            <?php
+                             <td>{{$pro->coupon_name}}</td>
+                        <td>{{number_format($pro->price_final). ' VND'}}</td>
+                       
+                        <?php
                             }
                             ?>
-                         
+                       
                         <td>
-                           
-                        <button type="button" class="btn btn-success btn-sm open_modal" data-toggle="modal"
-                        data-target="#myModal">
-                        Thêm km
-                    </button>
-                            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                        <div class="modal-dialog" role="document">
-                            <form action="{{URL::to('/save-coupon-product/'.$pro->product_id)}}" method="post">
-                                {{csrf_field()}}
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <a type="submit" class="close" data-dismiss="modal" aria-label="Close"><span
-                                                aria-hidden="true">&times;</span></a>
-                                        <h2 class="modal-title" id="myModalLabel">Khuyến mãi</h2>
-                                    </div>
-                                    <div class="modal-body">
-
-                                        <div class="form-one" style="width:100%">
-
-
-
-                                           <select name="km">
-                                                @foreach($coupons as $key => $cp)
-                                                    <option value={{$cp->coupon_id}}>{{$cp->coupon_name}} </option>
-                                                @endforeach
-                                            </select>
-                                           
-
-
-
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer ">
-
-
-                                        <button type="submit" class="btn btn-success" 
-                                            style="margin-top:10px">Lưu</button>
-                                        <button type="button" class="btn btn-info" data-dismiss="modal"
-                                            style="margin-top:10px">Đóng</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+                        
+                            <button type="button" class="btn btn-success btn-sm open_modal" data-id="{{ $pro->product_id }}" data-toggle="modal"
+                                data-target="#myModal">
+                                Thêm khuyến mãi
+                            </button>
                         </td>
-                        <td>
-                            <a href="{{URL::to('/delete-product-coupon/'.$pro->product_id)}}">
-                                <!-- xóa khuyến mãi của sp đó thôi -->
-                                <i class="fa-solid fa-trash" style="color:red;"></i>
-                            </a>
-                        </td>
+                       
                     </tr>
                     @endforeach
                 </tbody>
@@ -134,6 +94,53 @@
     </div>
 
 </div>
+<form action="{{URL::to('/save-product-coupon')}}" method="post">
+                                {{csrf_field()}}
+                            <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+                                aria-labelledby="myModalLabel">
+                                <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <a type="submit" class="close" data-dismiss="modal"
+                                                    aria-label="Close"><span aria-hidden="true">&times;</span></a>
+                                                <h2 class="modal-title" id="myModalLabel">Khuyến mãi</h2>
+                                            </div>
+                                            <div class="modal-body">
+                                            <input type="hidden" name="id_product">
+                                                <div class="form-one" style="width:100%">                                   
+                                                    <select name="coupon_id">
+                                                        @foreach($coupons as $key => $cpon)
+                                                            <option value='{{$cpon->coupon_id}}'>
+                                                             {{$cpon->coupon_name}} ( {{date('d/m/Y',strtotime($cpon->coupon_start))}} - {{date('d/m/Y',strtotime($cpon->coupon_end))}} ) 
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer ">
 
+
+                                                <button type="submit" class="btn btn-success"
+                                                    style="margin-top:10px">Lưu</button>
+                                                <button type="button" class="btn btn-info" data-dismiss="modal"
+                                                    style="margin-top:10px">Đóng</button>
+                                            </div>
+                                        </div>
+                                    
+                                </div>
+                            </div>
+                            </form>
+
+
+<script>
+$('.open_modal').click(function() {
+    const product_id = $(this).data('id');
+    console.log('product_id', product_id);
+    $('input[name="id_product"]').val(product_id);
+})
+
+
+
+</script>
 
 @endsection

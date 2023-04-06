@@ -45,7 +45,7 @@
             <td>{{$order->order_id}}</td>
           
             <td>{{$order->customer_name}}</td>
-            <td>{{$order->order_total}}</td>
+            <td>{{number_format($order->order_total).' VND'}}</td>
             <td>{{date('d/m/Y', strtotime($order->order_ngaydathang))}}</td>
             <td>{{$order->order_status}}</td>
            

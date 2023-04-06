@@ -34,7 +34,7 @@ Route::get('/account/{customer_id}',[HomeController::class, 'show_account']);
 // danh mục sản phẩm của trang chủ
 Route::get('/danh-muc-san-pham/{category_id}',[CategoryController::class, 'show_category_home']);
 
-Route::get('/thuong-hieu-san-pham/{category_id}',[BrandController::class, 'show_brand_home']);
+Route::get('/thuonghieu/{brand_id}',[BrandController::class, 'thuonghieu']);
 //trang chi tiết sp
 Route::get('/chi-tiet-san-pham/{product_id}',[ProductController::class, 'detail_product']);
 
@@ -129,5 +129,5 @@ Route::get('/edit-coupon/{coupon_id}',[CouponController::class,'edit_coupon']);
 Route::post('/update-coupon/{coupon_id}',[CouponController::class,'update_coupon']);
 Route::get('/delete-coupon/{coupon_id}',[CouponController::class,'delete_coupon']);
 Route::get('/apply-coupon',[CouponController::class,'apply_coupon']);
-Route::post('/save-coupon-product/{product_id}',[CouponController::class,'save_coupon_product']);
+Route::post('/save-product-coupon',[CouponController::class,'save_coupon_product']);
 Route::get('/delete-product-coupon/{product_id}',[CouponController::class,'delete_product_coupon']);

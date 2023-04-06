@@ -14,13 +14,20 @@ class CartController extends Controller
         $brand = DB::table('brand')->where('brand_status','1')->orderBy("brand_id","desc")->get();
         $productId = $request->productid_hidden;
         $quantity = $request->qty;
-
-        $product_info = DB::table('product')->where('product_id',$productId)->first();
+       
+        $product_info = DB::table('product')->where('product.product_id',$productId)
+                        ->leftJoin('promotional_products','product.product_id','promotional_products.product_id')
+                        ->first();
       
+        if($product_info->price_final == null){
+            $data['price'] = $product_info->product_price;
+        }else{
+            $data['price'] = $product_info->price_final;
+        }
        $data['id'] = $productId;
        $data['qty'] = $quantity;
        $data['name'] = $product_info->product_name;
-       $data['price'] = $product_info->product_price;
+      
        $data['weight'] = '1';
        $data['options']['image'] = $product_info->product_image;
        
@@ -34,12 +41,21 @@ class CartController extends Controller
         $productId = $request->productid_hidden;
         $quantity = $request->qty;
 
-        $product_info = DB::table('product')->where('product_id',$productId)->first();
-      
+        $product_info = DB::table('product')
+             ->where('product.product_id',$productId)
+            ->leftJoin('promotional_products','product.product_id','promotional_products.product_id')
+           
+            ->select('product.*','promotional_products.price_final')->first();
+           
+            // if($product_info->price_final == null){
+            //     $data['price'] = $product_info->product_price;
+            // }else{
+            //     $data['price'] = $product_info->price_final;
+            // }
        $data['id'] = $productId;
        $data['qty'] = $quantity;
        $data['name'] = $product_info->product_name;
-       $data['price'] = $product_info->product_price;
+       $data['price'] = $request->price_final;
        $data['weight'] = '1';
        $data['options']['image'] = $product_info->product_image;
        
