@@ -36,6 +36,25 @@ class HomeController extends Controller
     }
 
     public function show_account($customer_id){
-        echo 'trang tài khoản người dung';
+        $category = DB::table('category')->where('category_status','1')->orderBy("category_id","desc")->get();
+        $brand = DB::table('brand')->where('brand_status','1')->orderBy("brand_id","desc")->get();
+
+
+        $profile = DB::table('customer')
+                ->where('customer.customer_id',$customer_id)
+                ->get();
+        $profile_shipping = DB::table('shipping')
+                ->where('shipping.customer_id',$customer_id)
+                ->select('shipping.*')
+                ->get();
+        $profile_full = DB::table('customer')
+                ->where('customer.customer_id',$customer_id)
+                ->join('shipping','customer.customer_id','=','shipping.customer_id')
+                ->get();
+            return view('pages.profile_user')->with('profile',$profile)
+                                            ->with('category',$category)
+                                            ->with('brand',$brand)
+                                            ->with('profile_shipping',$profile_shipping)
+                                            ->with('profile_full',$profile_full);
     }
 }

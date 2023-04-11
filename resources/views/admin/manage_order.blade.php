@@ -14,9 +14,9 @@
       <div class="col-sm-3">
       <form action="{{URL::to('/timkiem_order')}}">
         <div class="input-group">
-            <input type="text" class="input-sm form-control" placeholder="Search" name="keyword_sub">
+            <input type="text" class="input-sm form-control" placeholder="Search" name="keyword">
             <span class="input-group-btn">
-              <button class="btn btn-sm btn-default" type="submit" name="keyword_sub">Tìm kiếm</button>
+              <button class="btn btn-sm btn-default" type="submit" name="keyword">Tìm kiếm</button>
             </span>
           </div>
         </form>

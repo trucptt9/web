@@ -30,6 +30,13 @@ Route::post('/timkiem',[HomeController::class, 'tim_kiem']);
 //trả về trang tài khoản người dùng
 Route::get('/account/{customer_id}',[HomeController::class, 'show_account']);
 
+// Quản lý tài khoản
+Route::get('/edit-profile/{customer_id}',[CheckoutController::class,'edit_profile']);
+Route::get('/edit-shipping/{customer_id}',[CheckoutController::class,'edit_shipping']);
+
+Route::get('/update-profile-user/{customer_id}',[CheckoutController::class,'update_profile_user']); 
+Route::get('/update-shipping-user/{customer_id}',[CheckoutController::class,'update_shipping_user']);
+
 
 // danh mục sản phẩm của trang chủ
 Route::get('/danh-muc-san-pham/{category_id}',[CategoryController::class, 'show_category_home']);
@@ -109,6 +116,10 @@ Route::post('/add',[CheckoutController::class,'add_customer']);
  Route::post('/login-customer',[CheckoutController::class,'login_customer']);
 
   Route::post('/update-address/{customer_id}',[CheckoutController::class,'update_address']); 
+
+
+
+
  // Order đơn hàng
 Route::get('/manage-order',[CheckoutController::class,'manage_order']);
 Route::get('/view-order/{orderId}',[CheckoutController::class,'view_order']);

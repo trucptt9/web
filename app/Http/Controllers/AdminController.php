@@ -64,10 +64,10 @@ class AdminController extends Controller
     //thống kê doanh thu
     public function thong_ke_doanh_thu(){
         $this->AuthLogin();
-        $Count_product = DB::table('product')->count();
+        
         $statistical = DB:: table('product')
                         ->join('order_detail','product.product_id','=','order_detail.product_id')
-                        ->select('product.product_id','product.product_name','product.product_price',DB::raw('count(*) as count'),DB::raw('sum(product.product_price) as total'))
+                        ->select('product.product_id','product.product_name','product.product_price',DB::raw('sum(order_detail.product_qty) as count'),DB::raw('sum(product.product_price*order_detail.product_qty) as total'))
                         ->groupBy('product.product_id','product.product_name','product.product_price')
                         ->get();
         $total=0;
@@ -110,10 +110,10 @@ class AdminController extends Controller
     public function tim_kiem_thong_ke(Request $request){
         $keyword = $request->keyword_sub;
 
-        $Count_product = DB::table('product')->count();
+        
         $statistical = DB:: table('product')
                         ->join('order_detail','product.product_id','=','order_detail.product_id')
-                        ->select('product.product_id','product.product_name','product.product_price',DB::raw('count(*) as count'),DB::raw('sum(product.product_price) as total'))
+                        ->select('product.product_id','product.product_name','product.product_price',DB::raw('sum(order_detail.product_qty) as count'),DB::raw('sum(product.product_price*order_detail.product_qty) as total'))
                         ->groupBy('product.product_id','product.product_name','product.product_price')
                         ->where('product.product_name','like','%'.$keyword.'%')
                         ->orWhere('product.product_id','=',$keyword)

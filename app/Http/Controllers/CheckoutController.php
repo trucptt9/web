@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Session;
 use Illuminate\Support\Facades\Redirect;
+
 class CheckoutController extends Controller
 {
     public function AuthLogin(){
@@ -269,13 +270,12 @@ class CheckoutController extends Controller
        
         
     }
-    public function tim_kiem_order(Request $request){
+    public function tim_kiem_order(Request $request_search){
         $this->AuthLogin();
-        $keyword = $request->keyword_sub;
-        $all_order = DB::table('order')->join('customer','order.customer_id', '=','customer.customer_id')
+        $keyword = $request_search->keyword;
+        $all_order = DB::table('customer')->join('order','order.customer_id', '=','customer.customer_id')
               ->select('order.*','customer.customer_name')
               ->where('customer.customer_name','like','%'.$keyword.'%')
-              ->orWhere('order.order_id','like','%'.$keyword.'%')
               ->orderBy('order.order_id','desc')
             ->get();
        
@@ -289,4 +289,97 @@ class CheckoutController extends Controller
         Session::put('message','Xóa danh mục thành công');
         return Redirect::to('manage-order');
     }
+
+    //Quản lý tài khoản
+    public function edit_profile($customer_id){
+
+        $category = DB::table('category')->where('category_status','1')->orderBy("category_id","desc")->get();
+        $brand = DB::table('brand')->where('brand_status','1')->orderBy("brand_id","desc")->get();
+
+
+        
+        
+            return view('pages.checkout.edit_profile_user')
+                                            ->with('category',$category)
+                                            ->with('brand',$brand);
+                                            
+
+       
+    } 
+
+    public function update_profile_user($customer_id, Request $request){
+        $request->validate([
+            'customer_name' => 'required',
+            'customer_phone'=> ['required',
+                               'regex:/^(0|\+84)(\s|\.)?((3[2-9])|(5[689])|(7[06-9])|(8[1-689])|(9[0-46-9]))(\d)(\s|\.)?(\d{3})(\s|\.)?(\d{3})$/',
+                               'unique:customer,customer_phone',],
+        ],
+        [
+            "customer_name.required"=>"Vui lòng nhập họ tên",
+            
+            "customer_phone.required"=>"Vui lòng nhập số điện thoại",
+            "customer_phone.unique"=>"Số điện thoại đã tồn tại",
+            "customer_phone.regex"=>"Số điện thoại không đúng định dạng",
+        ]);
+      
+       $data = array();
+       $data['customer_name'] = $request->customer_name;
+       $data['customer_phone'] = $request->customer_phone;
+
+       DB::table('customer')->where('customer_id',$customer_id)->update($data);
+       Session::put('message','Cập nhật thành công');
+       return Redirect::to('/account/'.$customer_id);
+     }
+     //shipping
+
+     public function edit_shipping($customer_id){
+
+        $category = DB::table('category')->where('category_status','1')->orderBy("category_id","desc")->get();
+        $brand = DB::table('brand')->where('brand_status','1')->orderBy("brand_id","desc")->get();
+
+
+        
+        
+            return view('pages.checkout.edit_shipping_user')
+                                            ->with('category',$category)
+                                            ->with('brand',$brand);
+                                            
+
+       
+    } 
+
+     public function update_shipping_user($customer_id, Request $request){
+        $request->validate([
+            'shipping_name' => 'required',
+            'shipping_address' => 'required',
+            'shipping_phone'=> ['required',
+                               'regex:/^(0|\+84)(\s|\.)?((3[2-9])|(5[689])|(7[06-9])|(8[1-689])|(9[0-46-9]))(\d)(\s|\.)?(\d{3})(\s|\.)?(\d{3})$/',],
+             'shipping_note' => 'required',
+        ],
+        [
+            "shipping_name.required"=>"Vui lòng nhập họ tên người nhận hàng",
+            "shipping_address.required"=>"Vui lòng nhập địa chỉ nhận hàng",
+            
+            "shipping_phone.required"=>"Vui lòng nhập số điện thoại",
+            "shipping_phone.unique"=>"Số điện thoại đã tồn tại",
+            "shipping_phone.regex"=>"Số điện thoại không đúng định dạng",
+            "shipping_note.required"=>"Vui lòng nhập ghi chú",
+            
+        ]);
+        
+       $data = array();
+       $data['shipping_name'] = $request->shipping_name;
+       $data['shipping_phone'] = $request->shipping_phone;
+       $data['shipping_address'] = $request->shipping_address;
+       $data['shipping_note'] = $request->shipping_note;
+        $check=DB::table('shipping')->where('customer_id',$customer_id);
+        if ($check->count()>0){
+       DB::table('shipping')->where('customer_id',$customer_id)->update($data);
+    }else{
+        $data['customer_id'] = $customer_id;
+        DB::table('shipping')->insert($data);
+    }
+       Session::put('message','Cập nhật thành công');
+       return Redirect::to('/account/'.$customer_id);
+     }
 }
