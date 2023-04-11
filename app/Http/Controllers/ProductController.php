@@ -42,7 +42,9 @@ class ProductController extends Controller
         $products = DB::table('product')
                                          ->join('category','product.category_id', '=','category.category_id')
                                             ->join('brand','product.brand_id', '=','brand.brand_id')  
-                                            ->select('product.*','category.category_name','brand.brand_name')
+                                            ->leftJoin('promotional_products','product.product_id','promotional_products.product_id')
+                                            ->leftJoin('coupon','promotional_products.coupon_id','coupon.coupon_id')
+                                            ->select('product.*','category.category_name','brand.brand_name','promotional_products.price_final','coupon.*')
                                             ->orderBy('product.product_id','desc')
                                             ->get();
        
@@ -53,6 +55,7 @@ class ProductController extends Controller
     }
     public function save_product(Request $request){
         $this->AuthLogin();
+
         $request->validate([
             
             'product_name'=> 'required',
@@ -164,15 +167,21 @@ class ProductController extends Controller
       }
 
     //   trang chi tiết sp
-    public function detail_product($product_id){
+    public function detail_product(Request $request,$product_id){
+
+        $this->AuthLogin();
         $category = DB::table('category')->where('category_status','1')->orderBy("category_id","desc")->get();
         $brand = DB::table('brand')->where('brand_status','1')->orderBy("brand_id","desc")->get();
 
-        $product_detail = DB::table('product')->join('category','product.category_id', '=','category.category_id')
+        $product_detail = DB::table('product') ->where('product.product_id',$product_id) 
+        ->join('category','product.category_id', '=','category.category_id')
         ->join('brand','product.brand_id', '=','brand.brand_id') 
-        ->where('product.product_id',$product_id) 
+        ->leftJoin('promotional_products','product.product_id','promotional_products.product_id')
+        ->leftJoin('coupon','promotional_products.coupon_id','coupon.coupon_id')
+        ->select('product.*','coupon.*','brand.*','category.*','promotional_products.price_final')
         ->get();
 
+       
 
         return view('pages.products.show_detail_product')
         ->with('category',$category)->with('brand',$brand)

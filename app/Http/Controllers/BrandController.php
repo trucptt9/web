@@ -100,7 +100,7 @@ class BrandController extends Controller
         $this->AuthLogin();
         $pro = DB::table('product')->where('product.brand_id',$brand_id)->first();
         if($pro != null){
-            return Redirect::to('all    -brand-product')->with('error',"Không thể xóa thương hiệu này vì vẫn còn sản phẩm thuộc thương hiệu.");
+            return Redirect::to('all-brand-product')->with('error',"Không thể xóa thương hiệu này vì vẫn còn sản phẩm thuộc thương hiệu.");
           
         }
         else{
@@ -112,13 +112,18 @@ class BrandController extends Controller
       }
 
     //   end admin
-    public function show_brand_home($brand_id){
+    public function thuonghieu($brand_id){
         $category = DB::table('category')->where('category_status','1')->orderBy("category_id","desc")->get();
         $brand = DB::table('brand')->where('brand_status','1')->orderBy("brand_id","desc")->get();
 
         $brand_name = DB::table('brand')->where('brand.brand_id',$brand_id)->limit(1)->get();
-        $brand_byID = DB::table('product')->join('brand','product.brand_id','=','brand.brand_id')
-                                            ->where('product.brand_id',$brand_id)->get();
+        $brand_byID = DB::table('product')
+        ->where('product.brand_id',$brand_id)->join('brand','product.brand_id','=','brand.brand_id')
+
+                                            ->leftJoin('promotional_products','product.product_id','promotional_products.product_id')
+                                            ->leftJoin('coupon','promotional_products.coupon_id','coupon.coupon_id')
+                                            ->select('product.*','promotional_products.price_final','coupon.*')
+                                            ->get();
         return view('pages.brand.show_brand')->with('brand',$brand)->with('category',$category)
                                             ->with('brand_name',$brand_name)->with('brand_byID',$brand_byID);
     }

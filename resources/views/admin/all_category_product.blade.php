@@ -3,6 +3,7 @@
 
 <div class="table-agile-info">
   <div class="panel panel-default">
+    @include('common.alert')
   <a class="btn btn-success " href="{{URL::to('/add-category-product')}}" type="button" style="margin-bottom: 10px;">Thêm</a>
     <div class="panel-heading">
       Liệt kê danh mục sản phẩm

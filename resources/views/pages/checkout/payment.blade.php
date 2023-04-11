@@ -196,8 +196,8 @@
                         <td class="cart_quantity">
                             <div class="cart_quantity_button">
 
-                                <input class="cart_quantity_input" type="text" name="quantity"
-                                    value="{{$v_content->qty}}" autocomplete="off" size="2">
+                                <p class="cart_quantity_input" type="text" name="quantity"
+                             autocomplete="off" size="2" style="margin-left: 20px;"> {{$v_content->qty}}</p>
 
                             </div>
                         </td>

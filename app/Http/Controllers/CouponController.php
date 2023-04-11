@@ -95,9 +95,9 @@ class CouponController extends Controller
     return Redirect::to('all-coupon')->with('success',"Cập nhật khuyến mãi thành công.");
    }
 
-   public function delete_coupon($coupon_id){
+   public function delete_coupon(Request $request){
     $this->AuthLogin();
-        DB::table('coupon')->where('coupon_id',$coupon_id)->delete();
+        DB::table('coupon')->where('coupon_id',$request->product_id)->delete();
         return Redirect::to('all-coupon');
    }
    public function apply_coupon(){
@@ -108,26 +108,31 @@ class CouponController extends Controller
     $product_coupon = DB::table('product')
                     ->leftJoin('promotional_products','product.product_id','=','promotional_products.product_id')
                     ->leftJoin('coupon','promotional_products.coupon_id','=','coupon.coupon_id')
-                    ->select('product.*','coupon.coupon_name')
+                    ->select('product.*','coupon.coupon_name','promotional_products.price_final')
                     ->get();
     return view('admin.apply_coupon')
                     ->with('coupons',$coupons)->with('product_coupon',$product_coupon)
                  ;
    }
 
-   public function save_coupon_product(Request $request, $product_id){
+   public function save_coupon_product(Request $request){
     $this->AuthLogin();
-        $data['product_id'] = $product_id;
-        $data['coupon_id'] = $request->km;
-
+        $data['product_id'] = $request->id_product;
+        
+        $data['coupon_id'] = $request->coupon_id;
+       
+        $price = DB::table('product')->where('product.product_id',$request->id_product)
+        ->select('product.product_price')
+        ->first();
+    
+        $coupon_value = DB::table('coupon')->where('coupon.coupon_id',$request->coupon_id)
+        ->select('coupon.coupon_value')
+        ->first();
+        $data['price_final'] =$price->product_price * (1- $coupon_value->coupon_value);
         DB::table('promotional_products')->insert($data);
-        $product_coupon = DB::table('product')
-        ->leftJoin('promotional_products','product.product_id','=','promotional_products.product_id')
-        ->leftJoin('coupon','promotional_products.coupon_id','=','coupon.coupon_id')
-        ->select('product.*','coupon.coupon_name')
-        ->get();
-        $coupons = DB::table('coupon')
-        ->get();
-        return view('admin.apply_coupon')->with('coupons',$coupons)->with('product_coupon',$product_coupon)->with('success',"Thêm thành công.");
+     
+
+        return Redirect::to('apply-coupon');    
+       
    }
 }

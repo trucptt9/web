@@ -40,7 +40,6 @@ Smar tphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Son
     <script src="https://unpkg.com/sweetalert2@7.18.0/dist/sweetalert2.all.js"></script>
 
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
 </head>
 
 <body>
@@ -51,7 +50,7 @@ Smar tphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Son
         <header class="header fixed-top clearfix">
             <!--logo start-->
             <div class="brand">
-                <a href="index.html" class="logo">
+                <a href="{{URL::to('/dashboard')}}" class="logo">
                     ADMIN
                 </a>
                 <div class="sidebar-toggle-box">
