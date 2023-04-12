@@ -11,7 +11,7 @@
                             @include('common.alert')
                             <div class="position-center">
                                 @foreach($coupon as $key => $cp)
-                                <form role="form" method="post" action="{{URL::to('/update-coupon/'.$cp->coupon_id)}}">
+                                <form role="form" method="post" action="{{route('admin.update_coupon',[ 'coupon_id'=>$cp->coupon_id])}}">
                                     {{csrf_field()}}
                                    
                                     <div class="form-group">
@@ -31,7 +31,7 @@
                                     <div class="form-group">
                                         <span class="text-danger">* </span>
                                         <label for="">Giá trị khuyến mãi (%)</label>
-                                        <input type="number" name="coupon_value" class="form-control"
+                                        <input type="number" name="coupon_value" class="form-control" style="width:40%"
                                         value="{{ ($cp->coupon_value)*100}}">
                                                 @error('coupon_value')
                                                     <span class="text-danger" style="color: red">{{ $message }} </span>
@@ -42,7 +42,7 @@
                                         <span class="text-danger">* </span>
                                         <label for="">Ngày bắt đầu áp dụnng khuyến mãi</label>
                                         
-                                        <input type="date" name="coupon_start" class="form-control" value="{{$cp->coupon_start}}"> 
+                                        <input type="date" name="coupon_start" class="form-control" value="{{$cp->coupon_start}}" style="width:40%"> 
                                                 @error('coupon_start')
                                                     <span class="text-danger" style="color: red">{{ $message }} </span>
                                                  @enderror
@@ -52,7 +52,7 @@
                                         <span class="text-danger">* </span>
                                         <label for="">Ngày kết thúc khuyến mãi</label>
                                         <input type="date" name="coupon_end" class="form-control" 
-                                       
+                                        style="width:40%"
                                         value="{{ $cp->coupon_end}}">
                                                 @error('coupon_end')
                                                     <span class="text-danger" style="color: red">{{ $message }} </span>
@@ -60,7 +60,7 @@
                                                         
                                     </div>
                                      <button type="submit" class="btn btn-info" name="save_brand_product">Lưu</button>
-                                     <a  class="btn btn-warning" name="quay lai" type="button" href="{{URL::to('/all-coupon')}}">Hủy</a>
+                                     <a  class="btn btn-warning" name="quay lai" type="button" href="{{route('admin.all_coupon')}}">Hủy</a>
                                 </form>
                               
                                @endforeach

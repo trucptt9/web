@@ -22,12 +22,13 @@
             <table class="table table-striped b-t b-light">
                 <thead>
                     <tr>
-                        <th>ID SP</th>
+                        <th>Mã sp</th>
                         <th style="width:200px">Tên sản phẩm</th>
                         <th>Giá sản phẩm</th>
 
                         <th>Khuyến mãi áp dụng</th>
                         <th>Giá áp dụng sau KM</th>
+                        <th>Trạng thái </th>
                         <th style="width:30px"></th>
 
                        
@@ -36,7 +37,7 @@
                 <tbody>
                     @foreach($product_coupon as $key => $pro)
                     <tr>
-                        <td>{{$pro->product_id}}</td>
+                        <td>{{$pro->product_idcode}}</td>
                         <td>{{$pro->product_name}}</td>
 
                         <td>{{number_format($pro->product_price).' VND'}}</td>
@@ -47,17 +48,36 @@
                         ?>
                           <td>Không có</td>
                         <td>{{number_format($pro->product_price). ' VND'}}</td>
-                      
+                      <td> -  </td>
                         <?php
-                            }else{
+                            }elseif(date('d/m/Y', strtotime ($pro->coupon_end)) >= date('d/m/Y') && date('d/m/Y', strtotime ($pro->coupon_start)) <= date('d/m/Y') ){
                             ?>
                              <td>{{$pro->coupon_name}}</td>
-                        <td>{{number_format($pro->price_final). ' VND'}}</td>
+                            
+                         <td>{{number_format($pro->price_final). ' VND'}}</td>
+                         <td> Đang áp dụng </td>
                        
                         <?php
-                            }
+                            }else if(date('d/m/Y', strtotime ($pro->coupon_end)) < date('d/m/Y')){
                             ?>
+
+                         <td>{{$pro->coupon_name}}</td>
+                            
+                         <td>{{number_format($pro->price_final). ' VND'}}</td>
+                         <td> Hết hạn </td>
                        
+                       <?php 
+                       }else{
+                         ?>
+                            <td>{{$pro->coupon_name}}</td>
+                            
+                            <td>{{number_format($pro->price_final). ' VND'}}</td>
+                            <td> Chưa áp dụng</td>
+                       
+                      
+                       <?php 
+                       }
+                       ?>
                         <td>
                         
                             <button type="button" class="btn btn-success btn-sm open_modal" data-id="{{ $pro->product_id }}" data-toggle="modal"
@@ -77,24 +97,17 @@
             <div class="row">
 
                 <div class="col-sm-5 text-center">
-                    <small class="text-muted inline m-t-sm m-b-sm">showing 20-30 of 50 items</small>
+                    
                 </div>
                 <div class="col-sm-7 text-right text-center-xs">
-                    <ul class="pagination pagination-sm m-t-none m-b-none">
-                        <li><a href=""><i class="fa fa-chevron-left"></i></a></li>
-                        <li><a href="">1</a></li>
-                        <li><a href="">2</a></li>
-                        <li><a href="">3</a></li>
-                        <li><a href="">4</a></li>
-                        <li><a href=""><i class="fa fa-chevron-right"></i></a></li>
-                    </ul>
+                   {{ $product_coupon->links() }}
                 </div>
             </div>
         </footer>
     </div>
 
 </div>
-<form action="{{URL::to('/save-product-coupon')}}" method="post">
+<form action="{{route('admin.save_product_coupon')}}" method="post">
                                 {{csrf_field()}}
                             <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
                                 aria-labelledby="myModalLabel">
@@ -108,7 +121,7 @@
                                             <div class="modal-body">
                                             <input type="hidden" name="id_product">
                                                 <div class="form-one" style="width:100%">                                   
-                                                    <select name="coupon_id">
+                                                    <select name="coupon_id" class="form-control">
                                                         @foreach($coupons as $key => $cpon)
                                                             <option value='{{$cpon->coupon_id}}'>
                                                              {{$cpon->coupon_name}} ( {{date('d/m/Y',strtotime($cpon->coupon_start))}} - {{date('d/m/Y',strtotime($cpon->coupon_end))}} ) 

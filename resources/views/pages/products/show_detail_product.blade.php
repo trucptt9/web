@@ -7,7 +7,7 @@
     <!--product-details-->
     <div class="col-sm-5">
         <div class="view-product">
-            <img src="{{URL::to('public/upload/product/'.$pro_detail->product_image)}}" alt="" />
+            <img src="{{asset('upload/product/'.$pro_detail->product_image)}}" alt="" />
 
         </div>
         <div id="similar-product" class="carousel slide" data-ride="carousel">
@@ -21,7 +21,7 @@
         <div class="product-information">
             <img src="images/product-details/new.jpg" class="newarrival" alt="" />
             <h2>{{$pro_detail->product_name}}</h2>
-            <p>ID sản phẩm: {{$pro_detail->product_id}}</p>
+            <p>ID sản phẩm: {{$pro_detail->product_idcode}}</p>
           
             <?php 
                     $date = date('d/m/Y');
@@ -49,8 +49,24 @@
                 if($pro_detail->product_SLtrongkho > 0){
                    
             ?> <p><b>Trạng thái: </b>Còn hàng</p>
-                    <form action="{{URL::to('save-cart')}}" method="POST"> 
+                    <form action="{{ route('save_cart')}}" method="POST"> 
                         {{csrf_field()}}
+                        <?php 
+                    $date = date('d/m/Y');
+                    $start = date('d/m/Y',strtotime($pro_detail->coupon_start));
+                    $end = date('d/m/Y',strtotime($pro_detail->coupon_end));
+                    if($pro_detail->price_final != null && ($date >=  $start && $date <= $end)){
+                        ?>
+                       <input name="price" type="hidden" value="{{$pro_detail->price_final}}"/>
+                    </div>
+                        <?php
+                    
+                    }else{
+                ?>
+                   <input name="price" type="hidden" value="{{$pro_detail->product_price}}"/>
+                        <?php   
+                }
+                ?>
                     <p>
                     
                         <label>Số lượng:</label>

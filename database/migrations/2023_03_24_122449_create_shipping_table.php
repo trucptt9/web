@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('shipping_name');
             $table->string('shipping_phone');
             $table->string('shipping_address');
+            $table->text('shipping_note')->nullable();
             $table->timestamps();
         });
     }

@@ -5,7 +5,7 @@
     <div class="">
         <div class="breadcrumbs">
             <ol class="breadcrumb">
-                <li><a href="{{URL::to('/trangchu')}}">Trang chủ</a></li>
+                <li><a href="{{ route('home') }}">Trang chủ</a></li>
                 <li class="active">Thanh toán giỏ hàng</li>
             </ol>
         </div>
@@ -102,52 +102,7 @@
 
                     <!-- Modal -->
 
-                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                        <div class="modal-dialog" role="document">
-                            <form action="{{URL::to('/save-checkout-customer')}}" method="post">
-                                {{csrf_field()}}
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <a type="submit" class="close" data-dismiss="modal" aria-label="Close"><span
-                                                aria-hidden="true">&times;</span></a>
-                                        <h2 class="modal-title" id="myModalLabel">Thông tin nhận hàng</h2>
-                                    </div>
-                                    <div class="modal-body">
-
-                                        <div class="form-one" style="width:100%">
-
-
-
-                                            <input type="text" placeholder="Họ tên người nhận" name="name"
-                                                class="form-control">
-
-                                            <input type="text" placeholder="Số điện thoại" name="phone"
-                                                class="form-control" style="margin-top:10px">
-
-                                            <input type="text" placeholder="Địa chỉ" name="address" class="form-control"
-                                                style="margin-top:10px">
-                                            <input type="hidden" value="{{$customer_id}}" name="customer_id">
-                                            <textarea name="note" placeholder="Ghi chú" style="margin-top:10px"
-                                                class="form-control" rows="4"
-                                                style="height:200px!important ;"></textarea>
-
-
-
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer ">
-
-
-                                        <button type="submit" class="btn btn-success" 
-                                            style="margin-top:10px">Lưu</button>
-                                        <button type="button" class="btn btn-info" data-dismiss="modal"
-                                            style="margin-top:10px">Đóng</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-
+                  
 
                 </div>
 
@@ -183,7 +138,7 @@
 
                     <tr>
                         <td class="cart_product">
-                            <a href=""><img src="{{URL::to('public/upload/product/'.$v_content->options->image)}}"
+                            <a href=""><img src="{{asset('upload/product/'.$v_content->options->image)}}"
                                     alt="" height="100" width="100"></a>
                         </td>
                         <td class="cart_description" style="width:300px;">
@@ -191,6 +146,7 @@
                             <p>ID Sản phẩm: {{$v_content->id}}</p>
                         </td>
                         <td class="cart_price">
+                            
                             <p>{{number_format($v_content->price).' vnđ'}}</p>
                         </td>
                         <td class="cart_quantity">
@@ -210,8 +166,8 @@
                             </p>
                         </td>
                         <td class="cart_delete">
-                            <a class="cart_quantity_delete" href="{{URL::to('/delete-cart/'.$v_content->rowId)}}"
-                                style="color:red;"><i class="fa fa-times"></i></a>
+                            <a class="cart_quantity_delete" href="{{URL::to('/delete-cart/'.$v_content->rowId)}}" style="color:red;">
+                                <i class="fa fa-times"></i></a>
                         </td>
                     </tr>
                     @endforeach
@@ -222,37 +178,104 @@
         <div class="payment-options">
             <div class="review-payment">
                
-                <h2>Phương thức thanh toán</h2>
+            <h2>Phương thức thanh toán</h2>
             </div>
-            <form action="{{URL::to('/phuongthucthanhtoan')}}" method="post">
+            <div class="payment_method">
+            <form action="{{URL::to('/thanhtoantructiep')}}" method="post">
                 {{csrf_field()}}
                 <span>
-                    <label><input type="radio" name="payment_op" value="0"> Thanh toán khi nhận hàng</label>
+                    
                 </span>
 
-                <span>
-                    <label><input type="radio" name="payment_op" value="1"> Thanh toán trực tuyến</label>
-                </span>
                 <div>
 
                 <?php
 				if($infor_shipping != null){
 			    ?>
-                    <input type="submit" value="Đặt hàng" class="btn btn-success btn-sm" style="font-size:18px">
+                    <button type="submit"  class="btn btn-success" value="">Thanh toán khi nhận hàng </button>
                 <?php
                 }else{
                 ?>
-                <input type="submit" value="Đặt hàng" class="btn btn-success btn-sm" style="font-size:18px">
-                <section class='alert alert-danger' style="margin-top:20px">{{session('alert')}}</section>
+                <button type="submit"  class="btn btn-success" value="">Thanh toán khi nhận hàng </button>
+               
                 <?php
                 }
                 ?>
                 </div>
 
-            </form>
+        </form>
+        <form action="{{URL::to('/thanhtoan-vnpay')}}" method="post" style="margin-left: 20px;">
+                {{csrf_field()}}
+                <span>
+                    
+                </span>
+
+                <div>
+
+                <?php
+				if($infor_shipping != null){
+			    ?>
+                    <button type="submit"  class="btn btn-success onl" name="redirect">Thanh toán VN-PAY </button>
+                <?php
+                }else{
+                ?>
+                <button type="submit"  class="btn btn-success" value="">Thanh toán VN-PAY</button>
+              
+                <?php
+                }
+                ?>
+                </div>
+
+        </form>
+            </div>
         </div>
     </div>
 </section>
 
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <form action="{{URL::to('/save-checkout-customer')}}" method="post">
+            {{csrf_field()}}
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a type="submit" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></a>
+                    <h2 class="modal-title" id="myModalLabel">Thông tin nhận hàng</h2>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-one" style="width:100%">
+
+
+
+                        <input type="text" placeholder="Họ tên người nhận" name="name"
+                            class="form-control">
+
+                        <input type="text" placeholder="Số điện thoại" name="phone"
+                            class="form-control" style="margin-top:10px">
+
+                        <input type="text" placeholder="Địa chỉ" name="address" class="form-control"
+                            style="margin-top:10px">
+                        <input type="hidden" value="{{$customer_id}}" name="customer_id">
+                        <textarea name="note" placeholder="Ghi chú" style="margin-top:10px"
+                            class="form-control" rows="4"
+                            style="height:200px!important ;"></textarea>
+
+
+
+                    </div>
+                </div>
+                <div class="modal-footer ">
+
+
+                    <button type="submit" class="btn btn-success" 
+                        style="margin-top:10px">Lưu</button>
+                    <button type="button" class="btn btn-info" data-dismiss="modal"
+                        style="margin-top:10px">Đóng</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 
 @endsection

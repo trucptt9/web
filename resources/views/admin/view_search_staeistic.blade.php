@@ -2,7 +2,7 @@
 @section('admin_content')
 
 
-<form action="{{URL::to('/timkiem_thong_ke')}}">
+<form action="{{route('admin.timkiem_thong_ke')}}">
         <div class="input-group" style="width:50%">
             <input type="text" class="input-sm form-control" placeholder="Search" name="keyword_sub">
             <span class="input-group-btn">

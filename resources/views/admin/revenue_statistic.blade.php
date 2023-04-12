@@ -1,25 +1,9 @@
 @extends('admin_layout')
 @section('admin_content')
 
-    <form action="{{URL::to('/timkiem_thong_ke')}}">
-        <div class="input-group" style="width:50%">
-            <input type="text" class="input-sm form-control" placeholder="Search" name="keyword_sub">
-            <span class="input-group-btn">
-                <button class="btn btn-sm btn-success" type="submit">Tìm kiếm</button>
-            </span>
-        </div>
-        </form>
-        <!-- <div class="col-sm-4">
-                        <form action="" method="post">
-                            {{csrf_field()}}
-                            <div class="search_box pull-right" style="width:250px">
-                                <input type="text" placeholder="Tìm kiếm" name="keyword_sub"/>
-                                <button type="submit" class="btn btn-primary btn-sm" style="margin-top:0px">
-                                    <i class="fa-solid fa-magnifying-glass"></i> </button>
-                            </div>
-                     </form>
-                    </div> -->
-    
+   
+      
+<div class="panel panel-default">
 <div class="panel-heading">
             Tổng doanh thu
         </div>
@@ -27,7 +11,7 @@
     <table class="table table-striped b-t b-light">
             <thead>
                 <tr>
-
+                    <th> Tổng đơn hàng </th>
                     <th>Tổng số tiền đơn hàng</th>
                     <th>Tổng số tiền đã thanh toán</th>
                     <th>Tổng số tiền chưa thanh toán</th>
@@ -38,7 +22,7 @@
             </thead>
             <tbody>
                 <tr>
-
+                    <td>{{ $order_total }} </td>
                     <td>{{number_format($total).' VND'}}</td>
                     <td>{{number_format($total_paid).' VND'}}</td>
                     <td>{{number_format($total_unpaid).' VND'}}</td>
@@ -46,13 +30,9 @@
                 
             </tbody>
         </table>
+    </div>
     <div class="panel panel-default">
-        <!-- <div class="input-group" style="width:50%">
-            <input type="text" class="input-sm form-control" placeholder="Search">
-            <span class="input-group-btn">
-                <button class="btn btn-sm btn-success" type="button">Tìm kiếm</button>
-            </span>
-        </div> -->
+        
         <div class="panel-heading">
             Các sản phẩm đã bán
         </div>
@@ -65,7 +45,7 @@
                     <th>ID sản phẩm</th>
                     <th>Tên sản phẩm</th>
                     <th>Số lượng</th>
-                    <th>Giá</th>
+                 
                     <th>Tổng tiền</th>
                     
                 </tr>
@@ -80,7 +60,7 @@
                     <td>{{$statistical->product_id}}</td>
                     <td>{{$statistical->product_name}}</td>
                     <td>{{$statistical->count}}</td>
-                    <td>{{number_format($statistical->product_price).'VND'}}</td>
+                    
                     <td>{{number_format($statistical->total).'VND'}}</td>
                     
 
@@ -94,10 +74,10 @@
         
         
 
-        
+      
    
     </div>
-
+   
 </div>
 
 </div>

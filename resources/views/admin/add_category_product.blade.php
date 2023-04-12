@@ -13,7 +13,7 @@
                             <div class="panel-body">
                             @include('common.alert')
                             <div class="position-center">
-                                <form role="form" method="post" action="{{URL::to('/save-category-product')}}">
+                                <form role="form" method="post" action="{{ route('admin.save_category') }}">
                                     {{csrf_field()}}
                                    
                                 <div class="form-group">

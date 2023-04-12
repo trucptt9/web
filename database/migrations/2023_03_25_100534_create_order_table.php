@@ -15,11 +15,12 @@ return new class extends Migration
     {
         Schema::create('order', function (Blueprint $table) {
             $table->increments('order_id');
-            $table->integer('customer_id');
+            $table->integer('customer_id')->nullable();
             $table->integer('shipping_id');
             $table->integer('payment_id');
-            $table->float('order_total');
-            $table->integer('order_status');    //trạng thái đang giao, chưa xử lý,...
+            $table->string('order_total');
+            $table->string('order_status'); 
+            $table->date('order_ngaydathang');    //trạng thái đang giao, chưa xử lý,...
             $table->timestamps();
         });
     }

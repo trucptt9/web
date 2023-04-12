@@ -13,14 +13,14 @@ function add_shoppingCart(clicked_id) {
     <!--features_items-->
     <h2 class="title text-center">Sản phẩm mới nhất</h2>
     @foreach($all_product as $key => $product)
-    <a href="{{URL::to('chi-tiet-san-pham/'.$product->product_id)}}">
+    <a href="{{route('detail_product',['product_id'=>$product->product_id])}}">
     <div class="col-sm-3">
         <div class="product-image-wrapper">
             <div class="single-products">
                 <div class="productinfo text-center">
                     
                
-             <img src="{{URL::to('public/upload/product/'.$product->product_image)}}" alt="lỗi" height="145" width="145" />
+             <img src="{{asset('upload/product/'.$product->product_image)}}" alt="lỗi" height="145" width="145" />
              <p style="height:35px;text-overflow:ellipsis">{{$product->product_name}}</p>
                 <?php 
                    $date = date('d/m/Y');
@@ -47,7 +47,7 @@ function add_shoppingCart(clicked_id) {
                 
                    
                    
-                    <form action="{{URL::to('/sell-cart')}}" method="post"> 
+                    <form action="{{ route('sell_cart')}}" method="post"> 
                         {{csrf_field()}}
                     
                     

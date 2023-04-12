@@ -4,7 +4,7 @@
 		<div class="">
 			<div class="breadcrumbs">
 				<ol class="breadcrumb">
-				  <li><a href="{{URL::to('/trangchu')}}">Trang chủ</a></li>
+				  <li><a href="{{ route('home') }}">Trang chủ</a></li>
 				  <li class="active">Giỏ hàng</li>
 				</ol>
 			</div>
@@ -29,7 +29,7 @@
 						
 						<tr>
 							<td class="cart_product">
-								<a href=""><img src="{{URL::to('public/upload/product/'.$v_content->options->image)}}" alt="" height="100" width="100"></a>
+								<a href=""><img src="{{asset('upload/product/'.$v_content->options->image)}}" alt="" height="100" width="100"></a>
 							</td>
 							<td class="cart_description" style="width:300px;">
 								<h5><a href="">{{$v_content->name}}</a></h5>
@@ -56,6 +56,7 @@
 							</td>
 							<td class="cart_delete">
 								<a class="cart_quantity_delete" href="{{URL::to('/delete-cart/'.$v_content->rowId)}}" style="color:red;"><i class="fa fa-times"></i></a>
+
 							</td>
 						</tr>
 						@endforeach
@@ -67,10 +68,7 @@
 
 	<section id="do_action">
 		<div class="">
-			<!-- <div class="heading">
-				<h3>What would you like to do next?</h3>
-				<p>Choose if you have a discount code or reward points you want to use or would like to estimate your delivery cost.</p>
-			</div> -->
+			
 			<div class="row">
 				
 				<div class="col-sm-6">
@@ -91,7 +89,7 @@
                                 <?php
                                 }else{
                                 ?>
-								  <a href="{{URL::to('/login-checkout')}}"> <button class="btn btn-primary">Thanh toán</button></a>
+								  <a href="{{route('login_checkout')}}"> <button class="btn btn-primary">Thanh toán</button></a>
                                  
                                 <?php
                                 } 

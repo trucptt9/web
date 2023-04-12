@@ -17,9 +17,9 @@ return new class extends Migration
             $table->increments('coupon_id');
             $table->string('coupon_name');
             $table->float('coupon_value');
-            $table->dateTime('coupon_start');
-            $table->dateTime('coupon_end');
-            $table->boolean('coupon_status');
+            $table->date('coupon_start');
+            $table->date('coupon_end');
+            $table->text('coupon_desc')->nullable();
             $table->timestamps();
         });
     }

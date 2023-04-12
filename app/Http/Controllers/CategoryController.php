@@ -11,27 +11,19 @@ use Illuminate\Support\Facades\Redirect;
 session_start();
 class CategoryController extends Controller
 {
-    public function AuthLogin(){
-        $admin_id = Session::get('admin_id');
-        if($admin_id){
-            return Redirect::to('dashboard');
-        }
-        else{
-            return Redirect::to('admin')->send();
-         }
-        }
     public function add_category_product(){
-        $this->AuthLogin();
+        
         return view('admin.add_category_product');
     }
 
-    public function all_category_product(){
-        $this->AuthLogin();
-        $all_category_product = DB::table('category')->get(); 
+    public function all_category_product(Request $request){
+        $search = $request->search ?? '';
+       
+        $all_category_product = DB::table('category')->where('category_name','like',"%$search%")->paginate(5); 
         return view('admin.all_category_product')->with('all_category_product', $all_category_product);
     }
     public function save_category_product(Request $request){
-        $this->AuthLogin();
+        
         // khi người dùng nhấn nút Thêm ở danh mục thêm danh mục sp mới thì nội dung dữ liệu của form đó được guier tới đây
         $request->validate([
             
@@ -55,55 +47,55 @@ class CategoryController extends Controller
        
         /* A way to pass a message to the next request. */
          Session::put('message','Thêm mới thành công');
-        return Redirect::to('add-category-product')->with('success', 'Thêm danh mục thành công');
+        return to_route('admin.new_category')->with('success', 'Thêm danh mục thành công');
        
 
     }
 
     public function unactive_category_product($category_id){
-        $this->AuthLogin();
+        
        DB::table('category')->where('category_id',$category_id)
                             ->update(['category_status'=> 0]);
 
         // $alert='Cập nhật thành công!';
         
-        return Redirect::to('all-category-product');
+        return to_route('admin.all_category');
     }
     public function active_category_product($category_id){
-        $this->AuthLogin();
+        
         DB::table('category')->where('category_id',$category_id)
                              ->update(['category_status'=> 1]);
          
                     
-         return Redirect::to('all-category-product');
+         return to_route('admin.all_category');
      }
 
      public function edit_category_product($category_id){
-        $this->AuthLogin();
+        
         $edit_category_product = DB::table('category')->where('category_id',$category_id)->get(); 
         return view('admin.edit_category_product')->with('edit_category_product', $edit_category_product);
      }
      public function update_category_product($category_id, Request $request){
-        $this->AuthLogin();
+        
        $data = array();
        $data['category_name'] = $request->category_product_name;
        $data['category_desc'] = $request->category_product_desc;
 
        DB::table('category')->where('category_id',$category_id)->update($data);
-       Session::put('message','Cập nhật thành công');
-       return Redirect::to('all-category-product');
+       
+       return to_route('admin.all_category')->with('success', 'Cập nhật danh mục thành công');
      }
      public function delete_category_product($category_id){
-        $this->AuthLogin();
+        
         $pro = DB::table('product')->where('product.category_id',$category_id)->first();
         if($pro != null){
-            return Redirect::to('all-category-product')->with('error',"Không thể xóa danh mục này vì vẫn còn sản phẩm thuộc danh mục.");
+            return to_route('admin.all_category')->with('error',"Không thể xóa danh mục này vì vẫn còn sản phẩm thuộc danh mục.");
           
         }
         else{
             DB::table('category')->where('category_id',$category_id)->delete();
             //Session::put('message','Xóa danh mục thành công');
-            return Redirect::to('all-category-product');
+            return to_route('admin.all_category');
         }
       
       }

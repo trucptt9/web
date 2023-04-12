@@ -10,7 +10,7 @@
                             <div class="panel-body">
                             @include('common.alert')
                             <div class="position-center">
-                                <form role="form" method="post" action="{{URL::to('/save-coupon')}}">
+                                <form role="form" method="post" action="{{route('admin.save_coupon')}}">
                                     {{csrf_field()}}
                                    
                                     <div class="form-group">
@@ -30,7 +30,7 @@
                                     <div class="form-group">
                                         <span class="text-danger">* </span>
                                         <label for="">Giá trị khuyến mãi (%)</label>
-                                        <input type="number" name="coupon_value" class="form-control"
+                                        <input type="number" name="coupon_value" class="form-control" style="width:40%"
                                         placeholder="Nhập giá trị khuyến mãi" value="{{ old('coupon_value')}}">
                                                 @error('coupon_value')
                                                     <span class="text-danger" style="color: red">{{ $message }} </span>
@@ -41,7 +41,7 @@
                                         <span class="text-danger">* </span>
                                         <label for="">Ngày bắt đầu áp dụnng khuyến mãi</label>
                                         
-                                        <input type="date" name="coupon_start" class="form-control" value="{{ old('coupon_start')}}" > 
+                                        <input type="date" name="coupon_start" class="form-control" value="{{ old('coupon_start')}}" style="width:40%"> 
                                                 @error('coupon_start')
                                                     <span class="text-danger" style="color: red">{{ $message }} </span>
                                                  @enderror
@@ -50,7 +50,7 @@
                                     <div class="form-group">
                                         <span class="text-danger">* </span>
                                         <label for="">Ngày kết thúc khuyến mãi</label>
-                                        <input type="date" name="coupon_end" class="form-control" placeholder="DD-MM-YYYY"
+                                        <input type="date" name="coupon_end" class="form-control" placeholder="DD-MM-YYYY" style="width:40%"
                                         required pattern="[0-9]{2}-[0-9]{2}-[0-9]{4}"
                                         value="{{ old('coupon_end')}}">
                                                 @error('coupon_end')
@@ -58,8 +58,8 @@
                                                  @enderror
                                                         
                                     </div>
-                                     <button type="submit" class="btn btn-info" name="save_brand_product">Thêm</button>
-                                     <a  class="btn btn-warning" name="quay lai" type="button" href="{{URL::to('/all-coupon')}}">Hủy</a>
+                                     <button type="submit" class="btn btn-info" name="save_coupon">Thêm</button>
+                                     <a  class="btn btn-warning" name="quay lai" type="button" href="{{route('admin.all_coupon')}}">Hủy</a>
                                 </form>
                               
                                

@@ -57,10 +57,10 @@
             </span></td> -->
             
             <td>
-              <a href="{{URL::to('view-order/'.$order->order_id)}}" class="active" ui-toggle-class="">
+              <a href="{{route('admin.view_order',[ 'orderId'=>$order->order_id])}}" class="active" ui-toggle-class="">
                 <i class="fa fa-pencil-square-o text-success text-active" style="font-size: 18px;"></i>
               </a>
-              <a href="{{URL::to('delete-order/'.$order->order_id)}}" 
+              <a href="{{route('admin.add_product',[ 'order_id'=>$order->order_id])}}" 
               onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này không?')"
               class="active" ui-toggle-class="">
                 <i class="fa fa-times text-danger text" style="font-size: 18px;"></i>

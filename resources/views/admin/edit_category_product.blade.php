@@ -13,7 +13,7 @@
                             <div class="panel-body">
                           @foreach($edit_category_product as $key => $edit_value)
                             <div class="position-center">
-                                <form role="form" method="post" action="{{URL::to('/update-category-product/'.$edit_value->category_id)}}">
+                                <form role="form" method="post" action="{{ route('admin.update_category',['category_id'=>$edit_value->category_id]) }}">
                                     {{csrf_field()}}
                                    
                                 <div class="form-group">

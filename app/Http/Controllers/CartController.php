@@ -19,20 +19,16 @@ class CartController extends Controller
                         ->leftJoin('promotional_products','product.product_id','promotional_products.product_id')
                         ->first();
       
-        if($product_info->price_final == null){
-            $data['price'] = $product_info->product_price;
-        }else{
-            $data['price'] = $product_info->price_final;
-        }
+       
        $data['id'] = $productId;
        $data['qty'] = $quantity;
        $data['name'] = $product_info->product_name;
-      
+       $data['price'] = $request->price;
        $data['weight'] = '1';
        $data['options']['image'] = $product_info->product_image;
        
        Cart::add($data);
-       return Redirect::to('/trangchu');
+       return redirect()->route('home');
       
     }
     public function sell_cart(Request $request){
@@ -61,7 +57,7 @@ class CartController extends Controller
        
     
        Cart::add($data);
-       return Redirect::to('/show-cart');
+       return to_route('show_cart');
       
     }
     public function show_cart(){
@@ -72,8 +68,8 @@ class CartController extends Controller
         ->with('category',$category)->with('brand',$brand)
         ;
     }
-    public function delete_cart($rowID){
-        Cart::update($rowID,0);     //nghĩa là xóa cái dòng đó đi dựa vào rowID hàm uodate đc bumbumment cung cấp
-        return Redirect::to('/show-cart');
+    public function delete_cart($rowId){
+        Cart::update($rowId,0);     //nghĩa là xóa cái dòng đó đi dựa vào rowID hàm uodate đc bumbumment cung cấp
+        return to_route('show_cart');
     }
 }

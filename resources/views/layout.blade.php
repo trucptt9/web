@@ -7,19 +7,19 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <title>Web bán phụ kiện</title>
-    <link href="{{asset('public/frontend/css/bootstrap.min.css')}}" rel="stylesheet">
-    <link href="{{asset('public/frontend/css/font-awesome.min.css')}}" rel="stylesheet">
-    <link href="{{asset('public/frontend/css/prettyPhoto.css')}}" rel="stylesheet">
-    <link href="{{asset('public/frontend/css/price-range.css')}}" rel="stylesheet">
-    <link href="{{asset('public/frontend/css/animate.css')}}" rel="stylesheet">
-    <link href="{{asset('public/frontend/css/main.css')}}" rel="stylesheet">
-    <link href="{{asset('public/frontend/css/responsive.css')}}" rel="stylesheet">
+    <link href="{{asset('frontend/css/bootstrap.min.css')}}" rel="stylesheet">
+    <link href="{{asset('frontend/css/font-awesome.min.css')}}" rel="stylesheet">
+    <link href="{{asset('frontend/css/prettyPhoto.css')}}" rel="stylesheet">
+    <link href="{{asset('frontend/css/price-range.css')}}" rel="stylesheet">
+    <link href="{{asset('frontend/css/animate.css')}}" rel="stylesheet">
+    <link href="{{asset('frontend/css/main.css')}}" rel="stylesheet">
+    <link href="{{asset('frontend/css/responsive.css')}}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!--[if lt IE 9]>
     <script src="js/html5shiv.js"></script>
     <script src="js/respond.min.js"></script>
     <![endif]-->
-    <link rel="shortcut icon" href="{{('public/frontend/images/ico/favicon.ico')}}">
+    <link rel="shortcut icon" href="{{ asset('frontend/images/ico/favicon.ico') }}">
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="images/ico/apple-touch-icon-144-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
@@ -59,24 +59,40 @@
                 <div class="row">
                     <div class="col-sm-4">
                         <div class="logo pull-left">
-                            <a href="{{URL::to('/trangchu')}}" title="logo"><img src="{{URL::to('public/frontend/images/Capture.PNG')}}" alt="" height="70";/></a>
+                            <a href="{{ route('home') }}" title="logo"><img src="{{asset('frontend/images/Capture.PNG')}}" alt="" height="70";/></a>
                         </div>
                       
                     </div>
                     <div class="col-sm-8">
                         <div class="shop-menu pull-right">
                             <ul class="nav navbar-nav">
+                           
                             <?php
                                     $customer_id = Session::get('customer_id');
                                     if($customer_id != null){
 
                                 ?>
                                 
-                                <li><a href="{{URL::to('/account/'.$customer_id)}}"><i class="fa fa-user"></i> Tài khoản</a></li>
+                                <li class="dropdown"><a href="{{ route('account_user',['customer_id'=> $customer_id]) }}"><i class="fa fa-user"></i>Tài khoản<i class="fa fa-angle-down"></i></a>
+                                    <ul class="sub-menu">
+                                        <li><a href="{{ route('account_user',['customer_id'=> $customer_id]) }}" style="color:black;">
+                                           Quản lý tài khoản</a></li>
+										<li><a href="{{ route('order_account',['customer_id'=> $customer_id]) }}" style="color:black;">
+                                           Đơn hàng của tôi</a></li>
+                                    </ul>
+                                </li>
                                 <?php
                                 }else{
                                 ?>
-                                 <li><a href="{{URL::to('/login-checkout')}}"><i class="fa fa-user"></i> Tài khoản</a></li>
+                                
+                                 <li class="dropdown"><a href="{{route('login_checkout')}}"><i class="fa fa-user"></i>Tài khoản<i class="fa fa-angle-down"></i></a>
+                                    <ul class="sub-menu">
+                                        <li><a href="{{route('login_checkout')}}" style="color:black;">
+                                           Quản lý tài khoản</a></li>
+										<li><a href="{{route('login_checkout')}}" style="color:black;">
+                                           Đơn hàng của tôi</a></li>
+                                    </ul>
+                                </li>
                                 <?php
                                 } 
                                 ?>
@@ -95,12 +111,12 @@
                                 <?php
                                 }else{
                                 ?>
-                                 <li><a href="{{URL::to('/login-checkout')}}"><i class="fa fa-crosshairs"></i> Thanh toán</a></li>
+                                 <li><a href="{{route('login_checkout')}}"><i class="fa fa-crosshairs"></i> Thanh toán</a></li>
                                 <?php
                                 }
                                 ?>
 
-                                <li><a href="{{URL::to('/show-cart')}}" id="abcv"><i class="fa fa-shopping-cart" id="abcv"></i>Giỏ hàng</a>
+                                <li><a href="{{route('show_cart')}}" id="abcv"><i class="fa fa-shopping-cart" id="abcv"></i>Giỏ hàng</a>
                                
                                 </li>
                                 <?php
@@ -113,7 +129,7 @@
                                 <?php
                                 }else{
                                 ?>
-                                <li><a href="{{URL::to('/login-checkout')}}"><i class="fa fa-lock"></i> Đăng nhập</a></li>
+                                <li><a href="{{route('login_checkout')}}"><i class="fa fa-lock"></i> Đăng nhập</a></li>
                                 <?php
                                 } 
                                 ?>
@@ -145,18 +161,18 @@
                         </div>
                         <div class="mainmenu pull-left" id="hello">
                             <ul class="nav navbar-nav collapse navbar-collapse">
-                                <li><a href="{{URL::to('/trangchu')}}" class="{{(request()->is('trangchu')) ? 'active' : '' }}">Trang chủ</a></li>
-                                <li class="" ><a href="{{URL::to('/tat-ca-sp')}}" class="{{(request()->is('tat-ca-sp')) ? 'active' : '' }}">Sản phẩm</a>
+                                <li><a href="{{ route('home') }}" class="{{(request()->is('trangchu')) ? 'active' : '' }}">Trang chủ</a></li>
+                                <li class="" ><a href="{{ route('allproduct')}}" class="{{(request()->is('tat-ca-sp')) ? 'active' : '' }}">Sản phẩm</a>
                                     
                                 </li>
                               
-                                <li ><a href="{{URL::to('/show-cart')}}" class="{{(request()->is('show-cart')) ? 'active' : '' }}" >Giỏ hàng</a></li>
+                                <li ><a href="{{route('show_cart')}}" class="{{(request()->is('show-cart')) ? 'active' : '' }}" >Giỏ hàng</a></li>
                                 <li><a href="{{URL::to('/lienhe')}}" class="{{(request()->is('lienhe')) ? 'active' : '' }}">Liên hệ</a></li>
                             </ul>
                         </div>
                     </div>
                     <div class="col-sm-4">
-                        <form action="{{URL::to('/timkiem')}}" method="post">
+                        <form action="route('search')" method="post">
                             {{csrf_field()}}
                             <div class="search_box pull-right" style="width:250px">
                                 <input type="text" placeholder="Tìm kiếm" name="keyword_sub"/>
@@ -174,7 +190,6 @@
 
 
     <!--/slider-->
-
     <section>
         <div class="container">
             <div class="row">
@@ -186,7 +201,7 @@
                             @foreach ($category as $key => $cate)
                             <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <h4 class="panel-title"><a href="{{URL::to('/danh-muc-san-pham/'.$cate->category_id)}}"
+                                    <h4 class="panel-title"><a href="{{route('category',['category_id'=> $cate->category_id])}}"
                                     class="{{(request()->is('danh-muc-san-pham/'.$cate->category_id)) ? 'active' : '' }}"
                                     >{{$cate->category_name}}</a></h4>
                                 </div>
@@ -199,7 +214,7 @@
                             <div class="brands-name">
                                 @foreach ($brand as $key => $brand)
                                 <ul class="nav nav-pills nav-stacked">
-                                    <li><a href="{{URL::to('/thuonghieu/'.$brand->brand_id)}}"
+                                    <li><a href="{{route('brand',['brand_id'=> $cate->category_id])}}"
                                     class="{{(request()->is('thuonghieu/'.$brand->brand_id)) ? 'active' : '' }}"
                                     > <span class="pull-right"></span>{{$brand->brand_name}}</a></li>
                                     
@@ -221,6 +236,8 @@
         </div>
     </section>
 
+    
+
     <footer id="footer">
         <!--Footer-->
        
@@ -241,7 +258,7 @@
                             <h2>Danh mục sản phẩm</h2>
                             <ul class="nav nav-pills nav-stacked">
                             @foreach ($category as $key => $cate)
-                                <li><a href="{{URL::to('/danh-muc-san-pham/'.$cate->category_id)}}">{{$cate->category_name}}</a></li>
+                                <li><a href="{{route('category',['category_id'=>$cate->category_id])}}">{{$cate->category_name}}</a></li>
                             @endforeach
                             </ul>
                         </div>
@@ -265,12 +282,12 @@
 
 
 
-    <script src="{{asset('public/frontend/js/jquery.js')}}"></script>
-    <script src="{{asset('public/frontend/js/bootstrap.min.js')}}"></script>
-    <script src="{{asset('public/frontend/js/jquery.scrollUp.min.js')}}"></script>
-    <script src="{{asset('public/frontend/js/price-range.js')}}"></script>
-    <script src="{{asset('public/frontend/js/jquery.prettyPhoto.js')}}"></script>
-    <script src="{{asset('public/frontend/js/main.js')}}"></script>
+    <script src="{{asset('frontend/js/jquery.js')}}"></script>
+    <script src="{{asset('frontend/js/bootstrap.min.js')}}"></script>
+    <script src="{{asset('frontend/js/jquery.scrollUp.min.js')}}"></script>
+    <script src="{{asset('frontend/js/price-range.js')}}"></script>
+    <script src="{{asset('frontend/js/jquery.prettyPhoto.js')}}"></script>
+    <script src="{{asset('frontend/js/main.js')}}"></script>
 </body>
 
 </html>

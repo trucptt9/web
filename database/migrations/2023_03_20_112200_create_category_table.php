@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('category', function (Blueprint $table) {
             $table->Increments('category_id');
             $table->string('category_name');
-            $table->text('category_desc');
+            $table->text('category_desc')->nullable();
             $table->boolean('category_status');
             $table->timestamps();
         });

@@ -36,10 +36,10 @@
                     <td>{{$o_content->product_id}}</td>
                     <td>{{$o_content->product_name}}</td>
                     <td>{{$o_content->product_qty}}</td>
-                    <td>{{$o_content->product_price}}</td>
+                    <td>{{$o_content->price}}</td>
                     <td>
                         <?php    
-                echo    $o_content->product_qty*$o_content->product_price
+                echo    $o_content->product_qty*$o_content->price
             ?>
                     </td>
 
@@ -79,7 +79,7 @@
             </tbody>
         </table>
 
-        <form action="{{URL::to('/capnhatdonhang/'.$order_byid->order_id)}}" method="post">
+        <form action="{{route('admin.update_order',['orderId'=>$order_byid->order_id])}}" method="post">
             {{csrf_field()}}
             <div class="form-group">
                 <h4 for="">Cập nhật tình trạng đơn hàng</h4>
@@ -92,7 +92,7 @@
 
                 </select>
             </div>
-            <a href="{{URL::to('/manage-order')}}" class="btn btn-warning">Quay lại </a>
+            <a href="{{route('admin.manage_order')}}" class="btn btn-warning">Quay lại </a>
            <button type="submit" class="btn btn-success" name="update_trangthai">Cập nhật</button>
         
         </form>

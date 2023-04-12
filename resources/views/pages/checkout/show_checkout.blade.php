@@ -7,7 +7,7 @@
     <div class="">
         <div class="breadcrumbs">
             <ol class="breadcrumb">
-                <li><a href="{{URL::to('/trangchu')}}">Trang chủ</a></li>
+                <li><a href="{{ route('home') }}">Trang chủ</a></li>
                 <li class="active">Thanh toán giỏ hàng</li>
             </ol>
         </div> 

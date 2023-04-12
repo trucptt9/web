@@ -11,12 +11,13 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up() 
     {
         Schema::create('promotional_products', function (Blueprint $table) {
             $table->increments('pp_id');
-            $table->string('product_id');
-            $table->dateTime('coupon_id');
+            $table->integer('product_id');
+            $table->integer('coupon_id');
+            $table->string('price_final');
             $table->timestamps();
         });
     }

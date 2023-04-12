@@ -1648,9 +1648,10 @@ ul.bs-glyphicons-list {
 }
 .panel-default>.panel-heading {
     color: #000000 ! important;
-    background-color: #ddede0 ! important;
-    border-color: #ddede0 ! important;
+    background-color: #93eca3 ! important;
+    border-color: #93eca3 ! important;
     font-size: 20px;
+    font-weight:500;
 }
 p.hd-title {
     color: #b64d99;

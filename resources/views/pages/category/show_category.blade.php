@@ -8,12 +8,12 @@
     <h2 class="title text-center"> {{$name->category_name}}</h2>
     @endforeach
     @foreach($category_byID as $key => $product)
-    <a href="{{URL::to('chi-tiet-san-pham/'.$product->product_id)}}">
+    <a href="{{route('detail_product',['product_id'=>$product->product_id])}}">
         <div class="col-sm-3">
             <div class="product-image-wrapper">
                 <div class="single-products">
                     <div class="productinfo text-center">
-                        <img src="{{URL::to('public/upload/product/'.$product->product_image)}}" alt="lỗi" height="145"
+                        <img src="{{asset('upload/product/'.$product->product_image)}}" alt="lỗi" height="145"
                             width="145" />
 
                         <p style="height:35px;text-overflow:ellipsis">{{$product->product_name}}</p>
@@ -38,7 +38,7 @@
                         <?php   
                 }
                 ?>
-                        <form action="{{URL::to('/sell-cart')}}" method="POST">
+                        <form action="{{ route('sell_cart')}}" method="POST">
                             {{csrf_field()}}
 
 

@@ -6,20 +6,41 @@
     <div class="panel-heading">
       Liệt kê đơn hàng
     </div>
+
+    {{-- <div class="row" style="margin-top:10px">
+      <form action="{{ route('admin.search_order') }}" method="get">
+      <div class="col-sm-3">
+        
+        
+        <select class="form-control" style="width:200px;" name="name_search"  >
+          <option value="0" type="">-- Chọn tên -- </option>
+          @foreach($all_order as $key => $order)
+         
+          <option value=" {{ $order->customer_name}}" type="" > {{ $order->customer_name }} </option>
+          @endforeach
+        </select>
+       
+      </div>
+      <div class="col-sm-6" style="display: flex">
+        
+        <input type="date" class="form-control" style="width:200px;" name="date_order" value='0' value="{{  $_GET['date_order'] ?? ''  }}"> 
+        <button class="btn btn-sm btn-success" type="submit" style="margin-left:10px" >Tìm kiếm</button>
+      </form>
+      </div>
+
+      
+       
+    
+    </div> --}}
+   
+
     
     <div class="row w3-res-tb">
     
       <div class="col-sm-4">
       </div>
       <div class="col-sm-3">
-      <form action="{{URL::to('/timkiem_order')}}">
-        <div class="input-group">
-            <input type="text" class="input-sm form-control" placeholder="Search" name="keyword_sub">
-            <span class="input-group-btn">
-              <button class="btn btn-sm btn-default" type="submit" name="keyword_sub">Tìm kiếm</button>
-            </span>
-          </div>
-        </form>
+     
         
       </div>
     </div>
@@ -55,10 +76,10 @@
             </span></td> -->
             
             <td>
-              <a href="{{URL::to('view-order/'.$order->order_id)}}" class="active" ui-toggle-class="">
+              <a href="{{route('admin.view_order',['orderId'=>$order->order_id])}}" class="active" ui-toggle-class="">
                 <i class="fa fa-pencil-square-o text-success text-active" style="font-size: 18px;"></i>
               </a>
-              <a href="{{URL::to('delete-order/'.$order->order_id)}}" 
+              <a href="{{route('admin.add_product',['order_id'=>$order->order_id])}}" 
               onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này không?')"
               class="active" ui-toggle-class="">
                 <i class="fa fa-times text-danger text" style="font-size: 18px;"></i>
@@ -73,17 +94,10 @@
       <div class="row">
         
         <div class="col-sm-5 text-center">
-          <small class="text-muted inline m-t-sm m-b-sm">showing 20-30 of 50 items</small>
+          
         </div>
         <div class="col-sm-7 text-right text-center-xs">                
-          <ul class="pagination pagination-sm m-t-none m-b-none">
-           
-            <li><a href="">1</a></li>
-            <li><a href="">2</a></li>
-            <li><a href="">3</a></li>
-            <li><a href="">4</a></li>
-            <li><a href=""><i class="fa fa-chevron-right"></i></a></li>
-          </ul>
+         {{ $all_order->links() }}
         </div>
       </div>
     </footer>

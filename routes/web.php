@@ -21,113 +21,191 @@ use App\Http\Controllers\TypeaheadController;
 |
 */
 
-// FRONTEND
-// goi toi file controller roi goi ham index cua HomeCOntroller
-Route::get('/',[HomeController::class,'index']);
-Route::get('/trangchu',[HomeController::class, 'index']);
-Route::post('/timkiem',[HomeController::class, 'tim_kiem']);
-
-//trả về trang tài khoản người dùng
-Route::get('/account/{customer_id}',[HomeController::class, 'show_account']);
-
-
-// danh mục sản phẩm của trang chủ
-Route::get('/danh-muc-san-pham/{category_id}',[CategoryController::class, 'show_category_home']);
-
-Route::get('/thuonghieu/{brand_id}',[BrandController::class, 'thuonghieu']);
-//trang chi tiết sp
-Route::get('/chi-tiet-san-pham/{product_id}',[ProductController::class, 'detail_product']);
-
 //BACKEND ->admin
 
-// tra ve trang login
-Route::get('/admin',[AdminController::class,'index']);
+Route::get('/login',[AdminController::class,'index'])->name('login');
+Route::post('/submit-login',[AdminController::class,'login'])->name('admin.submit_login');
 
-//tra ve trang dashboard
-Route::get('/dashboard',[AdminController::class,'showDashboard']);
+Route::middleware(['auth'])->prefix('admin')->group(function() {
+    Route::get('',[AdminController::class,'showDashboard'])->name('admin.index');
+    Route::get('/logout',[AdminController::class,'logout'])->name('admin.logout');
 
-// gui thong tin dang nhap de kiem tra tai khoan co trong csdl admin ko
-//neu co thi tra ve trang dashboard cua admin , neu khong thi tra ve thong bao loi r quay lai trang dang nhap
-Route::post('/admin-dashboard',[AdminController::class,'dashboard']);
-Route::get('/logout',[AdminController::class,'logout']);
+    Route::prefix('category')->group(function() {
+        Route::get('',[CategoryController::class,'all_category_product'])
+        ->name('admin.all_category');
+
+        Route::get('add',[CategoryController::class,'add_category_product'])->name('admin.new_category');
+
+        Route::post('/save',[CategoryController::class,'save_category_product'])
+        ->name('admin.save_category');
+
+        Route::get('/edit/{category_id}',[CategoryController::class,'edit_category_product'])
+        ->name('admin.edit_category');
+
+        Route::post('/update/{category_id}',[CategoryController::class,'update_category_product'])
+        ->name('admin.update_category'); 
+
+        Route::get('/delete/{category_id}',[CategoryController::class,'delete_category_product'])
+        ->name('admin.delete_category');   
+
+        Route::get('/unactive/{category_id}',[CategoryController::class,'unactive_category_product'])
+        ->name('admin.unactive_category');
+
+        Route::get('/active/{category_id}',[CategoryController::class,'active_category_product'])
+        ->name('admin.active_category');
+    });
+
+    // Brand Product
+    Route::prefix('brand')->group(function() {
+        Route::get('',[BrandController::class,'all_brand_product'])
+        ->name('admin.all_brand');
+        Route::get('/add',[BrandController::class,'add_brand_product'])
+        ->name('admin.add_brand');
+        Route::post('/save',[BrandController::class,'save_brand_product'])
+        ->name('admin.save_brand');
+        Route::get('/edit/{brand_id}',[BrandController::class,'edit_brand_product'])
+        ->name('admin.edit_brand');
+        Route::post('/update/{brand_id}',[BrandController::class,'update_brand_product'])
+        ->name('admin.update_brand'); 
+        Route::get('/delete/{brand_id}',[BrandController::class,'delete_brand_product'])
+        ->name('admin.delete_brand');
+        Route::get('/unactive/{brand_id}',[BrandController::class,'unactive_brand_product'])
+        ->name('admin.unactive_brand');
+        Route::get('/active/{brand_id}',[BrandController::class,'active_brand_product'])
+        ->name('admin.active_brand');
+    });
+    
+    // Product
+    Route::prefix('product')->group(function() {
+        Route::get('',[ProductController::class,'all_product'])
+        ->name('admin.all_product');
+        Route::get('/add',[ProductController::class,'add_product'])
+        ->name('admin.add_product');
+         Route::post('/save',[ProductController::class,'save_product'])
+        ->name('admin.save_product');
+        Route::get('/edit/{product_id}',[ProductController::class,'edit_product'])
+        ->name('admin.edit_product');
+        Route::post('/update/{product_id}',[ProductController::class,'update_product'])
+        ->name('admin.update_product'); 
+        Route::get('/delete/{product_id}',[ProductController::class,'delete_product'])
+        ->name('admin.delete_product');
+
+        Route::get('/unactive/{product_id}',[ProductController::class,'unactive_product'])
+        ->name('admin.unactive_product');
+        Route::get('/active/{product_id}',[ProductController::class,'active_product'])
+        ->name('admin.active_product');
+    });
+
+    // Order đơn hàng
+    Route::prefix('order')->group(function(){
+        Route::get('',[CheckoutController::class,'manage_order'])
+        ->name('admin.manage_order');
+
+        Route::get('/view/{orderId}',[CheckoutController::class,'view_order'])
+        ->name('admin.view_order');
+
+        Route::post('/update/{orderId}',[CheckoutController::class,'capnhat'])
+        ->name('admin.update_order');
+
+        Route::get('/search',[CheckoutController::class, 'tim_kiem_order'])
+        ->name('admin.search_order');
+        
+        Route::get('/delete/{order_id}',[CheckoutController::class,'delete_order'])
+        ->name('admin.delete_order');
+
+       
+    });
+    
+    //thống kê
+    Route::prefix('statistic')->group(function(){
+        Route::get('/revenue',[AdminController::class,'thong_ke_doanh_thu'])
+        ->name('admin.revenue_statistic');
+        Route::get('/user',[AdminController::class,'thong_ke_khach_hang'])
+        ->name('admin.user_statistic');
+        Route::get('/order',[AdminController::class,'thong_ke_don_hang'])
+        ->name('admin.order_statistic');
+        Route::get('/search',[AdminController::class, 'tim_kiem_thong_ke'])
+        ->name('admin.timkiem_thong_ke');
+    });
+    
+    //khuyến mãi
+    Route::prefix('coupon')->group(function(){
+        Route::get('',[CouponController::class,'all_coupon'])
+        ->name('admin.all_coupon');
+        Route::get('/add',[CouponController::class,'add_coupon'])
+        ->name('admin.add_coupon');
+        Route::post('/save',[CouponController::class,'save_coupon'])
+        ->name('admin.save_coupon');
+        Route::get('/edit/{coupon_id}',[CouponController::class,'edit_coupon'])
+        ->name('admin.edit_coupon');
+        Route::post('/update/{coupon_id}',[CouponController::class,'update_coupon'])
+        ->name('admin.update_coupon');
+        Route::get('/delete/{coupon_id}',[CouponController::class,'delete_coupon'])
+        ->name('admin.delete_coupon');
+        Route::get('/apply',[CouponController::class,'apply_coupon'])
+        ->name('admin.apply_coupon');
+        Route::post('/save-product',[CouponController::class,'save_coupon_product'])
+        ->name('admin.save_product_coupon');
+        Route::get('/delete-product/{product_id}',[CouponController::class,'delete_product_coupon'])
+        ->name('admin.delete_product_coupon');
+        
+    });
+});
+
+//User
+Route::get('/',[HomeController::class,'index'])->name('home_page');
+Route::get('/trangchu',[HomeController::class, 'index'])->name('home');
+Route::post('/timkiem',[HomeController::class, 'tim_kiem'])->name('search');
+
+// danh mục sản phẩm của trang chủ
+Route::get('/danh-muc-san-pham/{category_id}',[CategoryController::class, 'show_category_home'])
+->name('category');
+Route::get('/thuonghieu/{brand_id}',[BrandController::class, 'thuonghieu'])
+->name('brand');
+//trang chi tiết sp
+Route::get('/chi-tiet-san-pham/{product_id}',[ProductController::class, 'detail_product'])
+->name('detail_product');
+Route::get('/tat-ca-sp',[ProductController::class,'tat_ca_sp'])
+->name('allproduct');
+    //Cart -> thêm sp vào giỏ hàng
+
+    //hêr
+
+    Route::post('/save-cart',[CartController::class,'save_cart'])
+    ->name('save_cart'); 
+    Route::post('/sell-cart',[CartController::class,'sell_cart'])
+    ->name('sell_cart'); 
+    Route::get('/show-cart',[CartController::class,'show_cart'])
+    ->name('show_cart'); 
+    Route::get('/delete-cart/{rowId}',[CartController::class,'delete_cart'])
+    ->name('delete_cart');
+
+  
+ Route::get('/login-checkout',[CheckoutController::class,'login_checkout'])
+ ->name('login_checkout');
+  Route::post('/add',[CheckoutController::class,'add_customer'])
+->name('user.add_account');
+  Route::post('/login-customer',[CheckoutController::class,'login_customer'])
+->name('user.login');
+
+  
 
 
-
-// Category Product
-Route::get('/add-category-product',[CategoryController::class,'add_category_product']);
-
-Route::get('/all-category-product',[CategoryController::class,'all_category_product']);
-Route::post('/save-category-product',[CategoryController::class,'save_category_product']);
-Route::get('/edit-category-product/{category_id}',[CategoryController::class,'edit_category_product']);
-Route::post('/update-category-product/{category_id}',[CategoryController::class,'update_category_product']); 
-Route::get('/delete-category-product/{category_id}',[CategoryController::class,'delete_category_product']);
-
-Route::get('/unactive-category-product/{category_id}',[CategoryController::class,'unactive_category_product']);
-Route::get('/active-category-product/{category_id}',[CategoryController::class,'active_category_product']);
-
-// Brand Product
-
-Route::get('/add-brand-product',[BrandController::class,'add_brand_product']);
-
-Route::get('/all-brand-product',[BrandController::class,'all_brand_product']);
-Route::post('/save-brand-product',[BrandController::class,'save_brand_product']);
-Route::get('/edit-brand-product/{brand_id}',[BrandController::class,'edit_brand_product']);
-Route::post('/update-brand-product/{brand_id}',[BrandController::class,'update_brand_product']); 
-Route::get('/delete-brand-product/{brand_id}',[BrandController::class,'delete_brand_product']);
-
-Route::get('/unactive-brand-product/{brand_id}',[BrandController::class,'unactive_brand_product']);
-Route::get('/active-brand-product/{brand_id}',[BrandController::class,'active_brand_product']);
-
-// Product
-Route::get('/add-product',[ProductController::class,'add_product']);
-
-Route::get('/all-product',[ProductController::class,'all_product']);
-Route::get('/tat-ca-sp',[ProductController::class,'tat_ca_sp']);
-Route::post('/save-product',[ProductController::class,'save_product']);
-Route::get('/edit-product/{product_id}',[ProductController::class,'edit_product']);
-Route::post('/update-product/{product_id}',[ProductController::class,'update_product']); 
-Route::get('/delete-product/{product_id}',[ProductController::class,'delete_product']);
-
-Route::get('/unactive-product/{product_id}',[ProductController::class,'unactive_product']);
-Route::get('/active-product/{product_id}',[ProductController::class,'active_product']);
-
-//Cart -> thêm sp vào giỏ hàng
-Route::post('/save-cart',[CartController::class,'save_cart']); 
-Route::post('/sell-cart',[CartController::class,'sell_cart']); 
-Route::get('/show-cart',[CartController::class,'show_cart']); 
-Route::get('/delete-cart/{rowId}',[CartController::class,'delete_cart']); 
+//trả về trang tài khoản người dùng
+    Route::get('/account/{customer_id}',[HomeController::class, 'show_account'])->name('account_user');
+    Route::get('/order-history/{customer_id}',[HomeController::class, 'show_order_account'])->name('order_account');
 
 //Checkout  ktra đăng nhập để thanh tonasthanh toán
-Route::get('/login-checkout',[CheckoutController::class,'login_checkout']); 
-Route::get('/logout-checkout',[CheckoutController::class,'logout_checkout']); 
-Route::post('/add',[CheckoutController::class,'add_customer']);
- Route::get('/checkout/{customer_id}',[CheckoutController::class,'checkout']); 
- Route::get('/payment/{customer_id}',[CheckoutController::class,'payment']); 
- Route::post('/phuongthucthanhtoan',[CheckoutController::class,'phuongthucthanhtoan']);
- Route::post('/save-checkout-customer',[CheckoutController::class,'save_checkout_customer']);
+    
+    Route::get('/logout-checkout',[CheckoutController::class,'logout_checkout']); 
+   
+    // Route::get('/checkout/{customer_id}',[CheckoutController::class,'checkout']); 
+    Route::get('/payment/{customer_id}',[CheckoutController::class,'payment']); 
+    Route::post('/thanhtoantructiep',[CheckoutController::class,'thanhtoan_tructiep']);
+    Route::post('/thanhtoan-vnpay',[CheckoutController::class,'thanhtoan_vnpay']);
+    Route::post('/save-checkout-customer',[CheckoutController::class,'save_checkout_customer']);
+    Route::post('/update-address/{customer_id}',[CheckoutController::class,'update_address']); 
+    Route::get('/vnpay-payment',[CheckoutController::class,'vnpay_payment'])
+    ->name('vnpay_payment');
 
- Route::post('/login-customer',[CheckoutController::class,'login_customer']);
-
-  Route::post('/update-address/{customer_id}',[CheckoutController::class,'update_address']); 
- // Order đơn hàng
-Route::get('/manage-order',[CheckoutController::class,'manage_order']);
-Route::get('/view-order/{orderId}',[CheckoutController::class,'view_order']);
-Route::post('/capnhatdonhang/{orderId}',[CheckoutController::class,'capnhat']);
-Route::get('/timkiem_order',[CheckoutController::class, 'tim_kiem_order']);
-Route::get('/delete-order/{order_id}',[CheckoutController::class,'delete_order']);
-
-//thống kê doanh thu
-
-Route::get('/revenue-statistic',[AdminController::class,'thong_ke_doanh_thu']);
-Route::get('/timkiem_thong_ke',[AdminController::class, 'tim_kiem_thong_ke']);
-
-//khuyến mãi
-Route::get('/all-coupon',[CouponController::class,'all_coupon']);
-Route::get('/add-coupon',[CouponController::class,'add_coupon']);
-Route::post('/save-coupon',[CouponController::class,'save_coupon']);
-Route::get('/edit-coupon/{coupon_id}',[CouponController::class,'edit_coupon']);
-Route::post('/update-coupon/{coupon_id}',[CouponController::class,'update_coupon']);
-Route::get('/delete-coupon/{coupon_id}',[CouponController::class,'delete_coupon']);
-Route::get('/apply-coupon',[CouponController::class,'apply_coupon']);
-Route::post('/save-product-coupon',[CouponController::class,'save_coupon_product']);
-Route::get('/delete-product-coupon/{product_id}',[CouponController::class,'delete_product_coupon']);
+//cua usser

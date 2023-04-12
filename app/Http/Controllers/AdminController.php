@@ -2,27 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AdminModel;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Session;
 use Illuminate\Support\Facades\Redirect;
 session_start();
 class AdminController extends Controller
 {
-    public function AuthLogin(){
-            $admin_id = Session::get('admin_id');
-            if($admin_id){
-                return Redirect::to('dashboard');
-            }
-            else{
-                return Redirect::to('admin')->send();
-            }
-    }
     public function index(){
         return view('admin_login');
     }
     public function showDashboard(){
-        $this->AuthLogin();
         $customers = DB::table('customer')->get();
         $sl = count($customers);
 
@@ -35,42 +28,48 @@ class AdminController extends Controller
         ->with('number_order',$orders)
         ->with('number_hethang',$products_hethang);
     }
-    public function dashboard(Request $request){
-        $admin_email = $request->admin_email;
-        $admin_password = md5($request->admin_password);
-
-        $result = DB::table('admin')
-        ->where('admin_email', $admin_email)
-        ->where('admin_password',$admin_password)
-        ->first();  //lấy 1 user
-        if($result){
-            Session::put('admin_name',$result->admin_name);
-            Session::put('admin_id',$result->admin_id);
-            return Redirect::to('/dashboard');
-        }
-        else{
-            Session::put('message','Mật khẩu hoặc tài khoản không đúng. Vui lòng nhập lại!');          
-            return Redirect::to('/admin');
-        }
+    public function login(Request $request){
+        $credentials = $request->validate([
+            'admin_email' => ['required', 'email'],
+            'admin_password' => ['required'],
+        ]);
+ 
+        $admin = AdminModel::where('admin_email', $credentials['admin_email'])->first();
+        if ($admin && \Hash::check($credentials['admin_password'], $admin->admin_password)) {
+            Auth::login($admin);
+            $request->session()->regenerate();
+          
+            return to_route('admin.index');
+        }       
+        return back()->withErrors([
+           
+            'error' => 'Mật khẩu hoặc tài khoản không đúng',
+        ])->onlyInput('email');
        
     }
+
     public function logout(){
-        $this->AuthLogin();
-        Session::put('admin_name',null);
-        Session::put('admin_id',null);
-        return Redirect::to('/admin');
+        Auth::logout();
+        return to_route('login');
     }
 
     //thống kê doanh thu
-    public function thong_ke_doanh_thu(){
-        $this->AuthLogin();
-        $Count_product = DB::table('product')->count();
-        $statistical = DB:: table('product')
-                        ->join('order_detail','product.product_id','=','order_detail.product_id')
-                        ->select('product.product_id','product.product_name','product.product_price',
-                        DB::raw('sum(order_detail.product_qty) as count'),DB::raw('sum(product.product_price * order_detail.product_qty) as total'))
-                        ->groupBy('product.product_id','product.product_name','product.product_price')
+    public function thong_ke_doanh_thu(Request $request){
+        $search = $request->search ?? '';
+       
+        $statistical = DB:: table('order_detail')
+                        ->join('product','order_detail.product_id','product.product_id')
+                        ->select('order_detail.product_id','product.product_name',
+                        
+                        DB::raw('sum(order_detail.product_qty) as count'),DB::raw('sum(order_detail.price * order_detail.product_qty) as total'))
+                        ->where('order_detail.product_name','like',"%$search%")
+                        ->orWhere('order_detail.product_id','like',"%$search%")
+                        ->groupBy('order_detail.product_id','product.product_name')
+                        
                         ->get();
+// dd($statistical);
+
+        $order_total = DB::table('order')->count();         
         $total=0;
         $total_unpaid=0;
         $total_paid=0;
@@ -90,38 +89,60 @@ class AdminController extends Controller
                 ->with('total',$total)
                 ->with('statistical',$statistical)
                 ->with('total_paid',$total_paid)
-                ->with('total_unpaid',$total_unpaid)
+                ->with('total_unpaid',$total_unpaid)->with('order_total',$order_total)
                 ;
     }
+public function thong_ke_khach_hang(Request $request){
+    $search = $request->search ?? '';
+    $customer = DB::table('order')->join('customer','order.customer_id','customer.customer_id')
+    ->select('order.customer_id','customer.customer_name',
+    DB::raw('sum(order.order_total) as sum'), DB::raw('count(order.customer_id) as count') )
+    ->where('customer.customer_name','like',"%$search%")
+    ->groupBy('order.customer_id','customer.customer_name')
+    ->paginate(10);
+    // dd($customer);
+    return view('admin.user_statistic')->with('customer',$customer);
+}
+public function thong_ke_don_hang(Request $request){
+    $search = $request->search ?? '';
 
-    public function tim_kiem_thong_ke(Request $request){
-        $keyword = $request->keyword_sub;
+    $orders = DB::table('order')
+    ->select('order.order_status', DB::raw('count(order.order_status) as count'), DB::raw('sum(order.order_total) as sum'))
+    ->where('order.order_status','like',"%$search%")
+    ->groupBy('order.order_status')
+    ->paginate(5);
 
-        $Count_product = DB::table('product')->count();
-        $statistical = DB:: table('product')
-                        ->join('order_detail','product.product_id','=','order_detail.product_id')
-                        ->select('product.product_id','product.product_name','product.product_price',DB::raw('sum(order_detail.product_qty) as count'),DB::raw('sum(product.product_price) as total'))
-                        ->groupBy('product.product_id','product.product_name','product.product_price')
-                        ->where('product.product_name','like','%'.$keyword.'%')
-                        ->orWhere('product.product_id','=',$keyword)
-                        ->get();
-        $total=0;
-        $total_unpaid=0;
-        $total_paid=0;
-        $total = DB::table('order')->sum('order_total');
-        $total_paid = DB::table('order')
-                ->where('order_status','Giao hàng thành công')
-                ->sum('order_total');
-        $total_unpaid = DB::table('order')
-                ->where('order_status','Đang chờ xử lý')
-                ->orWhere('order_status','Đã giao cho bên vận chuyển')
-                ->sum('order_total');
-        return view('admin.revenue_statistic')
-                ->with('total',$total)
-                ->with('statistical',$statistical)
-                ->with('total_paid',$total_paid)
-                ->with('total_unpaid',$total_unpaid);
-    }
+    return view('admin.order_statistic')->with('orders',$orders);
+}
+    // public function tim_kiem_thong_ke(Request $request){
+    //     $keyword = $request->keyword_sub;
+
+    //     $Count_product = DB::table('product')->count();
+    //     $statistical = DB:: table('product')
+    //                     ->join('order_detail','product.product_id','=','order_detail.product_id')
+    //                     ->select('product.product_id','product.product_name','product.product_price',
+    //                     DB::raw('sum(order_detail.product_qty) as count'),DB::raw('sum(product.product_price) as total'))
+    //                     ->groupBy('product.product_id','product.product_name','product.product_price')
+    //                     ->where('product.product_name','like','%'.$keyword.'%')
+    //                     ->orWhere('product.product_id','=',$keyword)
+    //                     ->get();
+    //     $total=0;
+    //     $total_unpaid=0;
+    //     $total_paid=0;
+    //     $total = DB::table('order')->sum('order_total');
+    //     $total_paid = DB::table('order')
+    //             ->where('order_status','Giao hàng thành công')
+    //             ->sum('order_total');
+    //     $total_unpaid = DB::table('order')
+    //             ->where('order_status','Đang chờ xử lý')
+    //             ->orWhere('order_status','Đã giao cho bên vận chuyển')
+    //             ->sum('order_total');
+    //     return view('admin.revenue_statistic')
+    //             ->with('total',$total)
+    //             ->with('statistical',$statistical)
+    //             ->with('total_paid',$total_paid)
+    //             ->with('total_unpaid',$total_unpaid);
+    // }
 
     //hàm trả về thông tin tên trang dashboard
     public function get_infor(){

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('order_id');
             $table->integer('product_id');
             $table->string('product_name');
-            $table->float('produc_price');
+            $table->string('price');
             $table->integer('produc_qty');    //số lượng sp mua
             $table->timestamps();
         });

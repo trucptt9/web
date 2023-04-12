@@ -10,7 +10,7 @@
                             <div class="panel-body">
                             @include('common.alert')
                             <div class="position-center">
-                                <form role="form" method="post" action="{{URL::to('/save-brand-product')}}">
+                                <form role="form" method="post" action="{{route('admin.save_brand')}}">
                                     {{csrf_field()}}
                                    
                                     <div class="form-group">
@@ -35,7 +35,7 @@
                                     </div>
                                 
                                      <button type="submit" class="btn btn-info" name="save_brand_product">Thêm</button>
-                                     <a  class="btn btn-warning" name="quay lai" type="button" href="{{URL::to('/all-brand-product')}}">Hủy</a>
+                                     <a  class="btn btn-warning" name="quay lai" type="button" href="{{route('admin.all_brand')}}">Hủy</a>
                                 </form>
                               
                                

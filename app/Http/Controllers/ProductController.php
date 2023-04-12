@@ -8,39 +8,33 @@ use Session;
 use Illuminate\Support\Facades\Redirect;
 class ProductController extends Controller
 {
-    public function AuthLogin(){
-        $admin_id = Session::get('admin_id');
-        if($admin_id){
-            return Redirect::to('dashboard');
-        }
-        else{
-            return Redirect::to('admin')->send();
-        }
-}
     public function add_product(){
-        $this->AuthLogin();
+        
         $category = DB::table('category')->orderBy("category_id","desc")->get();
         $brand = DB::table('brand')->orderBy("brand_id","desc")->get();
         return view('admin.add_product')->with('category',$category)
                                          ->with('brand',$brand);
     }
 
-    public function all_product(){
-        $this->AuthLogin();
-        $all_product = DB::table('product')->join('category','product.category_id', '=','category.category_id')
-                                            ->join('brand','product.brand_id', '=','brand.brand_id')  
+    public function all_product(Request $request){
+        $search = $request->search ?? '';
+        
+        $all_product = DB::table('product')
+        ->join('category','product.category_id', '=','category.category_id')
+                                            ->join('brand','product.brand_id', '=','brand.brand_id') 
                                             ->select('product.*','category.category_name','brand.brand_name')
+                                            ->where('product.product_name', 'LIKE', "%$search%")
                                             ->orderBy('product.product_id','desc')
-                                            ->get();
-       
+                                            ->paginate(10);
+     
     return view('admin.all_product')->with('all_product', $all_product);
                                         
     }
     public function tat_ca_sp(){
         $category = DB::table('category')->orderBy("category_id","desc")->get();
         $brand = DB::table('brand')->orderBy("brand_id","desc")->get();
-        $products = DB::table('product')
-                                         ->join('category','product.category_id', '=','category.category_id')
+        $products = DB::table('product')->where('product_status','1')
+        ->join('category','product.category_id', '=','category.category_id')
                                             ->join('brand','product.brand_id', '=','brand.brand_id')  
                                             ->leftJoin('promotional_products','product.product_id','promotional_products.product_id')
                                             ->leftJoin('coupon','promotional_products.coupon_id','coupon.coupon_id')
@@ -54,18 +48,23 @@ class ProductController extends Controller
                                         
     }
     public function save_product(Request $request){
-        $this->AuthLogin();
+        
 
         $request->validate([
             
             'product_name'=> 'required',
+             'product_unit'=> 'required',
+              'product_idcode'=> 'required|unique:product,product_idcode',
+              
             'product_content' => 'nullable',
             'product_price'=> 'required|numeric',
             'product_SLtrongkho'=> 'required',
             'product_image'=> 'required|image',
         ],
         [
-          
+           "product_idcode.required"=>"Trường này không được bỏ trống",
+           "product_idcode.unique"=>"Mã sản phẩm đã tồn tại",
+           "product_unit.required"=>"Trường này không được bỏ trống",
             "product_name.required"=>"Trường này không được bỏ trống",
             "product_price.required"=>"Trường này không được bỏ trống",
             "product_price.numeric"=>"Trường này không được nhập kí tự",
@@ -76,6 +75,8 @@ class ProductController extends Controller
         $data = array();
         // 'brand_name' là của cột trong bảng brand tên phải giống với cột trong csdl ko đc khác
         $data['product_name'] = $request->product_name;
+         $data['product_idcode'] = $request->product_idcode;
+          $data['product_unit'] = $request->product_unit;
         $data['product_price'] = $request->product_price;
         $data['brand_id'] = $request->product_brand;
         $data['category_id'] = $request->product_category;
@@ -89,39 +90,39 @@ class ProductController extends Controller
             $get_name_image = $get_image->getClientOriginalName();
             $name_image = current(explode('.',$get_name_image));
             $new_image = $name_image.rand(0,99).'.'.$get_image->getClientOriginalExtension();
-            $get_image->move('public/upload/product',$new_image);
+            $get_image->move('upload/product',$new_image);
             $data['product_image'] = $new_image;
             DB::table('product')->insert($data); 
-            Session::put('message','Thêm sản phẩm thành công');
-            return Redirect::to('add-product')->with('success', 'Thêm sản phẩm thành công');
+            
+            return to_route('admin.add_product')->with('success', 'Thêm sản phẩm thành công');
         }
         $data['product_image'] = '';
 
         DB::table('product')->insert($data); 
-         Session::put('message','Thêm sản phẩm thành công');
-        return Redirect::to('add-product')->with('success', 'Thêm sản phẩm thành công');
+         
+        return to_route('admin.add_product')->with('success', 'Thêm sản phẩm thành công');
     }
 
     public function unactive_product($product_id){
-        $this->AuthLogin();
+        
        DB::table('product')->where('product_id',$product_id)
                             ->update(['product_status'=> 0]);
 
        
         
-        return Redirect::to('all-product');
+        return to_route('admin.all_product');
     }
     public function active_product($product_id){
-        $this->AuthLogin();
+        
         DB::table('product')->where('product_id',$product_id)
                             ->update(['product_status'=> 1]);
          
                     
-         return Redirect::to('all-product');
+         return to_route('admin.all_product');
      }
 
      public function edit_product($product_id){
-        $this->AuthLogin();
+        
         $category = DB::table('category')->orderBy("category_id","desc")->get();
         $brand = DB::table('brand')->orderBy("brand_id","desc")->get();
         $edit_product = DB::table('product')->where('product_id',$product_id)->get(); 
@@ -130,9 +131,11 @@ class ProductController extends Controller
                       ->with('brand', $brand);
      }
      public function update_product($product_id, Request $request){
-        $this->AuthLogin();
+        
        $data = array();
        $data['product_name'] = $request->product_name;
+       $data['product_idcode'] = $request->product_idcode;
+       $data['product_unit'] = $request->product_unit;
        $data['product_price'] = $request->product_price;
        $data['brand_id'] = $request->product_brand;
        $data['category_id'] = $request->product_category;
@@ -150,26 +153,26 @@ class ProductController extends Controller
 
         DB::table('product')->where('product_id',$product_id)->update($data); 
 
-        Session::put('message','Cập nhật sản phẩm thành công');
-        return Redirect::to('all-product');
+     
+        return to_route('admin.all_product')->with('success','Cập nhật thành công!');
        }
        
         DB::table('product')->where('product_id',$product_id)->update($data); 
-        Session::put('message','Cập nhật sản phẩm thành công');
-        return Redirect::to('all-product');
+       
+        return to_route('admin.all_product')->with('success','Cập nhật thành công!');
      }
      public function delete_product($product_id){
       
-        $this->AuthLogin();
+        
         DB::table('product')->where('product_id',$product_id)->delete();
         Session::put('message','Xóa sản phẩm thành công');
-        return Redirect::to('all-product');
+        return to_route('admin.all_product');
       }
 
     //   trang chi tiết sp
     public function detail_product(Request $request,$product_id){
 
-        $this->AuthLogin();
+     
         $category = DB::table('category')->where('category_status','1')->orderBy("category_id","desc")->get();
         $brand = DB::table('brand')->where('brand_status','1')->orderBy("brand_id","desc")->get();
 
