@@ -159,6 +159,44 @@
 				?>
 			</div>
 			
+			<h2 class="title text-center">lịch sử đặt hàng</h2>
+			<div class="table-responsive">
+			<table class="table table-striped b-t b-light">
+				<thead>
+				<tr>
+					
+					<th>ID đơn hàng</th>
+					<th>Tên khách hàng</th>
+					<th>Tổng giá trị đơn hàng</th>
+					<th>Ngày đặt hàng</th>
+					<th>Tình trạng đơn hàng</th>
+					
+					
+					<th style="width:30px;"></th>
+				</tr>
+				</thead>
+				<tbody>
+				@foreach($all_order as $key => $order)
+				<tr>
+					
+					<td>{{$order->order_id}}</td>
+				
+					<td>{{$order->customer_name}}</td>
+					<td>{{number_format($order->order_total).' VND'}}</td>
+					<td>{{date('d/m/Y', strtotime($order->order_ngaydathang))}}</td>
+					<td>{{$order->order_status}}</td>
+				
+					<!-- <td><span class="text-ellipsis">
+					
+				
+					</span></td> -->
+					
+					
+				</tr>
+				@endforeach
+				</tbody>
+			</table>
+			</div>
 		</div>
 	</section> 
 

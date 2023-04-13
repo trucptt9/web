@@ -55,14 +55,18 @@ class HomeController extends Controller
                 ->where('shipping.customer_id',$customer_id)
                 ->select('shipping.*')
                 ->get();
-        $profile_full = DB::table('customer')
-                ->where('customer.customer_id',$customer_id)
-                ->join('shipping','customer.customer_id','=','shipping.customer_id')
-                ->get();
+       $all_order = DB::table('order')->join('customer','order.customer_id', '=','customer.customer_id')
+              
+              ->where('customer.customer_id',$customer_id)
+              
+              ->select('order.*','customer.customer_name')
+              ->orderBy('order.order_id','desc')
+            ->get();
             return view('pages.profile_user')->with('profile',$profile)
                                             ->with('category',$category)
                                             ->with('brand',$brand)
                                             ->with('profile_shipping',$profile_shipping)
-                                            ->with('profile_full',$profile_full);
+                                            ->with('all_order',$all_order);
     }
+    
 }
