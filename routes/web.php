@@ -21,33 +21,6 @@ use App\Http\Controllers\TypeaheadController;
 |
 */
 
-<<<<<<< HEAD
-=======
-// FRONTEND
-// goi toi file controller roi goi ham index cua HomeCOntroller
-Route::get('/',[HomeController::class,'index']);
-Route::get('/trangchu',[HomeController::class, 'index']);
-Route::post('/timkiem',[HomeController::class, 'tim_kiem']);
-
-//trả về trang tài khoản người dùng
-Route::get('/account/{customer_id}',[HomeController::class, 'show_account']);
-
-// Quản lý tài khoản
-Route::get('/edit-profile/{customer_id}',[CheckoutController::class,'edit_profile']);
-Route::get('/edit-shipping/{customer_id}',[CheckoutController::class,'edit_shipping']);
-
-Route::get('/update-profile-user/{customer_id}',[CheckoutController::class,'update_profile_user']); 
-Route::get('/update-shipping-user/{customer_id}',[CheckoutController::class,'update_shipping_user']);
-
-
-// danh mục sản phẩm của trang chủ
-Route::get('/danh-muc-san-pham/{category_id}',[CategoryController::class, 'show_category_home']);
-
-Route::get('/thuonghieu/{brand_id}',[BrandController::class, 'thuonghieu']);
-//trang chi tiết sp
-Route::get('/chi-tiet-san-pham/{product_id}',[ProductController::class, 'detail_product']);
-
->>>>>>> 92017b6ea4af65fdc94048f24118ff80438c6b96
 //BACKEND ->admin
 
 Route::get('/login',[AdminController::class,'index'])->name('login');
@@ -267,7 +240,6 @@ Route::get('/tat-ca-sp',[ProductController::class,'tat_ca_sp'])
         Mail::mailer('smtp')->to( $adminEmail )
         ->send( new GuiEmail($ht, $em, $nd) );
 
-<<<<<<< HEAD
         $request->session()->flash('thongbao', "Đã gửi mail");
         return redirect("thongbao"); 
         });
@@ -277,32 +249,3 @@ Route::get('/tat-ca-sp',[ProductController::class,'tat_ca_sp'])
             $brand = DB::table('brand')->where('brand_status','1')->orderBy("brand_id","desc")->get();
             return view('pages.lienhe.thongbao',['thongbao'=> $tb])->with('category',$category)->with('brand',$brand); 
         });
-=======
-  Route::post('/update-address/{customer_id}',[CheckoutController::class,'update_address']); 
-
-
-
-
- // Order đơn hàng
-Route::get('/manage-order',[CheckoutController::class,'manage_order']);
-Route::get('/view-order/{orderId}',[CheckoutController::class,'view_order']);
-Route::post('/capnhatdonhang/{orderId}',[CheckoutController::class,'capnhat']);
-Route::get('/timkiem_order',[CheckoutController::class, 'tim_kiem_order']);
-Route::get('/delete-order/{order_id}',[CheckoutController::class,'delete_order']);
-
-//thống kê doanh thu
-
-Route::get('/revenue-statistic',[AdminController::class,'thong_ke_doanh_thu']);
-Route::get('/timkiem_thong_ke',[AdminController::class, 'tim_kiem_thong_ke']);
-
-//khuyến mãi
-Route::get('/all-coupon',[CouponController::class,'all_coupon']);
-Route::get('/add-coupon',[CouponController::class,'add_coupon']);
-Route::post('/save-coupon',[CouponController::class,'save_coupon']);
-Route::get('/edit-coupon/{coupon_id}',[CouponController::class,'edit_coupon']);
-Route::post('/update-coupon/{coupon_id}',[CouponController::class,'update_coupon']);
-Route::get('/delete-coupon/{coupon_id}',[CouponController::class,'delete_coupon']);
-Route::get('/apply-coupon',[CouponController::class,'apply_coupon']);
-Route::post('/save-product-coupon',[CouponController::class,'save_coupon_product']);
-Route::get('/delete-product-coupon/{product_id}',[CouponController::class,'delete_product_coupon']);
->>>>>>> 92017b6ea4af65fdc94048f24118ff80438c6b96

@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Session;
 use Illuminate\Support\Facades\Redirect;
-
 class CheckoutController extends Controller
 {
     public function login_checkout(){
@@ -269,7 +268,6 @@ class CheckoutController extends Controller
        
         
     }
-<<<<<<< HEAD
     public function tim_kiem_order(Request $request){
         
         $name = $request->name_search ?? '';
@@ -289,14 +287,6 @@ class CheckoutController extends Controller
         ])
                
               ->select('order.*','customer.customer_name')
-=======
-    public function tim_kiem_order(Request $request_search){
-        $this->AuthLogin();
-        $keyword = $request_search->keyword;
-        $all_order = DB::table('customer')->join('order','order.customer_id', '=','customer.customer_id')
-              ->select('order.*','customer.customer_name')
-              ->where('customer.customer_name','like','%'.$keyword.'%')
->>>>>>> 92017b6ea4af65fdc94048f24118ff80438c6b96
               ->orderBy('order.order_id','desc')
              ->paginate(5);
        
@@ -320,11 +310,7 @@ class CheckoutController extends Controller
 
         
         
-<<<<<<< HEAD
             return view('pages.user.edit_profile_user')
-=======
-            return view('pages.checkout.edit_profile_user')
->>>>>>> 92017b6ea4af65fdc94048f24118ff80438c6b96
                                             ->with('category',$category)
                                             ->with('brand',$brand);
                                             
@@ -365,11 +351,7 @@ class CheckoutController extends Controller
 
         
         
-<<<<<<< HEAD
             return view('pages.user.edit_shipping_user')
-=======
-            return view('pages.checkout.edit_shipping_user')
->>>>>>> 92017b6ea4af65fdc94048f24118ff80438c6b96
                                             ->with('category',$category)
                                             ->with('brand',$brand);
                                             
@@ -411,7 +393,6 @@ class CheckoutController extends Controller
        Session::put('message','Cập nhật thành công');
        return Redirect::to('/account/'.$customer_id);
      }
-<<<<<<< HEAD
 
      public function edit_password($customer_id){
 
@@ -588,8 +569,6 @@ class CheckoutController extends Controller
         }
         // vui lòng tham khảo thêm tại code demo
     
-=======
->>>>>>> 92017b6ea4af65fdc94048f24118ff80438c6b96
 }
 }
 public function show_handcash(){

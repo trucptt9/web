@@ -53,7 +53,6 @@ class HomeController extends Controller
                 ->where('shipping.customer_id',$customer_id)
                 ->select('shipping.*')
                 ->get();
-<<<<<<< HEAD
        $all_order = DB::table('order')->join('customer','order.customer_id', '=','customer.customer_id')
               
               ->where('customer.customer_id',$customer_id)
@@ -66,17 +65,6 @@ class HomeController extends Controller
                                             ->with('brand',$brand)
                                             ->with('profile_shipping',$profile_shipping)
                                             ->with('all_order',$all_order);
-=======
-        $profile_full = DB::table('customer')
-                ->where('customer.customer_id',$customer_id)
-                ->join('shipping','customer.customer_id','=','shipping.customer_id')
-                ->get();
-            return view('pages.profile_user')->with('profile',$profile)
-                                            ->with('category',$category)
-                                            ->with('brand',$brand)
-                                            ->with('profile_shipping',$profile_shipping)
-                                            ->with('profile_full',$profile_full);
->>>>>>> 92017b6ea4af65fdc94048f24118ff80438c6b96
     }
 
         //lịch dử đơn đặt hàng
