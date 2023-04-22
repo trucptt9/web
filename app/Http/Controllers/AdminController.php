@@ -56,6 +56,7 @@ class AdminController extends Controller
     }
 
     //thống kê doanh thu
+<<<<<<< HEAD
     public function thong_ke_doanh_thu(Request $request){
         $search = $request->search ?? '';
        
@@ -68,6 +69,15 @@ class AdminController extends Controller
                         ->orWhere('order_detail.product_id','like',"%$search%")
                         ->groupBy('order_detail.product_id','product.product_name')
                         
+=======
+    public function thong_ke_doanh_thu(){
+        $this->AuthLogin();
+        
+        $statistical = DB:: table('product')
+                        ->join('order_detail','product.product_id','=','order_detail.product_id')
+                        ->select('product.product_id','product.product_name','product.product_price',DB::raw('sum(order_detail.product_qty) as count'),DB::raw('sum(product.product_price*order_detail.product_qty) as total'))
+                        ->groupBy('product.product_id','product.product_name','product.product_price')
+>>>>>>> 92017b6ea4af65fdc94048f24118ff80438c6b96
                         ->get();
 // dd($statistical);
 
@@ -117,8 +127,36 @@ public function thong_ke_don_hang(Request $request){
     ->groupBy('order.order_status')
     ->paginate(5);
 
+<<<<<<< HEAD
     return view('admin.order_statistic')->with('orders',$orders);
 }
+=======
+        
+        $statistical = DB:: table('product')
+                        ->join('order_detail','product.product_id','=','order_detail.product_id')
+                        ->select('product.product_id','product.product_name','product.product_price',DB::raw('sum(order_detail.product_qty) as count'),DB::raw('sum(product.product_price*order_detail.product_qty) as total'))
+                        ->groupBy('product.product_id','product.product_name','product.product_price')
+                        ->where('product.product_name','like','%'.$keyword.'%')
+                        ->orWhere('product.product_id','=',$keyword)
+                        ->get();
+        $total=0;
+        $total_unpaid=0;
+        $total_paid=0;
+        $total = DB::table('order')->sum('order_total');
+        $total_paid = DB::table('order')
+                ->where('order_status','Giao hàng thành công')
+                ->sum('order_total');
+        $total_unpaid = DB::table('order')
+                ->where('order_status','Đang chờ xử lý')
+                ->orWhere('order_status','Đã giao cho bên vận chuyển')
+                ->sum('order_total');
+        return view('admin.revenue_statistic')
+                ->with('total',$total)
+                ->with('statistical',$statistical)
+                ->with('total_paid',$total_paid)
+                ->with('total_unpaid',$total_unpaid);
+    }
+>>>>>>> 92017b6ea4af65fdc94048f24118ff80438c6b96
 
 public function bieudo_thongke(){
     // $days = Input::get('days', 7);

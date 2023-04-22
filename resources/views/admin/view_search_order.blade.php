@@ -14,9 +14,9 @@
       <div class="col-sm-3">
       <form action="{{URL::to('/timkiem_order')}}">
         <div class="input-group">
-            <input type="text" class="input-sm form-control" placeholder="Search" name="keyword_sub">
+            <input type="text" class="input-sm form-control" placeholder="Search" name="keyword">
             <span class="input-group-btn">
-              <button class="btn btn-sm btn-default" type="submit" name="keyword_sub">Tìm kiếm</button>
+              <button class="btn btn-sm btn-default" type="submit" name="keyword">Tìm kiếm</button>
             </span>
           </div>
         </form>
@@ -27,14 +27,11 @@
       <table class="table table-striped b-t b-light">
         <thead>
           <tr>
-            <th style="width:20px;">
-              <label class="i-checks m-b-none">
-                <input type="checkbox"><i></i>
-              </label>
-            </th>
+            
             <th>ID đơn hàng</th>
             <th>Tên khách hàng</th>
             <th>Tổng giá trị đơn hàng</th>
+            <th>Ngày đặt hàng</th>
             <th>Tình trạng đơn hàng</th>
             
             
@@ -44,11 +41,12 @@
         <tbody>
           @foreach($all_order as $key => $order)
           <tr>
-            <td><label class="i-checks m-b-none"><input type="checkbox" name="post[]"><i></i></label></td>
+            
             <td>{{$order->order_id}}</td>
           
             <td>{{$order->customer_name}}</td>
             <td>{{$order->order_total}}</td>
+            <td>{{date('d/m/Y', strtotime($order->order_ngaydathang))}}</td>
             <td>{{$order->order_status}}</td>
            
             <!-- <td><span class="text-ellipsis">
@@ -79,7 +77,7 @@
         </div>
         <div class="col-sm-7 text-right text-center-xs">                
           <ul class="pagination pagination-sm m-t-none m-b-none">
-            <li><a href=""><i class="fa fa-chevron-left"></i></a></li>
+           
             <li><a href="">1</a></li>
             <li><a href="">2</a></li>
             <li><a href="">3</a></li>
