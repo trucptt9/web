@@ -103,19 +103,235 @@ class BrandController extends Controller
       }
 
     //   end admin
-    public function thuonghieu($brand_id){
+    public function thuonghieu($brand_id,Request $request){
+        $search = $request->keyword_sub ?? ''; 
+        $sort=$request->sort ?? '';
+        $price_min=$request->price_min ?? '';
+        $price_max=$request->price_max ?? '';
+        if ($request->price_max==0){
+            $price_max=9999999999999;
+        }
+        $coupon_min=$request->coupon_min/100 ?? '';
+        $coupon_max=$request->coupon_max/100 ?? '';
+        if ($request->coupon_max==0){
+            $coupon_max=9999999999999;
+        }
         $category = DB::table('category')->where('category_status','1')->orderBy("category_id","desc")->get();
         $brand = DB::table('brand')->where('brand_status','1')->orderBy("brand_id","desc")->get();
 
-        $brand_name = DB::table('brand')->where('brand.brand_id',$brand_id)->limit(1)->get();
-        $brand_byID = DB::table('product')
+        $brand_name = DB::table('brand')->where('brand_status','1')->where('brand.brand_id',$brand_id)->limit(1)->get();
+        $brand_byID = DB::table('product')->where('product_status','1')
         ->where('product.brand_id',$brand_id)->join('brand','product.brand_id','=','brand.brand_id')
 
                                             ->leftJoin('promotional_products','product.product_id','promotional_products.product_id')
                                             ->leftJoin('coupon','promotional_products.coupon_id','coupon.coupon_id')
+                                            ->where('product.product_name','like',"%$search%")
+                                            ->where('product.product_price','>',$price_min)
+                                            ->where('product.product_price','<',$price_max)
+                                            ->orWhere('promotional_products.price_final','<=',$price_max)
+                                            ->Where('promotional_products.price_final','>=',$price_max)
                                             ->select('product.*','promotional_products.price_final','coupon.*')
                                             ->get();
-        return view('pages.brand.show_brand')->with('brand',$brand)->with('category',$category)
-                                            ->with('brand_name',$brand_name)->with('brand_byID',$brand_byID);
+
+        if($coupon_min==0&&$coupon_max>1){
+            if ($sort==0){
+            $brand_byID = DB::table('product')->where('product_status','1')
+            ->where('product.brand_id',$brand_id)->join('brand','product.brand_id','=','brand.brand_id')
+            ->join('category','product.category_id', '=','category.category_id')
+                                                  
+                                                ->leftJoin('promotional_products','product.product_id','promotional_products.product_id')
+                                                ->leftJoin('coupon','promotional_products.coupon_id','coupon.coupon_id')
+                                                ->where('product.product_name','like',"%$search%")
+                                                ->where('product.product_price','>=',$price_min)
+                                                ->where('product.product_price','<=',$price_max)
+                                               
+                                                ->orWhere('promotional_products.price_final','<=',$price_max)
+                                                ->Where('promotional_products.price_final','>=',$price_max)
+                                                
+                                                ->select('product.*','category.category_name','brand.brand_name','promotional_products.price_final','coupon.*')
+                                                ->orderBy('product.product_id','desc')
+                                                ->get();
+            }elseif($sort==2){
+                $brand_byID = DB::table('product')->where('product_status','1')
+                ->where('product.brand_id',$brand_id)->join('brand','product.brand_id','=','brand.brand_id')
+                ->join('category','product.category_id', '=','category.category_id')
+                                                      
+                                                    ->leftJoin('promotional_products','product.product_id','promotional_products.product_id')
+                                                    ->leftJoin('coupon','promotional_products.coupon_id','coupon.coupon_id')
+                                                    ->where('product.product_name','like',"%$search%")
+                                                    ->where('product.product_price','>=',$price_min)
+                                                    ->where('product.product_price','<=',$price_max)
+                                                   
+                                                    ->orWhere('promotional_products.price_final','<=',$price_max)
+                                                    ->Where('promotional_products.price_final','>=',$price_max)
+                                                    
+                                                    ->select('product.*','category.category_name','brand.brand_name','promotional_products.price_final','coupon.*')
+                                                    ->orderBy('product.product_price')
+                                                    ->get();
+                }elseif($sort==3){
+                    $brand_byID = DB::table('product')->where('product_status','1')
+                    ->where('product.brand_id',$brand_id)->join('brand','product.brand_id','=','brand.brand_id')
+                    ->join('category','product.category_id', '=','category.category_id')
+                                                          
+                                                        ->leftJoin('promotional_products','product.product_id','promotional_products.product_id')
+                                                        ->leftJoin('coupon','promotional_products.coupon_id','coupon.coupon_id')
+                                                        ->where('product.product_name','like',"%$search%")
+                                                        ->where('product.product_price','>=',$price_min)
+                                                        ->where('product.product_price','<=',$price_max)
+                                                        
+                                                        ->orWhere('promotional_products.price_final','<=',$price_max)
+                                                        ->Where('promotional_products.price_final','>=',$price_max)
+                                                        
+                                                        ->select('product.*','category.category_name','brand.brand_name','promotional_products.price_final','coupon.*')
+                                                        ->orderBy('product.product_price','desc')
+                                                        ->get();
+                    }elseif($sort==4){
+                        $brand_byID = DB::table('product')->where('product_status','1')
+                        ->where('product.brand_id',$brand_id)->join('brand','product.brand_id','=','brand.brand_id')
+                        ->join('category','product.category_id', '=','category.category_id')
+                                                              
+                                                            ->leftJoin('promotional_products','product.product_id','promotional_products.product_id')
+                                                            ->leftJoin('coupon','promotional_products.coupon_id','coupon.coupon_id')
+                                                            ->where('product.product_name','like',"%$search%")
+                                                            ->where('product.product_price','>=',$price_min)
+                                                            ->where('product.product_price','<=',$price_max)
+                                                            
+                                                            ->orWhere('promotional_products.price_final','<=',$price_max)
+                                                            ->Where('promotional_products.price_final','>=',$price_max)
+                                                            
+                                                            ->select('product.*','category.category_name','brand.brand_name','promotional_products.price_final','coupon.*')
+                                                            ->orderBy('product.product_name')
+                                                            ->get();
+                        }elseif($sort==5){
+                            $brand_byID = DB::table('product')->where('product_status','1')
+                            ->where('product.brand_id',$brand_id)->join('brand','product.brand_id','=','brand.brand_id')
+                            ->join('category','product.category_id', '=','category.category_id')
+                                                                
+                                                                ->leftJoin('promotional_products','product.product_id','promotional_products.product_id')
+                                                                ->leftJoin('coupon','promotional_products.coupon_id','coupon.coupon_id')
+                                                                ->where('product.product_name','like',"%$search%")
+                                                                ->where('product.product_price','>=',$price_min)
+                                                                ->where('product.product_price','<=',$price_max)
+                                                                
+                                                                ->orWhere('promotional_products.price_final','<=',$price_max)
+                                                                ->Where('promotional_products.price_final','>=',$price_max)
+                                                                
+                                                                ->select('product.*','category.category_name','brand.brand_name','promotional_products.price_final','coupon.*')
+                                                                ->orderBy('product.product_name','desc')
+                                                                ->get();
+                            }
+                            return view('pages.brand.show_brand')->with('brand_byID', $brand_byID)
+                            ->with('category', $category)
+                            ->with('brand', $brand)
+                            ->with('brand_name',$brand_name);    
+                    }else{
+                        if ($sort==0){
+                            $brand_byID = DB::table('product')->where('product_status','1')
+                            ->where('product.brand_id',$brand_id)->join('brand','product.brand_id','=','brand.brand_id')
+                            ->join('category','product.category_id', '=','category.category_id')
+                                                                 
+                                                                ->Join('promotional_products','product.product_id','promotional_products.product_id')
+                                                                ->Join('coupon','promotional_products.coupon_id','coupon.coupon_id')
+                                                                ->where('product.product_name','like',"%$search%")
+                                                                ->where('product.product_price','>=',$price_min)
+                                                                ->where('product.product_price','<=',$price_max)
+                                                                ->where('coupon.coupon_value','>=',$coupon_min)
+                                                                ->where('coupon.coupon_value','<=',$coupon_max)
+                                                                ->orWhere('promotional_products.price_final','<=',$price_max)
+                                                                ->Where('promotional_products.price_final','>=',$price_max)
+                                                                ->where('coupon.coupon_value','>=',$coupon_min)
+                                                                ->where('coupon.coupon_value','<=',$coupon_max)
+                                                                ->select('product.*','category.category_name','brand.brand_name','promotional_products.price_final','coupon.*')
+                                                                ->orderBy('product.product_id','desc')
+                                                                ->get();
+                            }elseif($sort==2){
+                                $brand_byID = DB::table('product')->where('product_status','1')
+                                ->where('product.brand_id',$brand_id)->join('brand','product.brand_id','=','brand.brand_id')
+                                ->join('category','product.category_id', '=','category.category_id')
+                                                                      
+                                                                    ->leftJoin('promotional_products','product.product_id','promotional_products.product_id')
+                                                                    ->leftJoin('coupon','promotional_products.coupon_id','coupon.coupon_id')
+                                                                    ->where('product.product_name','like',"%$search%")
+                                                                    ->where('product.product_price','>',$price_min)
+                                                                    ->where('product.product_price','<',$price_max)
+                                                                    ->where('coupon.coupon_value','>=',$coupon_min)
+                                                                    ->where('coupon.coupon_value','<=',$coupon_max)
+                                                                    ->orWhere('promotional_products.price_final','<=',$price_max)
+                                                                    ->Where('promotional_products.price_final','>=',$price_max)
+                                                                    ->where('coupon.coupon_value','>=',$coupon_min)
+                                                                    ->where('coupon.coupon_value','<=',$coupon_max)
+                                                                    ->select('product.*','category.category_name','brand.brand_name','promotional_products.price_final','coupon.*')
+                                                                    ->orderBy('product.product_price')
+                                                                    ->get();
+                                }elseif($sort==3){
+                                    $brand_byID = DB::table('product')->where('product_status','1')
+                                    ->where('product.brand_id',$brand_id)->join('brand','product.brand_id','=','brand.brand_id')
+                                    ->join('category','product.category_id', '=','category.category_id')
+                                                                          
+                                                                        ->leftJoin('promotional_products','product.product_id','promotional_products.product_id')
+                                                                        ->leftJoin('coupon','promotional_products.coupon_id','coupon.coupon_id')
+                                                                        ->where('product.product_name','like',"%$search%")
+                                                                        ->where('product.product_price','>',$price_min)
+                                                                        ->where('product.product_price','<',$price_max)
+                                                                        ->where('coupon.coupon_value','>=',$coupon_min)
+                                                                        ->where('coupon.coupon_value','<=',$coupon_max)
+                                                                        ->orWhere('promotional_products.price_final','<=',$price_max)
+                                                                        ->Where('promotional_products.price_final','>=',$price_max)
+                                                                        ->where('coupon.coupon_value','>=',$coupon_min)
+                                                                        ->where('coupon.coupon_value','<=',$coupon_max)
+                                                                        ->select('product.*','category.category_name','brand.brand_name','promotional_products.price_final','coupon.*')
+                                                                        ->orderBy('product.product_price','desc')
+                                                                        ->get();
+                                    }elseif($sort==4){
+                                        $brand_byID = DB::table('product')->where('product_status','1')
+                                        ->where('product.brand_id',$brand_id)->join('brand','product.brand_id','=','brand.brand_id')
+                                        ->join('category','product.category_id', '=','category.category_id')
+                                                                              
+                                                                            ->leftJoin('promotional_products','product.product_id','promotional_products.product_id')
+                                                                            ->leftJoin('coupon','promotional_products.coupon_id','coupon.coupon_id')
+                                                                            ->where('product.product_name','like',"%$search%")
+                                                                            ->where('product.product_price','>',$price_min)
+                                                                            ->where('product.product_price','<',$price_max)
+                                                                            ->where('coupon.coupon_value','>=',$coupon_min)
+                                                                            ->where('coupon.coupon_value','<=',$coupon_max)
+                                                                            ->orWhere('promotional_products.price_final','<=',$price_max)
+                                                                            ->Where('promotional_products.price_final','>=',$price_max)
+                                                                            ->where('coupon.coupon_value','>=',$coupon_min)
+                                                                            ->where('coupon.coupon_value','<=',$coupon_max)
+                                                                            ->select('product.*','category.category_name','brand.brand_name','promotional_products.price_final','coupon.*')
+                                                                            ->orderBy('product.product_name')
+                                                                            ->get();
+                                        }elseif($sort==5){
+                                            $brand_byID = DB::table('product')->where('product_status','1')
+                                            ->where('product.brand_id',$brand_id)->join('brand','product.brand_id','=','brand.brand_id')
+                                            ->join('category','product.category_id', '=','category.category_id')
+                                                                                  
+                                                                                ->leftJoin('promotional_products','product.product_id','promotional_products.product_id')
+                                                                                ->leftJoin('coupon','promotional_products.coupon_id','coupon.coupon_id')
+                                                                                ->where('product.product_name','like',"%$search%")
+                                                                                ->where('product.product_price','>',$price_min)
+                                                                                ->where('product.product_price','<',$price_max)
+                                                                                ->where('coupon.coupon_value','>=',$coupon_min)
+                                                                                ->where('coupon.coupon_value','<=',$coupon_max)
+                                                                                ->orWhere('promotional_products.price_final','<=',$price_max)
+                                                                                ->Where('promotional_products.price_final','>=',$price_max)
+                                                                                ->where('coupon.coupon_value','>=',$coupon_min)
+                                                                                ->where('coupon.coupon_value','<=',$coupon_max)
+                                                                                ->select('product.*','category.category_name','brand.brand_name','promotional_products.price_final','coupon.*')
+                                                                                ->orderBy('product.product_name','desc')
+                                                                                ->get();
+                                            }
+                                            return view('pages.brand.show_brand')->with('brand_byID', $brand_byID)
+                                            ->with('category', $category)
+                                            ->with('brand', $brand)
+                                            ->with('brand_name',$brand_name);    
+                    }
+                    
+        return view('pages.brand.show_brand')->with('brand_byID', $brand_byID)
+        ->with('category', $category)
+        ->with('brand', $brand)
+        ->with('brand_name',$brand_name);
+        
     }
+    
 }

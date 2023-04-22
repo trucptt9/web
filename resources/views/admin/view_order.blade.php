@@ -3,12 +3,7 @@
 
 <div class="table-agile-info">
     <div class="panel panel-default">
-        <div class="input-group" style="width:50%">
-            <input type="text" class="input-sm form-control" placeholder="Search">
-            <span class="input-group-btn">
-                <button class="btn btn-sm btn-success" type="button">Tìm kiếm</button>
-            </span>
-        </div>
+       
         <div class="panel-heading">
             Chi tiết đơn hàng
         </div>
@@ -68,8 +63,8 @@
 
                 <tr>
 
-                    <td>{{$order_byid->customer_name}}</td>
-                    <td>{{$order_byid->customer_phone}}</td>
+                    <td>{{$order_byid->shipping_name}}</td>
+                    <td>{{$order_byid->shipping_phone}}</td>
                     <td>{{$order_byid->shipping_address}}</td>
                     <td>{{$order_byid->shipping_note}}</td>
 

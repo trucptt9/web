@@ -27,9 +27,9 @@
 						<i class="fa fa-cube fa-2xl"></i>
 					</div>
 					<div class="col-md-9 market-update-left">
-					<h4>Tổng sản phẩm </h4>
+					<a href="{{ route('admin.all_product') }}"><h4>Tổng sản phẩm </h4>
 						<h3>{{$number_product}}</h3>
-						<p>Số sản phẩm hiện đang bán của trang web</p>
+						<p>Số sản phẩm hiện đang bán của trang web</p> </a> 
 					</div>
 				  <div class="clearfix"> </div>
 				</div>
@@ -40,9 +40,11 @@
 						<i class="fa fa-file-text-o" aria-hidden="true"></i>
 					</div>
 					<div class="col-md-9 market-update-left">
+					<a href="{{ route('admin.manage_order') }}"> 
 						<h4>Tổng đơn hàng</h4>
 						<h3>{{$number_order}}</h3>
 						<p>Số đơn hàng hiện có</p>
+					</a>
 					</div>
 				  <div class="clearfix"> </div>
 				</div>
@@ -53,9 +55,11 @@
 						<i class="fa fa-shopping-cart" aria-hidden="true"></i>
 					</div>
 					<div class="col-md-9 market-update-left">
-						<h4>Hết hàng</h4>
+						<a href="{{ route('admin.out_of_stock') }}">
+						<h4>Sản phấm sắp hết hàng</h4>
 						<h3>{{$number_hethang}}</h3>
-						<p>Số lượng sản phẩm đã hết hàng</p>
+						<p>Số lượng sản phẩm sắp hết hàng</p>
+						</a>
 					</div>
 				  <div class="clearfix"> </div>
 				</div>

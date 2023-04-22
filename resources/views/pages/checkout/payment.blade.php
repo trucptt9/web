@@ -36,7 +36,7 @@
                         {{csrf_field()}}
                         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                             <div class="modal-dialog" role="document">
-
+                    
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <a type="" class="close" data-dismiss="modal" aria-label="Close"><span
@@ -44,40 +44,40 @@
                                         <h2 class="modal-title" id="myModalLabel">Thông tin nhận hàng</h2>
                                     </div>
                                     <div class="modal-body">
-
+                    
                                         <div class="form-one" style="width:100%">
-
-
-
+                    
+                    
+                    
                                             <input type="text" placeholder="Họ tên người nhận" name="name"
                                                 class="form-control">
-
+                    
                                             <input type="text" placeholder="Số điện thoại" name="phone"
                                                 class="form-control" style="margin-top:10px">
-
+                    
                                             <input type="text" placeholder="Địa chỉ" name="address" class="form-control"
                                                 style="margin-top:10px">
                                             <input type="hidden" value="" name="customer_id">
                                             <textarea name="note" placeholder="Ghi chú" style="margin-top:10px"
                                                 class="form-control" rows="4"></textarea>
-
-
-
+                    
+                    
+                    
                                         </div>
                                     </div>
                                     <div class="modal-footer ">
-
-
+                    
+                    
                                         <input type="submit" class="btn btn-success" 
                                             style="margin-top:10px" value="Lưu">
                                         <button type="button" class="btn btn-info" data-dismiss="modal"
                                             style="margin-top:10px">Đóng</button>
                                     </div>
                                 </div>
-
+                    
                             </div>
                         </div>
-
+                    
                     </form>
                 </div>
 
@@ -96,12 +96,56 @@
 
                     <!-- Button trigger modal -->
                     <button type="button" class="btn btn-success btn-sm open_modal" data-toggle="modal"
-                        data-target="#myModal">
+                        data-target="#myModal1">
                         Nhập thông tin
                     </button>
 
                     <!-- Modal -->
-
+                    <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <form action="{{URL::to('/save-checkout-customer')}}" method="post">
+                                {{csrf_field()}}
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <a type="submit" class="close" data-dismiss="modal" aria-label="Close"><span
+                                                aria-hidden="true">&times;</span></a>
+                                        <h2 class="modal-title" id="myModalLabel">Thông tin nhận hàng</h2>
+                                    </div>
+                                    <div class="modal-body">
+                    
+                                        <div class="form-one" style="width:100%">
+                    
+                    
+                    
+                                            <input type="text" placeholder="Họ tên người nhận" name="name"
+                                                class="form-control">
+                    
+                                            <input type="text" placeholder="Số điện thoại" name="phone"
+                                                class="form-control" style="margin-top:10px">
+                    
+                                            <input type="text" placeholder="Địa chỉ" name="address" class="form-control"
+                                                style="margin-top:10px">
+                                            <input type="hidden" value="{{$customer_id}}" name="customer_id">
+                                            <textarea name="note" placeholder="Ghi chú" style="margin-top:10px"
+                                                class="form-control" rows="4"
+                                                style="height:200px!important ;"></textarea>
+                    
+                    
+                    
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer ">
+                    
+                    
+                                        <button type="submit" class="btn btn-success" 
+                                            style="margin-top:10px">Lưu</button>
+                                        <button type="button" class="btn btn-info" data-dismiss="modal"
+                                            style="margin-top:10px">Đóng</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                   
 
                 </div>
@@ -143,7 +187,7 @@
                         </td>
                         <td class="cart_description" style="width:300px;">
                             <h5><a href="">{{$v_content->name}}</a></h5>
-                            <p>ID Sản phẩm: {{$v_content->id}}</p>
+                           
                         </td>
                         <td class="cart_price">
                             
@@ -165,10 +209,7 @@
 									?>
                             </p>
                         </td>
-                        <td class="cart_delete">
-                            <a class="cart_quantity_delete" href="{{URL::to('/delete-cart/'.$v_content->rowId)}}" style="color:red;">
-                                <i class="fa fa-times"></i></a>
-                        </td>
+                      
                     </tr>
                     @endforeach
                 </tbody>
@@ -232,50 +273,7 @@
     </div>
 </section>
 
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <form action="{{URL::to('/save-checkout-customer')}}" method="post">
-            {{csrf_field()}}
-            <div class="modal-content">
-                <div class="modal-header">
-                    <a type="submit" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></a>
-                    <h2 class="modal-title" id="myModalLabel">Thông tin nhận hàng</h2>
-                </div>
-                <div class="modal-body">
-
-                    <div class="form-one" style="width:100%">
 
 
-
-                        <input type="text" placeholder="Họ tên người nhận" name="name"
-                            class="form-control">
-
-                        <input type="text" placeholder="Số điện thoại" name="phone"
-                            class="form-control" style="margin-top:10px">
-
-                        <input type="text" placeholder="Địa chỉ" name="address" class="form-control"
-                            style="margin-top:10px">
-                        <input type="hidden" value="{{$customer_id}}" name="customer_id">
-                        <textarea name="note" placeholder="Ghi chú" style="margin-top:10px"
-                            class="form-control" rows="4"
-                            style="height:200px!important ;"></textarea>
-
-
-
-                    </div>
-                </div>
-                <div class="modal-footer ">
-
-
-                    <button type="submit" class="btn btn-success" 
-                        style="margin-top:10px">Lưu</button>
-                    <button type="button" class="btn btn-info" data-dismiss="modal"
-                        style="margin-top:10px">Đóng</button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
 
 @endsection

@@ -17,13 +17,11 @@
                     <p style="height:55px;text-overflow:ellipsis">{{$product->product_name}}</p>
                     <form action="{{ route('sell_cart')}}" method="post"> 
                         {{csrf_field()}}
-                    <p>
-                    
-                       
+                  
                         <input name="productid_hidden" type="hidden" value="{{$product->product_id}}"/>
                         <input name="qty" type="hidden" value="1" class="form-control" style="width:30%"/>
                         
-                    </p>
+                   
                     <button type="submit" class="btn btn-fefault cart mt-4" style="margin-top:20px;margin-left:0px">
                         <i class="fa fa-shopping-cart"></i>
                         Mua ngay

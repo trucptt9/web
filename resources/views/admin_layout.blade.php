@@ -36,7 +36,7 @@ Smar tphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Son
     <!-- //font-awesome icons -->
     <script src="{{asset('backend/js/jquery2.0.3.min.js')}}"></script>
     <script src="{{asset('backend/js/raphael-min.js')}}"></script>
-    {{-- <script src="{{asset('backend/js/morris.js')}}"></script> --}}
+     <script src="{{asset('backend/js/morris.js')}}"></script> 
     <script src="https://unpkg.com/sweetalert2@7.18.0/dist/sweetalert2.all.js"></script>
 
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
@@ -165,7 +165,7 @@ Smar tphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Son
                          <!-- thống kê -->
                          <li class="sub-menu">
                             <a href="javascript:;" class="{{ in_array(Route::currentRouteName(), 
-                            ['admin.revenue_statistic', 'admin.user_statistic','admin.order_statistic']) ? 'active' : '' }}">
+                            ['admin.revenue_statistic', 'admin.user_statistic','admin.order_statistic','admin.chart_statistic']) ? 'active' : '' }}">
                                 <i class="fa-solid fa-chart-column"></i>
                                 <span>Thống kê</span>
                             </a>
@@ -178,6 +178,9 @@ Smar tphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Son
                                 </li>
                                 <li class="{{ Route::currentRouteName() == 'admin.order_statistic' ? 'active' : '' }}">
                                     <a href="{{route('admin.order_statistic')}}">Thống kê theo đơn hàng</a>
+                                </li>
+                                <li class="{{ Route::currentRouteName() == 'admin.chart_statistic' ? 'active' : '' }}">
+                                    <a href="{{route('admin.chart_statistic')}}">Biểu đồ thống kê</a>
                                 </li>
                                 
                             </ul>

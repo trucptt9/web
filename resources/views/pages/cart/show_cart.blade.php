@@ -33,7 +33,7 @@
 							</td>
 							<td class="cart_description" style="width:300px;">
 								<h5><a href="">{{$v_content->name}}</a></h5>
-								<p>ID Sản phẩm: {{$v_content->id}}</p>
+								
 							</td>
 							<td class="cart_price">
 								<p>{{number_format($v_content->price).' vnđ'}}</p>

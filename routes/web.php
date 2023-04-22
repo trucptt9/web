@@ -94,6 +94,8 @@ Route::middleware(['auth'])->prefix('admin')->group(function() {
         ->name('admin.unactive_product');
         Route::get('/active/{product_id}',[ProductController::class,'active_product'])
         ->name('admin.active_product');
+        Route::get('/outOfStock',[ProductController::class,'out_of_stock_product'])
+        ->name('admin.out_of_stock');
     });
 
     // Order đơn hàng
@@ -126,6 +128,8 @@ Route::middleware(['auth'])->prefix('admin')->group(function() {
         ->name('admin.order_statistic');
         Route::get('/search',[AdminController::class, 'tim_kiem_thong_ke'])
         ->name('admin.timkiem_thong_ke');
+        Route::get('/chart',[AdminController::class, 'bieudo_thongke'])
+        ->name('admin.chart_statistic');
     });
     
     //khuyến mãi
@@ -179,11 +183,12 @@ Route::get('/tat-ca-sp',[ProductController::class,'tat_ca_sp'])
     ->name('show_cart'); 
     Route::get('/delete-cart/{rowId}',[CartController::class,'delete_cart'])
     ->name('delete_cart');
+    
 
   
  Route::get('/login-checkout',[CheckoutController::class,'login_checkout'])
  ->name('login_checkout');
-  Route::post('/add',[CheckoutController::class,'add_customer'])
+  Route::post('/add-customer',[CheckoutController::class,'add_customer'])
 ->name('user.add_account');
   Route::post('/login-customer',[CheckoutController::class,'login_customer'])
 ->name('user.login');
@@ -195,6 +200,14 @@ Route::get('/tat-ca-sp',[ProductController::class,'tat_ca_sp'])
     Route::get('/account/{customer_id}',[HomeController::class, 'show_account'])->name('account_user');
     Route::get('/order-history/{customer_id}',[HomeController::class, 'show_order_account'])->name('order_account');
 
+    Route::get('/edit-profile/{customer_id}',[CheckoutController::class,'edit_profile'])->name('edit_profile');
+    Route::get('/edit-shipping/{customer_id}',[CheckoutController::class,'edit_shipping'])->name('edit_shipping');
+    Route::get('/edit-password/{customer_id}',[CheckoutController::class,'edit_password'])->name('edit_password');
+
+    Route::get('/update-profile-user/{customer_id}',[CheckoutController::class,'update_profile_user'])->name('update_profile_user'); 
+    Route::get('/update-shipping-user/{customer_id}',[CheckoutController::class,'update_shipping_user'])->name('update_shipping_user');
+    Route::get('/update-password-user/{customer_id}',[CheckoutController::class,'update_password_user'])->name('update_password_user'); 
+
 //Checkout  ktra đăng nhập để thanh tonasthanh toán
     
     Route::get('/logout-checkout',[CheckoutController::class,'logout_checkout']); 
@@ -202,10 +215,37 @@ Route::get('/tat-ca-sp',[ProductController::class,'tat_ca_sp'])
     // Route::get('/checkout/{customer_id}',[CheckoutController::class,'checkout']); 
     Route::get('/payment/{customer_id}',[CheckoutController::class,'payment']); 
     Route::post('/thanhtoantructiep',[CheckoutController::class,'thanhtoan_tructiep']);
+    Route::get('/thanhtoantructiep',[CheckoutController::class,'thanhtoan_tructiep']);
     Route::post('/thanhtoan-vnpay',[CheckoutController::class,'thanhtoan_vnpay']);
     Route::post('/save-checkout-customer',[CheckoutController::class,'save_checkout_customer']);
     Route::post('/update-address/{customer_id}',[CheckoutController::class,'update_address']); 
     Route::get('/vnpay-payment',[CheckoutController::class,'vnpay_payment'])
     ->name('vnpay_payment');
-
+    Route::post('/thanhtoanonline',[CheckoutController::class,'show_handcash']);
+    Route::get('/thanhtoanonline',[CheckoutController::class,'show_handcash']);
 //cua usser
+
+//lienhe
+    Route::get("/lienhe", function(){ 
+        $category = DB::table('category')->where('category_status','1')->orderBy("category_id","desc")->get();
+        $brand = DB::table('brand')->where('brand_status','1')->orderBy("brand_id","desc")->get();
+        return view('pages.lienhe.lienhe')->with('category',$category)->with('brand',$brand); });
+    use App\Mail\GuiEmail;
+    Route::post("/guilienhe", function(Illuminate\Http\Request $request){ 
+        $arr = request()->post(); 
+        $ht = trim(strip_tags( $arr['ht'] ));
+        $em = trim(strip_tags( $arr['em'] ));
+        $nd = trim(strip_tags( $arr['nd'] ));
+        $adminEmail = 'duy35931@gmail.com'; //Gửi thư đến ban quản trị
+        Mail::mailer('smtp')->to( $adminEmail )
+        ->send( new GuiEmail($ht, $em, $nd) );
+
+        $request->session()->flash('thongbao', "Đã gửi mail");
+        return redirect("thongbao"); 
+        });
+    Route::get("/thongbao", function(Illuminate\Http\Request $request){ 
+            $tb = $request->session()->get('thongbao');
+            $category = DB::table('category')->where('category_status','1')->orderBy("category_id","desc")->get();
+            $brand = DB::table('brand')->where('brand_status','1')->orderBy("brand_id","desc")->get();
+            return view('pages.lienhe.thongbao',['thongbao'=> $tb])->with('category',$category)->with('brand',$brand); 
+        });

@@ -31,7 +31,7 @@
 				<div class="col-sm-5">
 					<div class="signup-form"><!--sign up form-->
 						<h2>Đăng ký tài khoản</h2>
-						<form action="{{URL::to('/add')}}" method="post">
+						<form action="{{route('user.add_account')}}" method="post">
                                 {{csrf_field()}}	
 							<input type="text" placeholder="Họ tên" name="customer_name" 
 							value="{{old('customer_name')}}" 

@@ -53,10 +53,10 @@
             <th>Tên khách hàng</th>
             <th>Tổng giá trị đơn hàng</th>
             <th>Ngày đặt hàng</th>
-            <th>Tình trạng đơn hàng</th>
+            <th >Tình trạng đơn hàng</th>
             
             
-            <th style="width:30px;"></th>
+            <th style="width:123px;">Thao tác</th>
           </tr>
         </thead>
         <tbody>
@@ -76,13 +76,14 @@
             </span></td> -->
             
             <td>
-              <a href="{{route('admin.view_order',['orderId'=>$order->order_id])}}" class="active" ui-toggle-class="">
-                <i class="fa fa-pencil-square-o text-success text-active" style="font-size: 18px;"></i>
+              <a href="{{route('admin.view_order',['orderId'=>$order->order_id])}}"
+                 class="active btn btn-sm btn-success " ui-toggle-class="">
+                <i class="fa fa-pencil-square-o text-active" style="font-size: 18px;"></i>
               </a>
-              <a href="{{route('admin.add_product',['order_id'=>$order->order_id])}}" 
+              <a href="{{route('admin.delete_order',['order_id'=>$order->order_id])}}" 
               onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này không?')"
-              class="active" ui-toggle-class="">
-                <i class="fa fa-times text-danger text" style="font-size: 18px;"></i>
+              class="active btn btn-sm btn-danger" ui-toggle-class="">
+                <i class="fa fa-times text" style="font-size: 18px;"></i>
               </a>
             </td>
           </tr>

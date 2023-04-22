@@ -22,10 +22,12 @@ class AdminController extends Controller
         $products = count(DB::table('product')->get());
         $orders = count(DB::table('order')->get());
         $products_hethang = count(DB::table('product')->where('product.product_SLtrongkho','=',0)->get());
+        $products_hethang = count(DB::table('product')->where('product.product_SLtrongkho','<=',5)->get());
         // echo $sl;
         return view('admin.dashboard')->with('number_customer',$sl)
         ->with('number_product',$products)
         ->with('number_order',$orders)
+        ->with('number_hethang',$products_hethang)
         ->with('number_hethang',$products_hethang);
     }
     public function login(Request $request){
@@ -76,9 +78,12 @@ class AdminController extends Controller
       
        
         $total = DB::table('order')->sum('order_total');
-        $total_paid = DB::table('order')
-                ->where('order_status','Giao hàng thành công')
-                ->sum('order_total');
+        $total_paid = DB::table('order')->join('payment','order.payment_id','payment.payment_id')
+                ->where('order.order_status','Giao hàng thành công')
+                ->orWhere('payment.payment_status','Đã thanh toán')
+                ->sum('order.order_total');
+
+                
         $total_unpaid = DB::table('order')
                 ->where('order_status','Đang chờ xử lý')
                 ->orWhere('order_status','Đã giao cho bên vận chuyển')
@@ -114,38 +119,30 @@ public function thong_ke_don_hang(Request $request){
 
     return view('admin.order_statistic')->with('orders',$orders);
 }
-    // public function tim_kiem_thong_ke(Request $request){
-    //     $keyword = $request->keyword_sub;
 
-    //     $Count_product = DB::table('product')->count();
-    //     $statistical = DB:: table('product')
-    //                     ->join('order_detail','product.product_id','=','order_detail.product_id')
-    //                     ->select('product.product_id','product.product_name','product.product_price',
-    //                     DB::raw('sum(order_detail.product_qty) as count'),DB::raw('sum(product.product_price) as total'))
-    //                     ->groupBy('product.product_id','product.product_name','product.product_price')
-    //                     ->where('product.product_name','like','%'.$keyword.'%')
-    //                     ->orWhere('product.product_id','=',$keyword)
-    //                     ->get();
-    //     $total=0;
-    //     $total_unpaid=0;
-    //     $total_paid=0;
-    //     $total = DB::table('order')->sum('order_total');
-    //     $total_paid = DB::table('order')
-    //             ->where('order_status','Giao hàng thành công')
-    //             ->sum('order_total');
-    //     $total_unpaid = DB::table('order')
-    //             ->where('order_status','Đang chờ xử lý')
-    //             ->orWhere('order_status','Đã giao cho bên vận chuyển')
-    //             ->sum('order_total');
-    //     return view('admin.revenue_statistic')
-    //             ->with('total',$total)
-    //             ->with('statistical',$statistical)
-    //             ->with('total_paid',$total_paid)
-    //             ->with('total_unpaid',$total_unpaid);
-    // }
+public function bieudo_thongke(){
+    // $days = Input::get('days', 7);
 
-    //hàm trả về thông tin tên trang dashboard
+    
+    $data = DB::table('order')->select('order.order_ngaydathang as date',
+     DB::raw('sum(order.order_total) as value')
+    )->groupBy('order.order_ngaydathang')->orderBy('order.order_ngaydathang', 'ASC')
+   ->get();
+
+    
+    $data2 = DB::table('order')->select('order.thang',
+     DB::raw('sum(order.order_total) as value')
+    )->groupBy('order.thang')
+   ->get();
+
+          
+    return view('admin.chart_statistic')->with('data',$data)->with('data2',$data2);
+}
+
+    
     public function get_infor(){
        
     }
+
+
 }

@@ -172,14 +172,16 @@
                         </div>
                     </div>
                     <div class="col-sm-4">
-                        <form action="route('search')" method="post">
+                        <form action="" method="get">
                             {{csrf_field()}}
                             <div class="search_box pull-right" style="width:250px">
-                                <input type="text" placeholder="Tìm kiếm" name="keyword_sub"/>
+                                <input type="text" placeholder="Tìm kiếm" name="keyword_sub" value="{{  $_GET['keyword_sub'] ?? ''  }}"/>
                                 <button type="submit" class="btn btn-primary btn-sm" style="margin-top:0px">
                                     <i class="fa-solid fa-magnifying-glass"></i> </button>
                             </div>
                      </form>
+                     
+                     
                     </div>
                 </div>
             </div>
@@ -214,7 +216,7 @@
                             <div class="brands-name">
                                 @foreach ($brand as $key => $brand)
                                 <ul class="nav nav-pills nav-stacked">
-                                    <li><a href="{{route('brand',['brand_id'=> $cate->category_id])}}"
+                                    <li><a href="{{route('brand',['brand_id'=> $brand->brand_id])}}"
                                     class="{{(request()->is('thuonghieu/'.$brand->brand_id)) ? 'active' : '' }}"
                                     > <span class="pull-right"></span>{{$brand->brand_name}}</a></li>
                                     

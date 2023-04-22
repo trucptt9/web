@@ -10,30 +10,32 @@ use Session;
 class CartController extends Controller
 {
     public function save_cart(Request $request){
-        $category = DB::table('category')->where('category_status','1')->orderBy("category_id","desc")->get();
-        $brand = DB::table('brand')->where('brand_status','1')->orderBy("brand_id","desc")->get();
+        // $category = DB::table('category')->where('category_status','1')->orderBy("category_id","desc")->get();
+        // $brand = DB::table('brand')->where('brand_status','1')->orderBy("brand_id","desc")->get();
         $productId = $request->productid_hidden;
         $quantity = $request->qty;
        
         $product_info = DB::table('product')->where('product.product_id',$productId)
                         ->leftJoin('promotional_products','product.product_id','promotional_products.product_id')
+                        ->select('product.*','promotional_products.*')
                         ->first();
       
-       
        $data['id'] = $productId;
+       $data['idcode'] = $product_info->product_idcode;
        $data['qty'] = $quantity;
        $data['name'] = $product_info->product_name;
        $data['price'] = $request->price;
        $data['weight'] = '1';
        $data['options']['image'] = $product_info->product_image;
        
-       Cart::add($data);
+       Cart::add($data)
+    ;
        return redirect()->route('home');
       
     }
     public function sell_cart(Request $request){
-        $category = DB::table('category')->where('category_status','1')->orderBy("category_id","desc")->get();
-        $brand = DB::table('brand')->where('brand_status','1')->orderBy("brand_id","desc")->get();
+        // $category = DB::table('category')->where('category_status','1')->orderBy("category_id","desc")->get();
+        // $brand = DB::table('brand')->where('brand_status','1')->orderBy("brand_id","desc")->get();
         $productId = $request->productid_hidden;
         $quantity = $request->qty;
 
@@ -48,7 +50,8 @@ class CartController extends Controller
             // }else{
             //     $data['price'] = $product_info->price_final;
             // }
-       $data['id'] = $productId;
+        $data['id'] = $productId;
+       $data['code'] = $product_info->product_idcode;
        $data['qty'] = $quantity;
        $data['name'] = $product_info->product_name;
        $data['price'] = $request->price_final;
@@ -72,4 +75,5 @@ class CartController extends Controller
         Cart::update($rowId,0);     //nghĩa là xóa cái dòng đó đi dựa vào rowID hàm uodate đc bumbumment cung cấp
         return to_route('show_cart');
     }
+  
 }
